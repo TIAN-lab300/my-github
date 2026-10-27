@@ -1,0 +1,26 @@
+# Presentation build cache and temporary validation artifacts
+.presentation-build/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Node.js
+node_modules/
+dist/
+coverage/
+
+# Local environment and logs
+.env
+*.log
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

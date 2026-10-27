@@ -1,0 +1,309 @@
+{
+  "scope": "文档静态核查，未执行项目代码或API测试",
+  "checks": [
+    {
+      "check": "修订MD数量",
+      "passed": true,
+      "detail": 6
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-class-report-design.md UTF8/结尾",
+      "passed": true,
+      "detail": 11292
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-class-report-design.md 代码块闭合",
+      "passed": true,
+      "detail": "fence pairs"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-class-report-design.md 统一版本",
+      "passed": true,
+      "detail": "metadata"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-class-report-speech.md UTF8/结尾",
+      "passed": true,
+      "detail": 15162
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-class-report-speech.md 代码块闭合",
+      "passed": true,
+      "detail": "fence pairs"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-class-report-speech.md 统一版本",
+      "passed": true,
+      "detail": "metadata"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md UTF8/结尾",
+      "passed": true,
+      "detail": 93894
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md 代码块闭合",
+      "passed": true,
+      "detail": "fence pairs"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md JSON 1",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md JSON 2",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md JSON 3",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md JSON 4",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md JSON 5",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md JSON 6",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md JSON 7",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md JSON 8",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md JSON 9",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md JSON 10",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md 相对链接 2026-10-27-smart-learning-planner-requirements-spec.md",
+      "passed": true,
+      "detail": "local file target"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md 相对链接 2026-10-27-smart-learning-planner-technical-design.md",
+      "passed": true,
+      "detail": "local file target"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md 相对链接 2026-10-27-smart-learning-planner-technical-design.md",
+      "passed": true,
+      "detail": "local file target"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-design.md 统一版本",
+      "passed": true,
+      "detail": "metadata"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-requirements-spec.md UTF8/结尾",
+      "passed": true,
+      "detail": 65764
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-requirements-spec.md 代码块闭合",
+      "passed": true,
+      "detail": "fence pairs"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-requirements-spec.md 相对链接 2026-10-27-smart-learning-planner-technical-design.md",
+      "passed": true,
+      "detail": "local file target"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-requirements-spec.md 统一版本",
+      "passed": true,
+      "detail": "metadata"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-srs-questions.md UTF8/结尾",
+      "passed": true,
+      "detail": 20528
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-srs-questions.md 代码块闭合",
+      "passed": true,
+      "detail": "fence pairs"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-srs-questions.md 相对链接 2026-10-27-smart-learning-planner-requirements-spec.md",
+      "passed": true,
+      "detail": "local file target"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-srs-questions.md 统一版本",
+      "passed": true,
+      "detail": "metadata"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md UTF8/结尾",
+      "passed": true,
+      "detail": 101484
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md 代码块闭合",
+      "passed": true,
+      "detail": "fence pairs"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 1",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 2",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 3",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 4",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 5",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 6",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 7",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 8",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 9",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 10",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 11",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 12",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 13",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md JSON 14",
+      "passed": true,
+      "detail": "parse"
+    },
+    {
+      "check": "2026-10-27-smart-learning-planner-technical-design.md 统一版本",
+      "passed": true,
+      "detail": "metadata"
+    },
+    {
+      "check": "design 功能主表47项",
+      "passed": true,
+      "detail": {
+        "count": 47,
+        "unique": 47
+      }
+    },
+    {
+      "check": "design 验收主表30项",
+      "passed": true,
+      "detail": {
+        "count": 30,
+        "unique": 30
+      }
+    },
+    {
+      "check": "requirements-spec 功能主表47项",
+      "passed": true,
+      "detail": {
+        "count": 47,
+        "unique": 47
+      }
+    },
+    {
+      "check": "requirements-spec 验收主表30项",
+      "passed": true,
+      "detail": {
+        "count": 30,
+        "unique": 30
+      }
+    },
+    {
+      "check": "Q001-100无缺项",
+      "passed": true,
+      "detail": 100
+    },
+    {
+      "check": "原空回答已处理",
+      "passed": true,
+      "detail": "decision register"
+    },
+    {
+      "check": "17页标题一一对应",
+      "passed": true,
+      "detail": 17
+    },
+    {
+      "check": "讲述1080秒",
+      "passed": true,
+      "detail": 1080
+    },
+    {
+      "check": "BKT示例数值",
+      "passed": true,
+      "detail": 0.342939481
+    },
+    {
+      "check": "原始六文档未改写",
+      "passed": true,
+      "detail": "only output/revised modified"
+    }
+  ],
+  "passed": 58,
+  "total": 58
+}
