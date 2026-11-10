@@ -1,8 +1,15 @@
 # 智能学习规划助手技术设计说明书
 
-> 文档状态：四智能体与教师平台技术基线
+> 当前实现对照更新 2026-11-06。REG、KB、EXT增补已进入源码，最新验证和环境缺口见文末及功能清单。旧完成度和早期“未实现”描述保留为历史记录。
+
+**账号流程修订（2026-11-03）**：学生和教师可从登录页自助注册，设置自己的密码后返回登录。公开注册仅允许student或teacher，管理员身份通过受控初始化取得。管理员仍可管理账号并重置密码；临时密码须首次修改。此修订取代旧版关于账号仅由管理员创建的描述。
+
+
+> 当前修订：2026-10-31 v3.3；新增末尾“功能模块与子功能细化基线”，共14个模块、127项子功能；旧FR/AT编号保留。
+
+> 文档状态：四智能体、教师平台与画像技术基线
 >
-> 文档版本：v3.1
+> 文档版本：v3.3
 >
 > 日期：2026-10-27
 >
@@ -10,13 +17,15 @@
 >
 > 团队规模：2 人
 >
-> 需求基线：`2026-10-27-smart-learning-planner-requirements-spec.md` v3.1
+> 需求基线：`2026-10-27-smart-learning-planner-requirements-spec.md` v3.2
 >
-> 设计方案：`2026-10-27-smart-learning-planner-design.md` v3.1
+> 设计方案：`2026-10-27-smart-learning-planner-design.md` v3.2
 >
 > 核心验收：学生 AI 闭环与教师班级/任务/进度闭环在同一次现场演示中连续可用
 
 > 修订说明：2026-10-27 文档审查修订版。保留原有教师平台、云端 AI、四 Agent 和完整闭环范围；新增 FR-042 至 FR-047、AT-023 至 AT-030。本文是设计方案，不是实现或测试通过证明。未提供源码、运行版本和测试报告，完成状态均待核验。新增业务默认值属于修订建议，不冒充用户或教师已确认。
+
+> 画像修订说明：2026-10-28 新增学生画像快照、教师班级画像快照、刷新水位和数据质量契约，新增 FR-048 至 FR-050、AT-031 至 AT-033。画像数值由确定性 SQL/Python 聚合产生，LLM 只负责解释。
 
 > 契约示例约定：example.edu、示意ID、sha256:...、演示日期与数值均为结构占位，不是真实来源或测试证据。网页日期可为null，字段定义以SRS 5.12与技术设计20.4为准。
 
@@ -46,6 +55,7 @@
 - 云端模型配置与业务代码解耦，可在不修改业务逻辑的情况下切换模型和搜索参数。
 - 支持单学校、多教师、多班级、管理员/教师/学生角色和对象级权限。
 - 教师可查看本人班级进度并向全班或指定学生布置独立任务。
+- 学生可查看本人跨目标画像，教师可查看本班班级画像和班级授权学生投影。
 - 教师任务计入学习负荷，但不直接修改 AI 路径。
 
 ### 2.2 关键约束
@@ -158,6 +168,7 @@ backend/
         auth.py
         classes.py
         teacher.py
+        profiles.py
         goals.py
         diagnostics.py
         content.py
@@ -191,6 +202,7 @@ backend/
       classroom.py
       teacher_task.py
       progress.py
+      profile.py
       model_config.py
     services/
       goals/
@@ -198,6 +210,7 @@ backend/
       classrooms/
       teacher_tasks/
       progress/
+      profiles/
       audit/
       diagnostics/
       rag/
@@ -240,6 +253,7 @@ frontend/
       auth/
       admin/
       teacher/
+      profile/
       classes/
       diagnostics/
       content/
@@ -290,6 +304,7 @@ docs/
 | 班级协作 | `classrooms`、`class_memberships`、`class_invites` | 班级归属、成员和邀请码 |
 | 教师任务 | `teacher_tasks`、`teacher_task_assignments`、`teacher_task_submissions` | 任务定义、学生分配和提交 |
 | 学习者 | `learner_profiles`、`mastery_snapshots` | 画像、掌握度和证据引用 |
+| 画像快照 | `student_profile_snapshots`、`class_profile_snapshots`、`profile_refresh_events` | 统计窗口、水位、聚合版本和刷新历史 |
 | 课程知识 | `course_documents`、`document_chunks`、`knowledge_nodes` | 图谱和课程索引 |
 | 诊断与证据 | `assessment_items`、`assessment_attempts`、`evidence` | 作答、评分和证据 |
 | 学习路径 | `learning_paths`、`path_items`、`learning_tasks` | 路径发布和任务排期 |
@@ -311,6 +326,9 @@ docs/
 | `goal_specs` | `id, goal_id, version, spec_json, parse_status, created_at` | 每版不可修改；新解析生成新版本 |
 | `learner_profiles` | `id, user_id, preferences_json, version, updated_at` | 每用户一条有效画像 |
 | `mastery_snapshots` | `id, user_id, knowledge_node_id, previous_probability, new_probability, evidence_id, parameter_version, created_at` | 概率在 `[0,1]` |
+| `student_profile_snapshots` | `id, student_id, scope_type, class_id nullable, version, stats_window_start, stats_window_end, source_watermark_json, payload_json, data_quality_json, generated_at` | 快照不可变；同一水位不重复生成相同版本 |
+| `class_profile_snapshots` | `id, class_id, owner_teacher_id, version, stats_window_start, stats_window_end, source_watermark_json, payload_json, data_quality_json, generated_at` | 只聚合本班授权投影 |
+| `profile_refresh_events` | `id, scope_type, scope_id, trigger_type, source_event_id, status, snapshot_id, error_json, created_at, processed_at` | 源事件唯一；失败保留错误和水位 |
 
 #### 5.2.2 平台账号与班级
 
@@ -395,6 +413,11 @@ docs/
 19. 教师任务不得写入 `path_items`，任务分配只允许指向班级有效学生。
 20. 学生只能读取和提交自己的教师任务分配。
 21. 账号停用、任务发布、任务撤回和越权尝试必须写入审计日志。
+22. 画像快照不可原地修改，刷新必须创建新版本。
+23. 每个画像快照必须保存统计窗口、源事件水位、数据质量和规则版本。
+24. 班级画像只能聚合本班授权投影，不得引用私人目标、其他班级证据或隐藏备注。
+25. 任一新画像事件改变水位后，旧快照标记 `stale`，读取路径不得把它当作最新状态。
+26. 画像数值和风险事实必须由确定性聚合生成，LLM 只能解释已计算字段。
 
 ## 6. 核心组件设计
 
@@ -957,21 +980,143 @@ not_started/in_progress -> overdue
 - 教师任务时长计入负荷检查；冲突时只返回重规划建议。
 - 学生只能提交自己的分配，重复提交使用幂等键或版本控制。
 
-### 6.16 Progress Analytics Service
+### 6.16 Student and Class Profile Services
+
+#### 6.16.1 Student Profile Service
 
 职责：
 
-- 聚合教师班级总览和学生详情。
-- 统计任务完成率、按时率、逾期人数、学习时长、掌握度分布和风险学生。
-- 将 AI 路径任务与教师任务分开展示，再计算合并负荷。
+- 聚合学生本人授权事实并生成版本化画像快照。
+- 计算学习上下文、行为、掌握状态、证据质量、风险和完整度。
+- 按事件水位判断快照是否过期。
+- 返回本人完整画像；教师端只能从班级投影接口读取。
 
-查询原则：
+接口：
 
-- 教师查询必须包含 `owner_teacher_id = current_user.id` 或班级归属校验。
-- 只聚合与本班课程或教师任务相关的数据。
-- 不返回学生未关联本班的私人目标和隐藏备注。
-- 聚合结果可按班级和日期范围缓存，但不得缓存越权数据。
-- 班级进度查询目标小于 1 秒。
+```python
+class StudentProfileService:
+    def get_current(self, student_id: str, scope: ProfileScope) -> StudentProfileSnapshot: ...
+    def refresh_if_stale(
+        self, student_id: str, scope: ProfileScope, trigger_event_id: str
+    ) -> StudentProfileSnapshot: ...
+    def list_history(
+        self, student_id: str, scope: ProfileScope, limit: int = 20
+    ) -> list[StudentProfileSnapshot]: ...
+```
+
+学生画像载荷：
+
+```json
+{
+  "learning_context": {
+    "active_goal_count": 2,
+    "joined_class_count": 1,
+    "weekly_minutes": 600,
+    "preferred_modes": ["reading", "coding"]
+  },
+  "learning_behavior": {
+    "actual_minutes_7d": 180,
+    "completion_rate": 0.75,
+    "on_time_rate": 0.67,
+    "last_active_at": "2026-10-28T08:00:00Z"
+  },
+  "mastery_state": {
+    "mastered_nodes": ["python-function"],
+    "weak_nodes": ["algo-recursion"],
+    "unknown_nodes": ["algo-graph"]
+  },
+  "evidence_quality": {
+    "valid_evidence_count": 12,
+    "pending_review_count": 1,
+    "coverage_ratio": 0.86
+  },
+  "risk_summary": {
+    "level": "medium",
+    "reasons": ["recent mastery below 0.45", "two overdue tasks"]
+  },
+  "data_quality": {
+    "window_start": "2026-10-21T00:00:00Z",
+    "window_end": "2026-10-28T00:00:00Z",
+    "completeness": 0.91,
+    "rule_version": "profile-rules-v1",
+    "stale": false
+  }
+}
+```
+
+#### 6.16.2 Class Profile Service
+
+职责：
+
+- 聚合教师班级画像。
+- 统计完成率、按时率、逾期学生数、学习时长、掌握度分布、共性薄弱点和风险学生。
+- 只使用班级授权投影和本班证据来源。
+- 保存统计窗口、数据水位、覆盖率及过期状态。
+
+接口：
+
+```python
+class ClassProfileService:
+    def get_current(
+        self, class_id: str, teacher_id: str, window: ProfileWindow
+    ) -> ClassProfileSnapshot: ...
+    def refresh_if_stale(
+        self, class_id: str, teacher_id: str, trigger_event_id: str
+    ) -> ClassProfileSnapshot: ...
+    def get_student_projection(
+        self, class_id: str, teacher_id: str, student_id: str
+    ) -> ClassStudentProjection: ...
+    def list_history(
+        self, class_id: str, teacher_id: str, limit: int = 20
+    ) -> list[ClassProfileSnapshot]: ...
+```
+
+班级画像载荷：
+
+```json
+{
+  "class_scope": {
+    "class_id": "class-001",
+    "owner_teacher_id": "teacher-001",
+    "window_start": "2026-10-21T00:00:00Z",
+    "window_end": "2026-10-28T00:00:00Z"
+  },
+  "participation": {
+    "active_students": 28,
+    "students_with_evidence": 24,
+    "coverage_ratio": 0.857
+  },
+  "task_metrics": {
+    "completion_rate": 0.68,
+    "on_time_rate": 0.61,
+    "overdue_students": 5
+  },
+  "learning_time": {
+    "actual_minutes_total": 3240
+  },
+  "mastery_distribution": [
+    {"knowledge_node_id": "algo-recursion", "weak": 6, "in_progress": 9, "mastered": 13}
+  ],
+  "common_weak_nodes": ["algo-recursion", "algo-graph"],
+  "risk_students": [
+    {"student_id": "student-007", "reasons": ["overdue_task"], "observed_at": "2026-10-28T08:00:00Z"}
+  ],
+  "data_quality": {
+    "completeness": 0.92,
+    "rule_version": "profile-rules-v1",
+    "stale": false
+  }
+}
+```
+
+#### 6.16.3 Refresh Rules
+
+- 诊断提交、打卡、教师任务提交、资源学习、评分、BKT 更新、目标关联/取消、班级成员变化均写入领域事件。
+- Profile Refresh Service 只根据事件 ID 幂等消费，并比较 `source_watermark_json`。
+- 水位未变化时返回当前快照；水位变化时生成新版本，旧版本只读。
+- 刷新失败保留上一有效快照并标记 `stale`，错误写入 `profile_refresh_events.error_json`。
+- 统计指标由 SQL/Python 确定性计算；LLM 只能基于快照事实生成解释。
+- 无分母显示“暂无数据”，不返回伪造的 0% 或 0 分钟。
 
 ## 7. 四智能体工作流设计
 
@@ -1244,8 +1389,9 @@ flowchart TD
 
 | 方法 | 路径 | 技术说明 |
 | --- | --- | --- |
-| `GET` | `/teacher/classes/{class_id}/progress` | 班级进度总览 |
-| `GET` | `/teacher/classes/{class_id}/students/{student_id}/progress` | 本班学生详情 |
+| `GET` | `/teacher/classes/{class_id}/profile` | 本班班级画像快照 |
+| `GET` | `/teacher/classes/{class_id}/profile/history` | 本班班级画像历史版本 |
+| `GET` | `/teacher/classes/{class_id}/students/{student_id}/profile` | 本班学生画像授权投影 |
 | `POST` | `/teacher/classes/{class_id}/tasks` | 创建教师任务 |
 | `POST` | `/teacher/tasks/{task_id}/publish` | 生成学生分配并发布 |
 | `POST` | `/teacher/tasks/{task_id}/revoke` | 撤回任务 |
@@ -1293,6 +1439,8 @@ flowchart TD
 | `GET` | `/paths/{path_id}/replans/preview` | 预览重规划结果，不替换当前路径 |
 | `POST` | `/replans/{replan_id}/accept` | 接受新路径版本 |
 | `GET` | `/traces/{run_id}` | 查询 Agent 运行状态、最终资源 ID 和步骤 |
+| `GET` | `/learners/me/profile` | 查询本人完整学生画像 |
+| `GET` | `/learners/me/profile/history` | 查询本人画像历史版本 |
 
 #### 云端模型与联网搜索
 
@@ -1453,9 +1601,9 @@ LLM 调用、向量生成和联网搜索不放在长写事务中。先生成候�
 | --- | --- |
 | `/login` | 登录 |
 | `/admin/users` | 管理员账号管理 |
-| `/teacher/classes` | 教师班级总览 |
-| `/teacher/classes/:class_id` | 班级学生和进度 |
-| `/teacher/classes/:class_id/students/:student_id` | 学生详情 |
+| `/teacher/classes` | 教师班级画像列表 |
+| `/teacher/classes/:class_id` | 班级画像与学生画像入口 |
+| `/teacher/classes/:class_id/students/:student_id` | 本班学生画像投影 |
 | `/teacher/classes/:class_id/tasks/new` | 创建教师任务 |
 | `/teacher/tasks/:task_id` | 任务详情和提交 |
 | `/goals/new` | 目标设置 |
@@ -1464,6 +1612,7 @@ LLM 调用、向量生成和联网搜索不放在长写事务中。先生成候�
 | `/paths/:path_id` | 学习路径 |
 | `/tasks/today` | 今日任务 |
 | `/teacher-tasks` | 学生教师任务 |
+| `/me/profile` | 学生本人画像与历史 |
 | `/assessments/:item_id` | 证据验收 |
 | `/paths/:path_id/replans/:replan_id` | 重规划预览 |
 | `/models` | 模型管理 |
@@ -1476,6 +1625,8 @@ LLM 调用、向量生成和联网搜索不放在长写事务中。先生成候�
 - 应用启动时调用 `/auth/me` 恢复身份和角色；401 清理状态并跳转登录。
 - 403 显示无权限页面并停止请求，不把隐藏菜单当作权限控制。
 - 教师班级总览支持按班级、日期范围和风险状态筛选。
+- 学生画像查询使用本人授权上下文；教师画像查询必须在服务端验证班级归属。
+- 画像响应显示版本、生成时间、统计窗口、数据完整度和 `stale` 状态。
 - 操作成功后只失效相关查询，不全量刷新页面。
 - 409 冲突时展示最新版本和差异，不自动覆盖。
 - `draft` 内容禁止触发“发布路径”操作。
@@ -1618,6 +1769,9 @@ unlockRule
 - 所有受保护接口先执行角色授权，再执行班级/学生对象级授权。
 - 教师只能访问 `owner_teacher_id = current_user.id` 的班级。
 - 学生只能读取和提交自己的教师任务分配。
+- 学生只能读取本人完整画像；教师画像接口只能返回本班授权投影。
+- 班级画像不得包含私人目标、其他班级证据、完整私人答题原文或隐藏备注。
+- 画像数值只能来自确定性聚合，LLM 解释不能扩展字段或修改指标。
 - 登录失败、账号停用、任务发布/撤回和越权尝试写入 `audit_logs`。
 - 上传文件经过扩展名、MIME、大小和规范化路径校验。
 - 禁止返回服务器绝对路径。
@@ -1689,6 +1843,7 @@ unlockRule
 | Classroom | 班级归属、邀请码有效期/次数和重复加入 |
 | Teacher Task | 全班/指定学生分配、发布/撤回和提交权限 |
 | Progress | 完成率、时长、掌握度、风险和班级过滤 |
+| Profile | 学生/班级聚合、水位、确定性复算、过期判断和隐私投影 |
 | Diagnostic | 节点覆盖、评分映射、低置信度标记 |
 | RAG | 切分、混合分数、过滤、引用存在性 |
 | Coverage | 目标映射、缺口枚举、时效判定、搜索门控和重查 |
@@ -1705,6 +1860,7 @@ unlockRule
 - FastAPI 与 SQLite Repository。
 - 登录会话、RBAC、班级邀请、教师任务分配、学生提交和进度聚合。
 - 审计日志覆盖登录失败、任务发布/撤回和越权尝试。
+- 画像刷新事件驱动学生和班级快照更新，水位不变时不重复生成版本。
 - Chroma 与 SQLite FTS5 混合检索。
 - 千问 Gateway 超时、限流、鉴权和 JSON 修复。
 - Web Search 查询、来源标准化、失败重试和 声明级新鲜度判断。
@@ -1723,6 +1879,8 @@ unlockRule
 - 未批准模型配置激活被拒绝。
 - 未登录返回 401，错误角色或跨班访问返回 403。
 - 教师任务不能修改 `path_items`，学生不能提交他人分配。
+- 学生画像只返回本人完整数据；教师画像只返回本班授权投影。
+- 相同输入、窗口和规则版本下画像指标可重复计算。
 
 ### 14.4 端到端测试
 
@@ -1742,10 +1900,13 @@ Playwright 主流程：
 12. 教师创建班级、生成邀请码，学生加入班级。
 13. 教师向全班或指定学生发布任务，学生提交后教师看到进度变化。
 14. 验证跨班级访问被拒绝。
+15. 诊断或打卡后学生画像版本更新。
+16. 教师班级画像按固定样例显示完成率、按时率、风险学生和共性薄弱点。
+17. 事件水位变化后旧画像标记过期并刷新。
 
 ### 14.5 现场验收
 
-- 连续执行 AT-001 至 AT-030。
+- 连续执行 AT-001 至 AT-033。
 - 至少一次关闭外部网络，验证明确错误和状态恢复。
 - 至少截图或记录一次失败恢复。
 - 验证每次核心运行具有新 `run_id`、时间戳和步骤轨迹。
@@ -1762,7 +1923,9 @@ Playwright 主流程：
 | BKT 小于 100 毫秒 | 单节点参数缓存和短事务 |
 | 千问首次输出小于 10 秒 | 限制提示词长度、流式状态和节点超时 |
 | 完整路径小于 150 秒 | 检索完成后再规划；独立检索可并行，统一截止时间并限制重试 |
-| 教师班级进度小于 1 秒 | 聚合查询索引、班级/日期范围过滤和短时缓存 |
+| 学生画像查询小于 500 毫秒 | 快照索引、本人授权过滤和最近版本指针 |
+| 教师班级画像小于 1 秒 | 聚合查询索引、班级/日期范围过滤和快照缓存 |
+| 画像增量刷新小于 2 秒 | 领域事件水位、增量聚合和 2 教师/30 学生目标规模 |
 | API 查询小于 500 毫秒 | 必要索引、分页和避免 N+1 查询 |
 
 SQLite 必要索引：
@@ -1782,6 +1945,9 @@ SQLite 必要索引：
 - `teacher_tasks(class_id, status, due_at)`
 - `teacher_task_assignments(student_id, status)`
 - `teacher_task_submissions(assignment_id, status)`
+- `student_profile_snapshots(student_id, scope_type, version)`
+- `class_profile_snapshots(class_id, version, generated_at)`
+- `profile_refresh_events(scope_type, scope_id, status, source_event_id)`
 
 ## 16. 双人协作与交付
 
@@ -1790,7 +1956,7 @@ SQLite 必要索引：
 | 成员 | 首次学习计划 | 学习后重规划 | 共享 |
 | --- | --- | --- | --- |
 | A | 目标解析、诊断、千问网关、联网搜索、内容生成、RAG、知识图谱、首次规划、校验、任务拆解和教师任务负荷接入 | 提供路径、节点和负荷接口 | API/Schema、搜索来源审核、师生端联调 |
-| B | 提供证据和掌握度接口 | 账号、RBAC、班级、邀请码、教师任务、提交、进度、BKT 和重规划 | 数据迁移、权限审计、现场演练、测试 |
+| B | 提供证据和掌握度接口 | 账号、RBAC、班级、邀请码、教师任务、提交、学生/班级画像、刷新、BKT 和重规划 | 数据迁移、权限审计、画像口径、现场演练、测试 |
 
 ### 16.2 共享契约
 
@@ -1805,6 +1971,7 @@ SQLite 必要索引：
 - `MasterySnapshot`
 - `ReplanEvent`
 - `UserRole`、`Classroom`、`TeacherTask`、`TeacherTaskAssignment`
+- `StudentProfileSnapshot`、`ClassProfileSnapshot`、`ProfileScope`、`ProfileRefreshEvent`
 - 教师任务与负荷接口
 - 错误码和幂等键格式
 
@@ -1824,10 +1991,10 @@ SQLite 必要索引：
 | 实践周 | 平台与智能能力交付 | A 的可定位成果 | B 的可定位成果 | 检查与证据 |
 | --- | --- | --- | --- | --- |
 | 第 2 周 | 确认必做范围、原型、账号与数据契约 | 目标/资源/路径原型，云端能力试验方案 | 账号/班级/教师任务/反馈原型 | 功能清单、需求到验收映射、每人流程示例 |
-| 第 3 周 | 首条真实流程与技术验证 | 资源上传发布、阅读记录、千问与来源返回试验 | 登录、入班、教师任务提交、进度查询 | 发布→学习/练习→反馈→保存→师生查看；同时验证一次 AI 请求 |
-| 第 4 周 | 中期集成，六阶段 AI 闭环初版 | 诊断、RAG、图谱、覆盖门控、规划与审查 | BKT、重规划、教师任务与班级进度接入 | 同一界面集成版本，已完成/部分/未完成清单 |
-| 第 5 周 | 必做功能全部接入 | 资源权限、引用、预算与新主题异常 | 提交反馈、权限、幂等、拒绝重规划与异常 | AT-001 至 AT-030 可执行；每人正常/异常验证与改进对照 |
-| 第 6 周 | 系统验证与智能输出评价 | 固定集 AI 评价、路径与引用测试 | 越权、状态、重复提交、并发与恢复测试 | 输入/预期/实际/缺陷/复测；严重缺陷关闭 |
+| 第 3 周 | 首条真实流程与技术验证 | 资源上传发布、阅读记录、千问与来源返回试验 | 登录、入班、教师任务提交、学生/班级画像首版 | 发布→学习/练习→反馈→保存→师生查看；同时验证一次 AI 请求 |
+| 第 4 周 | 中期集成，六阶段 AI 闭环初版 | 诊断、RAG、图谱、覆盖门控、规划、画像事实输入与审查 | BKT、重规划、教师任务、画像刷新与班级画像接入 | 同一界面集成版本，已完成/部分/未完成清单 |
+| 第 5 周 | 必做功能全部接入 | 资源权限、引用、预算、画像解释与新主题异常 | 提交反馈、权限、画像水位与刷新、幂等、拒绝重规划与异常 | AT-001 至 AT-033 可执行；每人正常/异常验证与改进对照 |
+| 第 6 周 | 系统验证与智能输出评价 | 固定集 AI 评价、路径与引用测试 | 越权、画像口径、状态、重复提交、并发与恢复测试 | 输入/预期/实际/缺陷/复测；严重缺陷关闭 |
 | 第 7 周 | 部署交接、三轮闭环演练 | 安装配置、资料与云端检查、A 模块交接 | 账号初始化、恢复、B 模块交接 | 他人新环境试用；版本、配置、耗时、问题记录 |
 | 第 8 周 | 完整平台验收与冻结 | 展示首次计划、资源与验证贡献 | 展示教师平台、证据与重规划贡献 | 完整演示、逐项结论、源代码、测试、安装使用、周报与个人/AI记录 |
 
@@ -1853,6 +2020,8 @@ SQLite 必要索引：
 | 对象级权限遗漏 | 跨班数据泄露 | 统一 AuthorizationService，所有班级/学生接口强制归属检查 |
 | 教师任务破坏 AI 路径 | 路径状态不一致 | 独立任务表，只影响负荷和重规划建议 |
 | 邀请码滥用 | 非目标学生入班 | 哈希存储、有效期、次数上限和撤回 |
+| 画像快照过期或口径漂移 | 教师看到旧进度或错误风险 | 事件水位、规则版本、确定性复算和 `stale` 标记 |
+| 班级画像混入私人数据 | 隐私泄露 | 班级投影查询、对象级授权和固定隐私测试 |
 
 ## 18. 需求追踪
 
@@ -1869,10 +2038,13 @@ SQLite 必要索引：
 | FR-031 | Coverage、PathBuilding、Web Search、RAG | `coverage_checks`、`web_evidence`、`agent_steps` | `/paths/generate`、`/traces/{run_id}` | AT-016 |
 | FR-032 至 FR-035 | Auth、School Account、Classroom | `users`、`sessions`、`classrooms`、`class_memberships`、`class_invites` | `/auth`、`/admin/users`、`/classes` | AT-017、AT-020、AT-022 |
 | FR-036 至 FR-041 | Progress、Teacher Task、Auth/RBAC、Audit | `teacher_tasks`、`teacher_task_assignments`、`teacher_task_submissions`、`audit_logs` | `/teacher`、`/student/teacher-tasks` | AT-018、AT-019、AT-020、AT-021、AT-022 |
+| FR-048 | Student Profile Service | `learner_profiles`、`student_profile_snapshots` | `/learners/me/profile` | AT-031、AT-033 |
+| FR-049 | Class Profile Service | `class_profile_snapshots`、`class_memberships` | `/teacher/classes/{class_id}/profile` | AT-032、AT-033 |
+| FR-050 | Profile Refresh Service | `profile_refresh_events`、画像水位 | 画像读取与刷新事件 | AT-031、AT-033 |
 
 | 非功能需求 | 技术实现 | 验证方式 |
 | --- | --- | --- |
-| NFR-PERF-001 至 NFR-PERF-009 | 索引、搜索超时、限制重试、短事务 | 性能测试 |
+| NFR-PERF-001 至 NFR-PERF-011 | 索引、搜索超时、限制重试、画像快照与短事务 | 性能测试 |
 | 可靠性 | 幂等、覆盖门控、模型配置回退、断点恢复 | 故障注入 |
 | 可解释性 | 本地/联网引用、来源时间、规则 ID、Agent 轨迹 | AT-010、AT-012、AT-015 |
 | 安全与隐私 | 回环监听、密码哈希、RBAC、对象级权限、API Key 保护、审计 | 安全测试 |
@@ -1880,7 +2052,7 @@ SQLite 必要索引：
 
 ## 19. 技术验收结论
 
-技术基线采用模块化单体而非微服务。LangGraph Coordinator 受控调度 GoalDiagnosisAgent、PathBuildingAgent、PlanReviewAgent 和 LearningReplanAgent。千问云端模型负责候选内容和自然语言解释，原生联网搜索提供最新公开资料。Auth/RBAC、班级、教师任务和进度服务提供单学校多教师多班级平台能力，教师任务通过负荷接口影响重规划建议，但不直接修改 AI 路径节点。
+技术基线采用模块化单体而非微服务。LangGraph Coordinator 受控调度 GoalDiagnosisAgent、PathBuildingAgent、PlanReviewAgent 和 LearningReplanAgent。千问云端模型负责候选内容和自然语言解释，原生联网搜索提供最新公开资料。Auth/RBAC、班级、教师任务和画像服务提供单学校多教师多班级平台能力。学生画像与班级画像由学生授权事实和本班授权投影确定性聚合，保存版本、窗口、事件水位和数据质量；教师任务通过负荷接口影响重规划建议，但不直接修改 AI 路径节点。
 
 现场闭环的技术证据链为：
 
@@ -1888,6 +2060,8 @@ SQLite 必要索引：
 浏览器请求
   -> Auth/RBAC
   -> 学生 AI 学习闭环 / 教师任务与进度链路
+  -> student_profile_snapshots / class_profile_snapshots
+  -> profile_refresh_events
   -> 新建 agent_run
   -> GoalDiagnosisAgent
   -> PathBuildingAgent
@@ -1905,11 +2079,11 @@ SQLite 必要索引：
   -> 可查询的完整轨迹
 ```
 
-只有学生 AI 学习闭环和教师任务/进度链路都产生真实、隔离且可审计的记录，技术实现才满足 AT-015 至 AT-022 的现场验收要求。
+只有学生 AI 学习闭环、教师任务链路和学生/班级画像都产生真实、隔离、可复算且可审计的记录，技术实现才满足 AT-015 至 AT-033 的现场验收要求。
 
 ## 20. 可实现性补充与统一技术契约
 
-本节把本次审查发现的缺口落实为接口、数据和事务。业务规则以 SRS v3.1 的 5.8 至 5.12 为准；不是另起一套产品要求。
+本节把本次审查发现的缺口落实为接口、数据和事务。业务规则以 SRS v3.2 的 5.8 至 5.13 为准；不是另起一套产品要求。
 
 ### 20.1 课程资源与权限数据
 
@@ -1928,6 +2102,9 @@ SQLite 必要索引：
 | `graph_snapshots` | id、version、nodes_json、edges_json、assessment_versions_json、source_refs_json、content_hash | 发布路径引用不可变快照，候选内容不直接覆盖共享图谱 |
 | `validation_results` | id、run_id、candidate_hash、graph_snapshot_id、mastery_version、budget_version、rules_version、result_json | 路径必须绑定本次通过记录 |
 | `agent_checkpoints` | run_id、sequence、state_version、state_json、status、updated_at | 恢复依据，不仅记录步骤日志 |
+| `student_profile_snapshots` | id、student_id、scope_type、class_id nullable、version、window、source_watermark_json、payload_json、data_quality_json、generated_at | 快照不可变；相同水位不重复生成 |
+| `class_profile_snapshots` | id、class_id、owner_teacher_id、version、window、source_watermark_json、payload_json、data_quality_json、generated_at | 只聚合本班授权投影 |
+| `profile_refresh_events` | id、scope_type、scope_id、trigger_type、source_event_id、status、snapshot_id、error_json、created_at、processed_at | 源事件幂等，失败保留水位和错误 |
 
 现有表补充：learning_paths 保存 goal_spec_version、graph_snapshot_id、validation_result_id、mastery_version、budget_version、active_from；goals 保存 active_path_id；evidence 保存 goal_id nullable、class_id nullable、attempt_id、grade_version、privacy_scope。共享掌握度用于学生本人，教师视图只汇总本班来源。course_documents 增加 owner、scope、class_id、cloud_allowed、index_version。teacher_task_submissions 增加 actual_minutes、first_completed_at、idempotency_key、version；任务关联资源和题目使用关联表，不只存任意 URL。
 
@@ -1945,6 +2122,8 @@ RAG 授权链：API actor → Service scope 校验 → SQL/Chroma 过滤 owner/c
 | --- | --- | --- |
 | GET | `/goals` | 学生本人列表，支持状态和分页 |
 | GET/PATCH | `/learners/me/budget` | 学生本人全局预算；PATCH 带版本并触发负荷评估 |
+| GET | `/learners/me/profile` | 学生本人完整画像；读取时如水位变化可生成新快照 |
+| GET | `/learners/me/profile/history` | 学生本人画像历史版本 |
 | PUT/DELETE | `/goals/{id}/class-link` | 学生关联/取消本人有效班级；不修改历史班级提交 |
 | POST/GET | `/resources` | 有权用户上传/列出资源；scope 由服务端校验 |
 | GET | `/resources/{id}` | 返回正文/版本/元数据，按权限读取 |
@@ -1960,6 +2139,9 @@ RAG 授权链：API actor → Service scope 校验 → SQL/Chroma 过滤 owner/c
 | POST | `/classes/{id}/invites/{invite_id}/revoke` | 负责教师撤销邀请 |
 | POST | `/classes/{id}/leave` | 学生退班，取消未完成分配并释放预约 |
 | DELETE | `/classes/{id}/members/{student_id}` | 负责教师移除成员，历史按权限保留 |
+| GET | `/teacher/classes/{id}/profile` | 负责教师查看本班画像；读取时按水位刷新 |
+| GET | `/teacher/classes/{id}/profile/history` | 负责教师查看本班画像历史 |
+| GET | `/teacher/classes/{id}/students/{student_id}/profile` | 本班学生授权画像投影 |
 | GET/PATCH | `/teacher/tasks/{id}` | 本班负责教师读取/编辑草稿，已发布修改返回 409 |
 | GET | `/student/teacher-tasks/{id}` | 仅分配接收人，含资源、练习、反馈和截止时间 |
 | POST | `/paths/{id}/replans` | 发起重规划预览，创建 run，返回 202 |
@@ -1967,6 +2149,8 @@ RAG 授权链：API actor → Service scope 校验 → SQL/Chroma 过滤 owner/c
 | POST | `/traces/{id}/retry` | 运行所有者重试中断步骤，复用已提交结果 |
 | POST | `/traces/{id}/cancel` | 所有者取消；未提交候选不生效，已保存打卡/证据保留 |
 | GET | `/health` | 仅公开必要健康状态，配置/详细异常限管理员 |
+
+画像 GET 是只读缓存资源的例外：当 `source_watermark_json` 已过期时，服务可以生成一个新的不可变画像快照并返回；不得修改源学习事实，也不得把刷新失败的新版本冒充为成功。
 
 `GET /paths/{path_id}/replans/preview` 只读最近生成预览，不产生 LLM、搜索或业务写入；没有预览返回 404。GET 不承担生成副作用。生成类 POST：首次以新幂等键接受返回 202 + run_id；同键重放返回原运行（202 运行中，200 已结束）。202 响应不是最终路径；成功后轮询 traces，再 GET 对应资源。新 run 与请求、操作人、时间和输入哈希绑定，仅新 ID 不能单独证明没有缓存。
 
@@ -2037,6 +2221,9 @@ AI 固定集至少60例：20个已覆盖固定目标、20个缺失/新主题、2
 | FR-045 | SRS 5.11，技术 20.1 | `/goals/{id}/class-link`、资源/引用读取 | goal_class_links、resource scopes | AT-024 |
 | FR-046 | SRS 5.10，技术 20.2 | `/learners/me/budget`、teacher progress | budget、reservations、events | AT-026、AT-027 |
 | FR-047 | SRS 10，技术 20.6 | 运维 CLI 与 `/health` | backups、reports、evidence | AT-028 至 AT-030 |
+| FR-048 | SRS 5.13，技术 6.16/20.1 | `/learners/me/profile` | `student_profile_snapshots` | AT-031、AT-033 |
+| FR-049 | SRS 5.13，技术 6.16/20.1 | `/teacher/classes/{id}/profile` | `class_profile_snapshots` | AT-032、AT-033 |
+| FR-050 | SRS 5.13，技术 6.16/20.1 | `/learners/me/profile/history`、`/teacher/classes/{id}/profile/history` | `profile_refresh_events` | AT-031、AT-033 |
 
 ### 20.7 新增验收映射
 
@@ -2049,7 +2236,10 @@ AI 固定集至少60例：20个已覆盖固定目标、20个缺失/新主题、2
 | AT-027 | 进度口径 | 按固定样例计算完成率/按时率/逾期数/实际时长，撤回与未作答不误计 0；重复提交不重复统计 |
 | AT-028 | 退出停用与重启恢复 | 停用/重置密码使旧会话失效；重启恢复学习记录；中断任务可查询/重试且不重复 BKT |
 | AT-029 | 新环境部署与恢复 | 他人按说明在干净环境运行，备份恢复后业务和索引一致，外部模型不可用时给出提示 |
-| AT-030 | 逐项证据与个人贡献 | FR-001 至 FR-047 有设计/接口/数据/用例映射；未测试不写通过；每人有周成果及 AI 辅助修改和验证记录 |
+| AT-030 | 逐项证据与个人贡献 | FR-001 至 FR-050 有设计/接口/数据/用例映射；未测试不写通过；每人有周成果及 AI 辅助修改和验证记录 |
+| AT-031 | 学生画像全链路 | 诊断、打卡、任务、资源学习、评分或 BKT 更新后，学生画像版本、证据覆盖和薄弱点更新 |
+| AT-032 | 教师班级画像 | 固定样例生成完成率、按时率、逾期人数、学习时长、掌握度分布和风险学生，不混入私人目标 |
+| AT-033 | 画像过期与隐私投影 | 事件水位变化后旧快照过期并刷新；教师跨班和私人目标访问被拒绝 |
 
 ### 20.8 状态字段与持久化补充
 
@@ -2072,3 +2262,521 @@ GoalDiagnosisAgent允许 `parse_goal / prepare_diagnostic / evaluate_diagnostic`
 - 恢复：作答事实已提交、LLM重规划中断，重启后事实/反馈仍在，重试只处理pending事件，不重复BKT。首次配置可在registered评测后激活，未联网时仍可登录浏览本地已授权历史。
 
 以上为测试规格与手算预期，不是已执行结果。
+
+<!-- MODULE-DECOMPOSITION-V3.3 -->
+## 功能模块与子功能细化基线（v3.3，2026-10-31）
+
+本次依据课程精炼版、现有需求/设计/技术文档及最新 `zhixing-prototype_1.1.html` 补充编码前分析。原FR-001～050与AT-001～033不改号；SF-模块-序号为稳定子功能标识，细化而非替换父需求。下列描述是待实现设计，不代表实现或验收通过。新细节由本次文档修订提出，不冒充课堂逐项确认。
+
+范围规则：本地账号由管理员创建，支持学生和教师自助注册，手机绑定及短信验证改密纳入2026-11-09增补；邮箱验证码、第三方登录、人脸识别或支付仍属于后续扩展。首次改密、本人改密、失败冷却、跨标签页退出等补齐基础账号安全行为。默认不新增“永久记住登录”，会话时限采用可配置策略。原型角色切换只保留在归档原型，正式系统按服务器身份导航。
+
+资源补充：音视频、图片及网址保留原型已有附件能力；自动转写、OCR、DOCX/PPT正文解析不在本次承诺范围。正文资源发布仍须完成解析索引；无正文附件允许单独发布但标记不可用于正文RAG。沿用SRS 5.8上传限制，原型10/100MB限制不作为正式需求；音视频若需更大配额另作显式配置和决策记录。取消原型式静默降级。
+
+### AUTH 登录与会话
+
+父需求：FR-032、FR-041。
+
+实现归属与数据/API入口：AuthService；users/sessions/login_attempts；POST /auth/login、/logout、/change-password，GET /auth/me。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-AUTH-01 | 账号密码登录；服务层校验输入及对象权限 | 有效账号和正确密码登录后进入对应工作台；无效凭据统一提示，不暴露账号是否存在；按该条构造正常及相关异常验证。 |
+| SF-AUTH-02 | 输入检查；服务层校验输入及对象权限 | 账号去除首尾空白；密码不裁剪；空字段阻止提交，服务端再次检查；按该条构造正常及相关异常验证。 |
+| SF-AUTH-03 | 密码显隐；服务层校验输入及对象权限 | 默认隐藏，可切换显示；切换不改变输入内容；按该条构造正常及相关异常验证。 |
+| SF-AUTH-04 | 提交防重与反馈；服务层校验输入及对象权限 | 请求中禁用重复提交，失败解除禁用并保留账号，密码不写入日志或浏览器持久存储；按该条构造正常及相关异常验证。 |
+| SF-AUTH-05 | 首次登录改密；服务层校验输入及对象权限 | 管理员设置临时密码后须先修改密码，完成前不能访问普通业务；按该条构造正常及相关异常验证。 |
+| SF-AUTH-06 | 本人修改密码；服务层校验输入及对象权限 | 验证旧密码与两次新密码一致，成功后撤销全部旧会话并要求重新登录；按该条构造正常及相关异常验证。 |
+| SF-AUTH-07 | 忘记密码处理；服务层校验输入及对象权限 | 提供联系管理员入口；管理员重置临时密码，系统不展示旧密码，不宣称提供邮件自助找回；按该条构造正常及相关异常验证。 |
+| SF-AUTH-08 | 当前身份与角色导航；服务层校验输入及对象权限 | 刷新后由服务端查询当前身份生成导航，客户端不能通过切换角色取得权限；按该条构造正常及相关异常验证。 |
+| SF-AUTH-09 | 会话过期；服务层校验输入及对象权限 | 失效请求返回401，页面提示重新登录，登录后仅跳转到该身份有权访问的站内地址；按该条构造正常及相关异常验证。 |
+| SF-AUTH-10 | 安全退出；服务层校验输入及对象权限 | 退出撤销服务端会话并清理前端用户数据，浏览器后退不能读取受保护数据；按该条构造正常及相关异常验证。 |
+| SF-AUTH-11 | 停用与重置即时失效；服务层校验输入及对象权限 | 账号停用或管理员重置密码后，所有旧会话下次请求立即失败；按该条构造正常及相关异常验证。 |
+| SF-AUTH-12 | 失败限流与恢复；服务层校验输入及对象权限 | 多次失败进入可配置冷却，返回可重试时间，成功登录或冷却结束按规则恢复；按该条构造正常及相关异常验证。 |
+| SF-AUTH-13 | 跨标签页退出同步；服务层校验输入及对象权限 | 一个标签页退出后其他标签页清理身份，服务器仍逐请求验证；按该条构造正常及相关异常验证。 |
+| SF-AUTH-14 | 认证审计；服务层校验输入及对象权限 | 登录成功/失败、退出、改密、重置与越权记录时间和安全摘要，排除密码及原始token；按该条构造正常及相关异常验证。 |
+
+### ACCOUNT 账号与个人资料
+
+父需求：FR-033、FR-041。
+
+实现归属与数据/API入口：AccountService；users/auth_version/audit_logs；/admin/users、/users/me。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-ACCOUNT-01 | 管理员初始化；服务层校验输入及对象权限 | 仅受控初始化命令创建首个管理员，不开放公开管理员注册；按该条构造正常及相关异常验证。 |
+| SF-ACCOUNT-02 | 创建账号；服务层校验输入及对象权限 | 管理员创建教师/学生，账号唯一，临时密码仅在创建或重置成功时交付；按该条构造正常及相关异常验证。 |
+| SF-ACCOUNT-03 | 列表与筛选；服务层校验输入及对象权限 | 按角色、状态和账号查询，分页不泄露密码哈希；按该条构造正常及相关异常验证。 |
+| SF-ACCOUNT-04 | 资料编辑；服务层校验输入及对象权限 | 本人修改展示名和允许的学习信息；账号标识、角色不允许自行修改；按该条构造正常及相关异常验证。 |
+| SF-ACCOUNT-05 | 停用与恢复；服务层校验输入及对象权限 | 停用保留历史成果并撤销会话；恢复不恢复旧会话；按该条构造正常及相关异常验证。 |
+| SF-ACCOUNT-06 | 密码重置；服务层校验输入及对象权限 | 管理员确认对象后重置，强制下次改密并留审计；按该条构造正常及相关异常验证。 |
+| SF-ACCOUNT-07 | 角色保护；服务层校验输入及对象权限 | 不开放已有业务账号直接改角色，避免班级、任务归属失效；按该条构造正常及相关异常验证。 |
+| SF-ACCOUNT-08 | 误操作防护；服务层校验输入及对象权限 | 停用和重置显示目标及影响并二次确认；初始化管理员恢复走受控操作而非公开接口；按该条构造正常及相关异常验证。 |
+
+### CLASS 班级与成员
+
+父需求：FR-034、FR-035、FR-041。
+
+实现归属与数据/API入口：ClassroomService；classrooms/memberships/invites；/classes、/class-invites/{code}/join。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-CLASS-01 | 新建与编辑班级；服务层校验输入及对象权限 | 教师设置名称说明，仅能编辑本人活动班级，保存检查版本；按该条构造正常及相关异常验证。 |
+| SF-CLASS-02 | 班级列表与详情；服务层校验输入及对象权限 | 教师仅见负责班级；学生仅见已加入班级概况及本人关系；按该条构造正常及相关异常验证。 |
+| SF-CLASS-03 | 邀请码生成；服务层校验输入及对象权限 | 设置有效期和使用上限，创建成功展示明文并支持复制；按该条构造正常及相关异常验证。 |
+| SF-CLASS-04 | 邀请码校验；服务层校验输入及对象权限 | 无效、到期、撤销、耗尽或归档班级拒绝加入，提供明确提示；按该条构造正常及相关异常验证。 |
+| SF-CLASS-05 | 重复入班；服务层校验输入及对象权限 | 同一学生重复加入返回原成员关系，不重复消耗邀请码；按该条构造正常及相关异常验证。 |
+| SF-CLASS-06 | 成员查询；服务层校验输入及对象权限 | 教师查看本人班级有效成员和状态，学生不能浏览他人私密详情；按该条构造正常及相关异常验证。 |
+| SF-CLASS-07 | 退班与移除；服务层校验输入及对象权限 | 退出或移除后取消未完成分配和未来预约；保留已完成历史但停止新增访问权限；按该条构造正常及相关异常验证。 |
+| SF-CLASS-08 | 班级归档；服务层校验输入及对象权限 | 确认后转只读，撤销邀请码并禁止新发布和提交，保留历史查询；按该条构造正常及相关异常验证。 |
+| SF-CLASS-09 | 晚入班补发；服务层校验输入及对象权限 | 不自动分配历史任务，教师可新建关联补发任务并明确接收人；按该条构造正常及相关异常验证。 |
+
+### RESOURCE 资源与课程知识库
+
+父需求：FR-006、FR-042、FR-043、FR-045。
+
+实现归属与数据/API入口：ResourceService/Parser；resources/versions/chunks/transcripts；/resources、/resources/{id}/transcripts。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-RESOURCE-01 | 分类列表与筛选；服务层校验输入及对象权限 | 按班级、类型、标签、标题、发布及解析状态查看授权资源；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-02 | 上传信息；服务层校验输入及对象权限 | 填写标题、说明、标签、来源与使用权限、所属班级和云端授权；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-03 | 单批上传与失败反馈；服务层校验输入及对象权限 | 逐文件显示成功失败；文本基线20MiB/文件、10文件/批、100MiB/批，超限拒绝且不发布半成品；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-04 | 格式校验；服务层校验输入及对象权限 | 核对扩展名、MIME和内容；Markdown/TXT/文本PDF可解析，扫描PDF提示当前不支持；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-05 | 解析状态与重试；服务层校验输入及对象权限 | 区分文件已保存、解析中、成功、失败，重试不产生重复版本或重复索引；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-06 | 版本与元数据编辑；服务层校验输入及对象权限 | 正文修改创建新版本；引用绑定旧版本；元数据修改保留审计；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-07 | 发布与下架；服务层校验输入及对象权限 | 仅所有者教师发布本班资料；正文检索型资源须索引成功；下架停止新访问与召回，历史引用按原授权快照读取；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-08 | 正文与下载；服务层校验输入及对象权限 | 授权后阅读、下载，Markdown不执行脚本，文件真实路径不返回给用户；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-09 | 音视频与字幕；服务层校验输入及对象权限 | 保留原型播放和字幕关联交互，字幕绑定版本；无字幕标待转写，不虚构自动识别结果；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-10 | 图片及其他附件；服务层校验输入及对象权限 | 可作为授权附件存储预览或下载，未实现OCR/解析的资料标正文不可检索；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-11 | 网址登记审核；服务层校验输入及对象权限 | 校验HTTP/HTTPS和标题理由，教师审核后发布；仅链接不算已验证正文；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-12 | 学生私有资料；服务层校验输入及对象权限 | 学生上传私有资料用于本人学习；可见范围与云端发送权限分别设置；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-13 | 主动阅读记录；服务层校验输入及对象权限 | 记录学习会话、实际分钟与完成状态；重复保存更新同一会话，不累计两次；按该条构造正常及相关异常验证。 |
+| SF-RESOURCE-14 | 附件发布边界；服务层校验输入及对象权限 | 无正文的音视频/图片可作为附件发布；索引状态为不可用，不能进入正文RAG证据或伪装完成解析；按该条构造正常及相关异常验证。 |
+
+### SEARCH 检索与证据
+
+父需求：FR-007、FR-024、FR-025、FR-026、FR-029、FR-031。
+
+实现归属与数据/API入口：Retrieval/Coverage/WebEvidenceService；FTS5/Chroma/evidence；/retrieval/search、/web-search-runs。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-SEARCH-01 | 授权检索；服务层校验输入及对象权限 | 召回前过滤班级/私有范围，查看来源及发送云端前再次检查授权；按该条构造正常及相关异常验证。 |
+| SF-SEARCH-02 | 混合召回；服务层校验输入及对象权限 | 组合关键词与向量检索，返回真实chunk及页码/字幕时间定位；按该条构造正常及相关异常验证。 |
+| SF-SEARCH-03 | 结果解释；服务层校验输入及对象权限 | 区分正文命中、仅元数据命中、无结果和证据不足，不把命中数量当覆盖结论；按该条构造正常及相关异常验证。 |
+| SF-SEARCH-04 | 覆盖检查；服务层校验输入及对象权限 | 检查目标映射、节点、先修、学时、题目、证据，输出缺口类型；按该条构造正常及相关异常验证。 |
+| SF-SEARCH-05 | 联网开关与触发；服务层校验输入及对象权限 | 本地完整且非时效不联网；仅上传资料模式有缺口时保留草稿；按该条构造正常及相关异常验证。 |
+| SF-SEARCH-06 | 来源验证；服务层校验输入及对象权限 | 保存URL、标题、域名、支持片段、获取时间；未知日期用null，不伪造；按该条构造正常及相关异常验证。 |
+| SF-SEARCH-07 | 时效检查；服务层校验输入及对象权限 | 固定概念与当前版本/近期事件分别验证；失败声明保留draft；按该条构造正常及相关异常验证。 |
+| SF-SEARCH-08 | 去重与补齐退出；服务层校验输入及对象权限 | 相同来源合并并保留版本，最多两轮补齐，结构或预算错误不靠搜索解决；按该条构造正常及相关异常验证。 |
+| SF-SEARCH-09 | 无结果及外部失败；服务层校验输入及对象权限 | 提示补充材料或重试，不将预置链接和模型记忆当实时搜索成果；按该条构造正常及相关异常验证。 |
+
+### GOAL 目标与预算设置
+
+父需求：FR-001、FR-002、FR-005、FR-045、FR-046。
+
+实现归属与数据/API入口：GoalService/BudgetService；goals/goal_specs/budgets；/goals、/learners/me/budget。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-GOAL-01 | 目标增查改归档；服务层校验输入及对象权限 | 多目标独立列表与详情，归档保留路径、作答和历史；按该条构造正常及相关异常验证。 |
+| SF-GOAL-02 | 结构化修正；服务层校验输入及对象权限 | 自然语言解析为技能、截止、时间与偏好，学生可修正后确认；按该条构造正常及相关异常验证。 |
+| SF-GOAL-03 | 输入校验；服务层校验输入及对象权限 | 拒绝空目标、非正预算和无效日期，无法理解时请求补充信息；按该条构造正常及相关异常验证。 |
+| SF-GOAL-04 | 全局时间设置；服务层校验输入及对象权限 | 设置时区、可学习日、日周上限，目标预算不得重复占用全局额度；按该条构造正常及相关异常验证。 |
+| SF-GOAL-05 | 班级显式关联；服务层校验输入及对象权限 | 目标默认私有，可关联本人一个班级，取消后不再展示教师详情投影；按该条构造正常及相关异常验证。 |
+| SF-GOAL-06 | 活动目标变更；服务层校验输入及对象权限 | 时间或技能变化创建新版本并评估重规划，不覆盖当前路径历史；按该条构造正常及相关异常验证。 |
+| SF-GOAL-07 | 不可行说明；服务层校验输入及对象权限 | 返回范围、时间、证据等冲突与可计算替代方向，不能虚报生成成功；按该条构造正常及相关异常验证。 |
+
+### DIAG 诊断与题库
+
+父需求：FR-003、FR-004、FR-008、FR-015。
+
+实现归属与数据/API入口：DiagnosticService/QuestionBank；diagnoses/items/attempts；/goals/{id}/diagnoses。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-DIAG-01 | 题库与知识映射；服务层校验输入及对象权限 | 题目包含题型、知识点、答案规则、解析、来源和不可变版本；按该条构造正常及相关异常验证。 |
+| SF-DIAG-02 | 诊断创建；服务层校验输入及对象权限 | 默认6至12题，覆盖关键先修；不足节点显示低置信度；按该条构造正常及相关异常验证。 |
+| SF-DIAG-03 | 答题与暂存；服务层校验输入及对象权限 | 显示进度和未答提示，草稿保存不产生评分证据；按该条构造正常及相关异常验证。 |
+| SF-DIAG-04 | 提交确认；服务层校验输入及对象权限 | 按题目版本校验答案，防重复点击；答案在正式提交前不返回；按该条构造正常及相关异常验证。 |
+| SF-DIAG-05 | 结果反馈；服务层校验输入及对象权限 | 显示正确错误、解析、知识点与初始化掌握度，保留诊断记录；按该条构造正常及相关异常验证。 |
+| SF-DIAG-06 | 重测与等价题；服务层校验输入及对象权限 | 新建attempt并保留历史，使用等价题或先补强，避免背答案刷掌握度；按该条构造正常及相关异常验证。 |
+| SF-DIAG-07 | 无题或生成失败；服务层校验输入及对象权限 | 明确缺口并保留可重试状态，不用占位题完成正式诊断；按该条构造正常及相关异常验证。 |
+
+### PATH 图谱与学习路径
+
+父需求：FR-008、FR-009、FR-010、FR-011、FR-012、FR-013。
+
+实现归属与数据/API入口：Graph/Planning/ValidatorService；graph_snapshots/paths/path_items；/goals/{id}/planning-runs、/paths/{id}/accept。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-PATH-01 | 图谱维护；服务层校验输入及对象权限 | 节点、技能、先修边和题目来源版本化，硬先修有环拒绝生效；按该条构造正常及相关异常验证。 |
+| SF-PATH-02 | 生成与运行恢复；服务层校验输入及对象权限 | 创建新run，显示阶段、失败原因和重试入口，刷新可恢复查询；按该条构造正常及相关异常验证。 |
+| SF-PATH-03 | 候选与正式隔离；服务层校验输入及对象权限 | 模型候选先校验；draft无法激活为正式路径；按该条构造正常及相关异常验证。 |
+| SF-PATH-04 | 先修与掌握度筛选；服务层校验输入及对象权限 | 按目标闭包和有效掌握度生成待学节点，不因打卡自动跳过先修；按该条构造正常及相关异常验证。 |
+| SF-PATH-05 | 全局排期；服务层校验输入及对象权限 | 所有目标和教师任务共用日周容量，按整数分钟计算，超限显示冲突；按该条构造正常及相关异常验证。 |
+| SF-PATH-06 | 路径规则审查；服务层校验输入及对象权限 | 校验先修、时间、截止、负荷、重复节点和来源，保存规则结果；按该条构造正常及相关异常验证。 |
+| SF-PATH-07 | 解释与引用；服务层校验输入及对象权限 | 展示为什么这样排序、学什么、多久、如何验收及来源定位；按该条构造正常及相关异常验证。 |
+| SF-PATH-08 | 路径接受与历史；服务层校验输入及对象权限 | 确认后原子切换活动路径，每目标最多一条，旧路径只读；按该条构造正常及相关异常验证。 |
+| SF-PATH-09 | 任务拆解与解锁；服务层校验输入及对象权限 | 任务带时长、日期、材料和验收方式，执行解锁取决于有效掌握证据；按该条构造正常及相关异常验证。 |
+
+### TASK 教师任务与分配
+
+父需求：FR-038、FR-039、FR-040、FR-046。
+
+实现归属与数据/API入口：TeacherTaskService；tasks/assignments/submissions；/teacher/tasks、/assignments/{id}/submissions。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-TASK-01 | 草稿创建编辑；服务层校验输入及对象权限 | 包含标题、说明、截止、预计分钟、完成方式及关联资源，草稿可修改；按该条构造正常及相关异常验证。 |
+| SF-TASK-02 | 接收人选择；服务层校验输入及对象权限 | 全班或指定本班有效学生，发布前预览分配范围；按该条构造正常及相关异常验证。 |
+| SF-TASK-03 | 发布冻结；服务层校验输入及对象权限 | 发布时冻结内容及成员快照，不能原地修改答案、时长和截止；按该条构造正常及相关异常验证。 |
+| SF-TASK-04 | 学生待办筛选；服务层校验输入及对象权限 | 显示未开始、进行中、完成、逾期和撤销状态，按截止排序；按该条构造正常及相关异常验证。 |
+| SF-TASK-05 | 文本链接打卡提交；服务层校验输入及对象权限 | 学生只提交本人分配，成功即完成普通任务，主观测验评分状态独立；按该条构造正常及相关异常验证。 |
+| SF-TASK-06 | 逾期补交；服务层校验输入及对象权限 | 允许补交，保存late和首次完成时间，完成不等于按时；按该条构造正常及相关异常验证。 |
+| SF-TASK-07 | 撤回与关闭；服务层校验输入及对象权限 | 撤回取消未完成分配并释放未来负荷，关闭停止新提交，历史保留；按该条构造正常及相关异常验证。 |
+| SF-TASK-08 | 变更重发；服务层校验输入及对象权限 | 发布后修改通过撤回再建新任务，保留前后关联，不能重写历史；按该条构造正常及相关异常验证。 |
+| SF-TASK-09 | 教师查看提交；服务层校验输入及对象权限 | 仅本人班级可查看内容、状态和反馈，不能访问私人目标；按该条构造正常及相关异常验证。 |
+| SF-TASK-10 | 负荷联动；服务层校验输入及对象权限 | 发布后占用截止前可用窗口，冲突产生重规划建议，不能直接改AI路径；按该条构造正常及相关异常验证。 |
+
+### ASSESS 评分、反馈与掌握度
+
+父需求：FR-014、FR-015、FR-016、FR-043、FR-044。
+
+实现归属与数据/API入口：Assessment/MasteryService；answers/score_versions/evidence/mastery；/attempts、/reviews。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-ASSESS-01 | 客观规则评分；服务层校验输入及对象权限 | 单选判断填空按版本化规则，多选默认全对得1其余0；按该条构造正常及相关异常验证。 |
+| SF-ASSESS-02 | 即时结果反馈；服务层校验输入及对象权限 | 提交后展示得分、答案、解析、相关知识点和建议，反馈可历史查询；按该条构造正常及相关异常验证。 |
+| SF-ASSESS-03 | 主观待复核；服务层校验输入及对象权限 | 简答/代码文本无确定性评分时pending_review，不伪装已判分；按该条构造正常及相关异常验证。 |
+| SF-ASSESS-04 | 教师rubric复核；服务层校验输入及对象权限 | 教师对本班提交按公开rubric评分并备注，不执行用户代码；按该条构造正常及相关异常验证。 |
+| SF-ASSESS-05 | 评分更正；服务层校验输入及对象权限 | 生成新评分版本与原因，重放有效观察序列，不重复增加掌握度；按该条构造正常及相关异常验证。 |
+| SF-ASSESS-06 | 证据去重；服务层校验输入及对象权限 | 同attempt多次重试或更换幂等键仍只产生一次有效观察；按该条构造正常及相关异常验证。 |
+| SF-ASSESS-07 | BKT更新与解释；服务层校验输入及对象权限 | 记录前后概率、证据、参数版本和阈值，未测不等于薄弱；按该条构造正常及相关异常验证。 |
+| SF-ASSESS-08 | 打卡边界；服务层校验输入及对象权限 | 时长正数、比例0至1，困难反馈与备注可存；阅读打卡不直接增加掌握度；按该条构造正常及相关异常验证。 |
+
+### REPLAN 重规划与预算协调
+
+父需求：FR-017、FR-040、FR-046。
+
+实现归属与数据/API入口：ReplanService/ReservationService；previews/reservations；/goals/{id}/replan-previews。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-REPLAN-01 | 触发评估；服务层校验输入及对象权限 | 掌握薄弱、连续两个任务到期未完成、预算/目标变化或证据冲突触发判断；按该条构造正常及相关异常验证。 |
+| SF-REPLAN-02 | 局部全局选择；服务层校验输入及对象权限 | 范围变动、预算变化超过30%或局部不可行时按既有规则全局重排；按该条构造正常及相关异常验证。 |
+| SF-REPLAN-03 | 差异预览；服务层校验输入及对象权限 | 展示原新节点、排期、补强任务、风险、依据和规则结果；按该条构造正常及相关异常验证。 |
+| SF-REPLAN-04 | 接受原子切换；服务层校验输入及对象权限 | 重新核对目标、掌握度、成员和预算版本，仅替换本目标预约；按该条构造正常及相关异常验证。 |
+| SF-REPLAN-05 | 拒绝与风险保留；服务层校验输入及对象权限 | 拒绝不改变原路径，保留风险提醒和先修执行限制；按该条构造正常及相关异常验证。 |
+| SF-REPLAN-06 | 陈旧预览拒绝；服务层校验输入及对象权限 | 输入变化返回409并提示重新生成，不接受过期方案；按该条构造正常及相关异常验证。 |
+| SF-REPLAN-07 | 补强保留历史；服务层校验输入及对象权限 | 创建独立补强task，不重复插入相同路径知识节点，不删除已完成事实；按该条构造正常及相关异常验证。 |
+
+### PROFILE 记录、进度与画像
+
+父需求：FR-036、FR-037、FR-048、FR-049、FR-050。
+
+实现归属与数据/API入口：Progress/ProfileService；learning_events/snapshots/refresh_events；/learners/me/profile、/teacher/classes/{id}/profile。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-PROFILE-01 | 本人记录筛选；服务层校验输入及对象权限 | 按时间、目标、班级、资源和任务查看本人阅读、作答、反馈与路径记录；按该条构造正常及相关异常验证。 |
+| SF-PROFILE-02 | 进度分层；服务层校验输入及对象权限 | 阅读完成、任务提交、知识掌握分别显示，不互相替代；按该条构造正常及相关异常验证。 |
+| SF-PROFILE-03 | 确定性统计；服务层校验输入及对象权限 | 实际时长源事件去重，完成率和按时率使用既有分母，分母0显示暂无数据；按该条构造正常及相关异常验证。 |
+| SF-PROFILE-04 | 学生完整画像；服务层校验输入及对象权限 | 展示上下文、行为、掌握、证据、风险及数据质量，仅本人可访问；按该条构造正常及相关异常验证。 |
+| SF-PROFILE-05 | 班级画像；服务层校验输入及对象权限 | 统计授权班级完成率、时长、掌握分布、共性薄弱和风险原因；按该条构造正常及相关异常验证。 |
+| SF-PROFILE-06 | 学生授权投影；服务层校验输入及对象权限 | 教师仅看本班证据和显式关联目标，排除私人目标与隐藏备注；按该条构造正常及相关异常验证。 |
+| SF-PROFILE-07 | 刷新与水位；服务层校验输入及对象权限 | 事件变化生成新不可变快照，同水位不重复生成，失败保留旧快照标stale；按该条构造正常及相关异常验证。 |
+| SF-PROFILE-08 | 画像历史；服务层校验输入及对象权限 | 查询窗口、版本、生成时间和依据，旧版本不被刷新覆盖；按该条构造正常及相关异常验证。 |
+| SF-PROFILE-09 | 解释与无数据；服务层校验输入及对象权限 | 风险附原因与观测时间，LLM只能解释确定性数字，未知不写成薄弱；按该条构造正常及相关异常验证。 |
+
+### AI 模型配置与执行编排
+
+父需求：FR-018、FR-019、FR-020、FR-021、FR-027、FR-028、FR-030。
+
+实现归属与数据/API入口：ConfigRegistry/LLMGateway/LangGraph；configs/runs/steps；/admin/model-configs、/runs。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-AI-01 | 配置版本；服务层校验输入及对象权限 | 保存模型端点、名称、生成搜索参数、超时及提示词版本；界面不返回密钥；按该条构造正常及相关异常验证。 |
+| SF-AI-02 | 能力试验；服务层校验输入及对象权限 | 检查认证、结构化输出和实际搜索能力，保存真实结果，不假定供应商支持；按该条构造正常及相关异常验证。 |
+| SF-AI-03 | 评估后激活；服务层校验输入及对象权限 | 只有评估通过配置可激活，失败回退上一有效配置；按该条构造正常及相关异常验证。 |
+| SF-AI-04 | 四Agent路由；服务层校验输入及对象权限 | 诊断、路径、审查、重规划职责明确，工具调用经过业务服务与授权；按该条构造正常及相关异常验证。 |
+| SF-AI-05 | 执行追踪；服务层校验输入及对象权限 | 保存run/step、输入版本、脱敏输出、工具调用、时间及错误；按该条构造正常及相关异常验证。 |
+| SF-AI-06 | 有限修复；服务层校验输入及对象权限 | 非法JSON最多修复2次，规划最多修复3次且受总时限约束，失败不写半成品正式业务；按该条构造正常及相关异常验证。 |
+| SF-AI-07 | 取消重试恢复；服务层校验输入及对象权限 | 保存检查点，中断可重试；取消阻止后续步骤和最终业务提交，已提交事务不假称回滚；按该条构造正常及相关异常验证。 |
+| SF-AI-08 | 云端隐私授权；服务层校验输入及对象权限 | 发送文本/嵌入前检查cloud_allowed，未授权使用本地处理或提示缺口；按该条构造正常及相关异常验证。 |
+| SF-AI-09 | 服务异常；服务层校验输入及对象权限 | 区分密钥无效、配额、限流、超时和搜索失败，基础学习链仍可用；按该条构造正常及相关异常验证。 |
+
+### OPS 审计、演示与交付
+
+父需求：FR-022、FR-041、FR-047。
+
+实现归属与数据/API入口：Audit/BackupService；audit_logs/manifest；受控CLI与管理员查询接口。路由前缀统一为 `/api/v1`；同名接口沿用原契约，不另建重复接口。
+
+| 子功能编号 | 实现用例 | 必须保持的规则与验证目标 |
+| --- | --- | --- |
+| SF-OPS-01 | 审计筛选；服务层校验输入及对象权限 | 按操作人、对象、时间和结果分页，普通用户不能改删审计；按该条构造正常及相关异常验证。 |
+| SF-OPS-02 | 演示初始化与重置；服务层校验输入及对象权限 | 受控命令可重复执行，危险重置确认并留审计，不开放学生一键清库；按该条构造正常及相关异常验证。 |
+| SF-OPS-03 | 健康与配置检查；服务层校验输入及对象权限 | 报告数据库、文件目录与模型配置状态，不输出秘密；按该条构造正常及相关异常验证。 |
+| SF-OPS-04 | 备份一致性；服务层校验输入及对象权限 | 备份数据库、附件、配置引用及版本清单，索引可重建，秘密另行受控交接；按该条构造正常及相关异常验证。 |
+| SF-OPS-05 | 恢复与验证；服务层校验输入及对象权限 | 在隔离目标恢复并核对记录、附件及索引，不直接覆盖正在运行数据；按该条构造正常及相关异常验证。 |
+| SF-OPS-06 | 安装使用说明；服务层校验输入及对象权限 | 提供初始化、启动、角色账号交接和故障排查，他人可按说明运行；按该条构造正常及相关异常验证。 |
+| SF-OPS-07 | 验收证据与贡献；服务层校验输入及对象权限 | 记录输入、预期、实际、版本、失败复测、个人贡献和AI使用，不将计划写成完成；按该条构造正常及相关异常验证。 |
+
+### 细化行为的统一实现契约
+
+认证扩展：users增加must_change_password、password_changed_at、auth_version；sessions保存签发版本、过期和撤销时间。改密、停用、重置与会话撤销在同一短事务完成。必须改密的会话仅允许/auth/me、/auth/change-password、/auth/logout；每次写入重新验证账号状态，不能只校验Cookie签名。冷却按账号安全摘要及来源组合计数，阈值和时间可配置，不因未知账号返回不同提示；登录成功轮换会话。密钥和密码不存前端缓存。
+
+新增接口约束：POST /auth/change-password接收旧/新/确认密码，不回显；PATCH /users/me仅允许展示名与学习资料白名单；GET /admin/users分页筛选；POST /admin/users/{id}/enable恢复账号但不恢复旧会话；成员退班/移除与班级归档必须同时取消未来分配预约和写事件。邀请使用次数通过条件更新或事务保证不会超用。
+
+并发约束：可编辑对象使用expected_version；旧版本409；同actor+scope+idempotency_key命中同结果，换幂等键不能绕过业务唯一约束。作答和BKT按attempt/evidence唯一约束保护；学习会话更新用替换差值而非重复追加。统计分母、历史快照和来源版本继续执行原20节契约。
+
+运行取消：POST /runs/{id}/cancel仅限运行所有者/授权运维；执行器每步和最终提交前检查cancel_requested。已提交步骤不回滚，重试仅重放幂等安全步骤。单机后台任务有持久状态和启动恢复检查，不能以进程内队列冒充可靠恢复。
+
+附件建模：resource_kind、publish_status、parse_status、index_status独立；正文型资源ready/indexed后发布，附件型无正文可published但index_status=not_applicable。字幕必须有resource_version_id和字幕版本，更新字幕使派生索引失效并重建。资源下架/成员变更后检索、下载、引用和云端发送重新鉴权。
+
+增补接口与字段需进入OpenAPI、迁移和前端类型。原子提交领域事实与待刷新事件，画像刷新失败保留旧版本；文件/SQL/向量跨存储用staging、发布指针和补偿清理，不宣称跨库事务。
+
+验证设计：优先验证凭据统一失败、首次改密限制、冷却恢复、重置旧会话失效、两教师两班隔离、重复邀请与重复作答、附件不可充当RAG正文、逾期补交统计、撤回释放预算、旧预览409及画像水位。结果需记录真实输入输出，当前仅完成设计检查。
+
+
+## 127项详细设计追踪补充（2026-11-03）
+
+127项逐项编码契约位于[后续任务编码前分析与技术设计第11节](2026-11-02-zhixing-followup-preimplementation-technical-design.md#11-127项逐项编码设计2026-11-03修订)。本补充保留既有FR/AT/SF编号。新增设计约束的实际落地与验收结论使用独立台账。
+
+| 子功能 | 名称 | 设计契约摘要 |
+| --- | --- | --- |
+| SF-AUTH-01 | 账号密码登录 | username/password→public_user和HttpOnly会话；Argon2验证，令牌只存哈希 |
+| SF-AUTH-02 | 输入检查 | username.trim与原始password分别校验；密码长度10～128，空值422 |
+| SF-AUTH-03 | 密码显隐 | passwordVisible为组件内布尔状态；切换input.type，值及光标位置保留 |
+| SF-AUTH-04 | 提交防重与反馈 | 同步提交锁覆盖请求全过程；网络失败释放锁，账号保留，错误显示在表单旁 |
+| SF-AUTH-05 | 首次登录改密 | must_change=1只允许me、改密和退出；改密成功递增auth_version并重新认证 |
+| SF-AUTH-06 | 本人修改密码 | old_password/new_password/confirm_password；旧密验证通过才更新哈希和撤销会话 |
+| SF-AUTH-07 | 忘记密码处理 | 忘记密码弹层展示管理员联系路径；重置后交付临时密码并设置must_change |
+| SF-AUTH-08 | 当前身份与角色导航 | GET me返回id/name/role/status/must_change；导航由role映射，接口独立鉴权 |
+| SF-AUTH-09 | 会话过期 | expires_at按服务器UTC判定；401清理所有私密视图，returnTo只允许站内授权路由 |
+| SF-AUTH-10 | 安全退出 | POST logout删除当前令牌会话并清cookie；随后读取受保护接口401 |
+| SF-AUTH-11 | 停用与重置即时失效 | users.status和auth_version参与每次会话查询；停用/重置事务内递增版本 |
+| SF-AUTH-12 | 失败限流与恢复 | login_attempts保存失败次数和cooldown_until；429返回Retry-After和剩余秒数 |
+| SF-AUTH-13 | 跨标签页退出同步 | BroadcastChannel或storage事件传播logout；收到后清除身份和缓存 |
+| SF-AUTH-14 | 认证审计 | 审计字段actor/action/target/result/time/request_id；失败登录采用安全账号摘要 |
+| SF-ACCOUNT-01 | 管理员初始化 | CLI初始化管理员，username唯一；重复执行返回已有账号，不覆盖密码或真实数据 |
+| SF-ACCOUNT-02 | 创建账号 | username/name/role/temporary_password；只允许teacher/student，重复账号409 |
+| SF-ACCOUNT-03 | 列表与筛选 | q/account_role/status/page；每页50条，返回公开字段，created_at/id稳定排序 |
+| SF-ACCOUNT-04 | 资料编辑 | PATCH users/me仅允许name；拒绝空白与超长，保存后更新页头姓名 |
+| SF-ACCOUNT-05 | 停用与恢复 | 目标账号active↔disabled；状态变化与auth_version递增同事务，恢复需重新登录 |
+| SF-ACCOUNT-06 | 密码重置 | 生成随机临时密码，仅本次受控交付；password_hash、must_change与auth_version原子更新 |
+| SF-ACCOUNT-07 | 角色保护 | 角色由初始化/建号入口决定；本人资料接口字段白名单，保护管理员不被普通管理动作修改 |
+| SF-ACCOUNT-08 | 误操作防护 | 停用/重置先展示账号、影响及确认按钮；取消时零写请求，成功后刷新列表 |
+| SF-CLASS-01 | 新建与编辑班级 | name/description/version；仅owner可改active班级，版本不符409 |
+| SF-CLASS-02 | 班级列表与详情 | 列表限定owner或active membership；详情返回本人关系，教师附成员状态 |
+| SF-CLASS-03 | 邀请码生成 | expires_in_hours/max_uses；随机原码仅创建响应展示，持久化hash，提供复制反馈 |
+| SF-CLASS-04 | 邀请码校验 | 先校验码、归档、撤销及有效期，再校验使用上限；加入和计数同事务 |
+| SF-CLASS-05 | 重复入班 | (class_id,user_id)唯一；有效成员重复加入返回already_joined且used不增长 |
+| SF-CLASS-06 | 成员查询 | 成员列表只含公开资料和成员状态；教师学生投影接口再次校验班级所有权 |
+| SF-CLASS-07 | 退班与移除 | 成员变left；取消未完成assignments与活动teacher reservations，保留attempts |
+| SF-CLASS-08 | 班级归档 | 归档事务撤销邀请、取消待办与预约并touch学生；恢复也不复活旧邀请和旧分配 |
+| SF-CLASS-09 | 晚入班补发 | student_ids/expected_version；复制原题目为关联补发draft，相同接收人待发布草稿复用 |
+| SF-RESOURCE-01 | 分类列表与筛选 | class_id/kind/tag/q/status/parse_status/page组合；先授权再分页，不泄漏隐私数量 |
+| SF-RESOURCE-02 | 上传信息 | 标题、说明、标签、source_license、class_id、cloud_allowed分别存储，范围和云端授权独立 |
+| SF-RESOURCE-03 | 单批上传与失败反馈 | 逐文件返回id或error；20MiB/文件、10文件/批、100MiB/批，失败清理临时附件 |
+| SF-RESOURCE-04 | 格式校验 | 扩展名/MIME/文件头联合检查；文本UTF-8、PDF可抽取正文，扫描件failed并给修正建议 |
+| SF-RESOURCE-05 | 解析状态与重试 | parse_jobs按version唯一；queued/running/ready/failed，最多3次和租约恢复，重复重试复用任务 |
+| SF-RESOURCE-06 | 版本与元数据编辑 | 候选版本expected_version；解析索引成功后核版本切draft，失败保留现版，旧引用绑定version_id |
+| SF-RESOURCE-07 | 发布与下架 | owner教师与active班级校验；正文须ready且indexed；下架禁止新召回，历史证据走快照权限 |
+| SF-RESOURCE-08 | 正文与下载 | 详情DTO隐去storage_key；下载重新授权；Markdown采用安全渲染，拒绝可执行HTML和脚本协议 |
+| SF-RESOURCE-09 | 音视频与字幕 | 播放器只请求授权附件URL；字幕绑定resource_version_id及时间范围，字幕失败不标正文成功 |
+| SF-RESOURCE-10 | 图片及其他附件 | image/attachment允许预览下载；parse_status=not_applicable，OCR能力单独标记 |
+| SF-RESOURCE-11 | 网址登记审核 | url/title/description/review_status；HTTP(S)校验，审核发布与正文抓取验证分开记录 |
+| SF-RESOURCE-12 | 学生私有资料 | student owner且scope=private；教师查询不可见；cloud_allowed单独切换并在发送时重查 |
+| SF-RESOURCE-13 | 主动阅读记录 | (student_id,session_id)唯一；更新minutes/proportion而非累加，来源授权及正数时长校验 |
+| SF-RESOURCE-14 | 附件发布边界 | 附件发布允许not_applicable，正文RAG仅召回ready/indexed片段，UI显示附件不可检索 |
+| SF-SEARCH-01 | 授权检索 | query/scope/top_k；SQL授权ID限定召回候选，展示和云端发送前回查权限 |
+| SF-SEARCH-02 | 混合召回 | 关键词与向量各取候选后RRF融合；chunk_id/version_id/page/time定位真实片段 |
+| SF-SEARCH-03 | 结果解释 | 返回match_type/excerpt/score/source/coverage_status；元数据命中不冒充正文支持 |
+| SF-SEARCH-04 | 覆盖检查 | 按目标节点生成missing_mapping/prerequisite/duration/question/evidence结构化缺口 |
+| SF-SEARCH-05 | 联网开关与触发 | 联网许可、上传资料模式及freshness共同决定触发；禁止联网时保留缺口草稿 |
+| SF-SEARCH-06 | 来源验证 | source_snapshot保存规范URL、标题、域名、支持片段、fetched_at/published_at/hash |
+| SF-SEARCH-07 | 时效检查 | 节点标stable或time_sensitive；按声明时间窗核对发布日期，未知日期保存null |
+| SF-SEARCH-08 | 去重与补齐退出 | 规范URL和内容hash去重；最多2轮，缺口无变化则退出并保留失败原因 |
+| SF-SEARCH-09 | 无结果及外部失败 | 空结果/配额/网络/解析失败分码返回，提示上传补充，保留已核实结果 |
+| SF-GOAL-01 | 目标增查改归档 | title/target_skill_ids/due_date/weekly_minutes/class_id/version；归档释放本目标未来预约 |
+| SF-GOAL-02 | 结构化修正 | goal_spec含范围、先修、截止、难度与资源模式；用户确认后冻结spec_version |
+| SF-GOAL-03 | 输入校验 | 校验标题、日期、知识点存在性、正数预算及目标范围，字段级错误返回422 |
+| SF-GOAL-04 | 全局时间设置 | daily_minutes/weekly_minutes/timezone/weekdays/version；ZoneInfo计算学习日，UTC存事件 |
+| SF-GOAL-05 | 班级显式关联 | class_id默认null；关联时校验有效成员，关联变动不能泄漏旧私人备注 |
+| SF-GOAL-06 | 活动目标变更 | 活动目标修改生成影响说明和新输入版本；原路径需重评估，不能覆盖已完成事实 |
+| SF-GOAL-07 | 不可行说明 | 返回available/required/conflicts/reasons；区分预算证实不足与搜索未找到 |
+| SF-DIAG-01 | 题库与知识映射 | 题库question_id/version/skill_id/options/answer/rubric；每个目标节点至少一个有效题 |
+| SF-DIAG-02 | 诊断创建 | 冻结goal_spec、question_snapshot和创建时间；未提交诊断重复创建复用 |
+| SF-DIAG-03 | 答题与暂存 | answers按题号存草稿；未知题号/非法选项422，草稿无评分与掌握度副作用 |
+| SF-DIAG-04 | 提交确认 | 交卷显示未答清单和确认；提交携带diagnosis_id，完整性服务端校验 |
+| SF-DIAG-05 | 结果反馈 | 结果含逐题正确性、解析、知识点与证据质量；历史读取同一快照 |
+| SF-DIAG-06 | 重测与等价题 | 学习后才领等价卷；新题快照隔离，未交重测复用，题库耗尽409 |
+| SF-DIAG-07 | 无题或生成失败 | 缺映射或生成失败返回missing_skills和可重试原因，不能生成空卷成功状态 |
+| SF-PATH-01 | 图谱维护 | graph_version含nodes/edges与来源；保存时拓扑检查、自环和不存在端点拒绝 |
+| SF-PATH-02 | 生成与运行恢复 | POST创建run_id；GET轮询，持久步骤及输入指纹，中断标记可重试 |
+| SF-PATH-03 | 候选与正式隔离 | candidate/pending_acceptance/active分离；草稿不计预约，不进入正式执行 |
+| SF-PATH-04 | 先修与掌握度筛选 | 先修拓扑和mastery阈值筛选；跳过节点记录证据，保留所有目标覆盖 |
+| SF-PATH-05 | 全局排期 | 排期联合所有目标与教师预约，按用户时区学习日计算；预约原子写入 |
+| SF-PATH-06 | 路径规则审查 | VR-001～008逐条返回rule_id/pass/reason；任何硬规则失败阻止接受 |
+| SF-PATH-07 | 解释与引用 | 解释绑定节点、资源版本、片段与规则；无来源说明缺口，点击后重新鉴权 |
+| SF-PATH-08 | 路径接受与历史 | accept携带版本指纹；版本状态与预约同事务，旧路径superseded并保留 |
+| SF-PATH-09 | 任务拆解与解锁 | path item映射skill/task/source，解锁依赖先修完成与掌握门槛，越序409 |
+| SF-TASK-01 | 草稿创建编辑 | TaskInput冻结mode/resource/questions；draft编辑需version并重新校验截止 |
+| SF-TASK-02 | 接收人选择 | recipients空数组表示发布时全班；显式选择去重校验本班active成员 |
+| SF-TASK-03 | 发布冻结 | 发布冻结题目/资源版本/接收人；tasks状态和assignments同事务提交 |
+| SF-TASK-04 | 学生待办筛选 | 按due_at排序，状态筛选覆盖not_started/in_progress/completed/overdue/cancelled |
+| SF-TASK-05 | 文本链接打卡提交 | assignment归本人；text/link/checkin分别校验，普通完成与评分状态独立 |
+| SF-TASK-06 | 逾期补交 | 比较服务器提交时间和due_at保存late；first_completed_at首次写入不被重试覆盖 |
+| SF-TASK-07 | 撤回与关闭 | withdraw取消未完成分配和活动预约；close阻止新提交，两者保留历史 |
+| SF-TASK-08 | 变更重发 | previous_task_id关联修订draft；旧题目、分配和成绩不更新 |
+| SF-TASK-09 | 教师查看提交 | teacher owner限定提交查询，输出作答/状态/版本反馈，排除私人目标 |
+| SF-TASK-10 | 负荷联动 | 截止前窗口预约teacher负荷；冲突显式返回学生和分钟，生成重评估提示 |
+| SF-ASSESS-01 | 客观规则评分 | rule_version冻结评分规范；多选按集合严格相等，填空按明确大小写空白规则 |
+| SF-ASSESS-02 | 即时结果反馈 | 提交后返回score/answer/explanation/skill/recommendations，历史同attempt返回 |
+| SF-ASSESS-03 | 主观待复核 | subjective提交pending_review且score=null，未复核不写掌握证据 |
+| SF-ASSESS-04 | 教师rubric复核 | 复核携带rubric_version/score/comment；校验owner和分数0～1 |
+| SF-ASSESS-05 | 评分更正 | 评分版本追加reason/reviewer/time；停用旧观察后按有效证据时间序重放BKT |
+| SF-ASSESS-06 | 证据去重 | (attempt_id,question_id,rule_version)有效观察唯一，业务键胜于客户端幂等键 |
+| SF-ASSESS-07 | BKT更新与解释 | 存prior/posterior/parameter_version/evidence_id，默认初值标未测，阈值可解释 |
+| SF-ASSESS-08 | 打卡边界 | minutes>0、proportion在0～1；difficulty/notes保存，checkin不写mastery observation |
+| SF-REPLAN-01 | 触发评估 | 触发快照记录低掌握、连续2项逾期、预算目标变化和证据冲突，返回依据 |
+| SF-REPLAN-02 | 局部全局选择 | 预算相对变化>30%、范围变动或局部失败时global，其他local，记录decision_reason |
+| SF-REPLAN-03 | 差异预览 | diff按稳定节点ID比较新增/删除/保留、日期分钟变化、风险与规则结果 |
+| SF-REPLAN-04 | 接受原子切换 | 事务内重查目标、掌握度、成员、预算与资源版本，仅切本目标未来预约 |
+| SF-REPLAN-05 | 拒绝与风险保留 | reject仅改preview状态，旧path与预约继续；保留风险和先修阻断 |
+| SF-REPLAN-06 | 陈旧预览拒绝 | fingerprint比较所有输入版本，任一变化409并给重新生成入口 |
+| SF-REPLAN-07 | 补强保留历史 | remediation独立task及关联skill/path，去重业务键，旧完成事实保留 |
+| SF-PROFILE-01 | 本人记录筛选 | from/to/class/goal/resource/task/type/page，所有查询先限定本人事实 |
+| SF-PROFILE-02 | 进度分层 | 独立read_progress/submission_progress/mastery，不用阅读比例替代掌握 |
+| SF-PROFILE-03 | 确定性统计 | 事件唯一键去重；完成率completed/assigned，按时率on_time/completed，分母0为null |
+| SF-PROFILE-04 | 学生完整画像 | 六段context/behavior/mastery/evidence/risk/data_quality仅本人完整获取 |
+| SF-PROFILE-05 | 班级画像 | 先圈定本班授权事实再聚合，返回分母、统计窗、分布及风险依据 |
+| SF-PROFILE-06 | 学生授权投影 | teacher owner及active membership控制投影，只有显式class_id目标和本班证据 |
+| SF-PROFILE-07 | 刷新与水位 | 事实与refresh_event同事务；同watermark复用，不可变新快照，失败返回旧版stale |
+| SF-PROFILE-08 | 画像历史 | snapshot_id/version/window/generated_at/watermark可查，保留旧内容及规则版本 |
+| SF-PROFILE-09 | 解释与无数据 | risk附evidence_ids/observed_at，解释只引用已有数值，无数据返回unknown |
+| SF-AI-01 | 配置版本 | config版本保存endpoint/model/generation/search/timeout/prompt_version及secret_env引用 |
+| SF-AI-02 | 能力试验 | 真实认证、JSON及搜索分别记录tested/passed/error，未测试能力显示unknown |
+| SF-AI-03 | 评估后激活 | 只有全项必要评价通过才active，切换事务保证唯一活动版，失败保留上一版 |
+| SF-AI-04 | 四Agent路由 | 诊断/路径/审查/重规划按状态路由，各节点经授权服务调用工具，规则审查独立 |
+| SF-AI-05 | 执行追踪 | run/step记录输入版本、tool、时间、错误和脱敏结构化输出，去除密钥原文 |
+| SF-AI-06 | 有限修复 | JSON最多2次修复、规划最多3次，统一180秒deadline；失败候选不发布 |
+| SF-AI-07 | 取消重试恢复 | checkpoint持久，取消令牌每步与提交前重查；重试保留parent_run_id和新输入指纹 |
+| SF-AI-08 | 云端隐私授权 | 正文及embedding发送前逐资源检查cloud_allowed和当前访问权，撤销即时生效 |
+| SF-AI-09 | 服务异常 | 认证/余额/429/超时/搜索错误映射独立code，基础作答不依赖网关可用性 |
+| SF-OPS-01 | 审计筛选 | actor/target/action/result/start/end/page；管理员只读，时间必须含时区，稳定排序 |
+| SF-OPS-02 | 演示初始化与重置 | CLI初始化幂等；危险重置仅显式演示目录及确认令牌，审计记录操作者和范围 |
+| SF-OPS-03 | 健康与配置检查 | 数据库实际查询、附件临时读写、active配置和密钥存在布尔；故障503且隐藏路径秘密 |
+| SF-OPS-04 | 备份一致性 | SQLite一致性备份+附件hash清单+schema/app/config版本，包含完整性校验 |
+| SF-OPS-05 | 恢复与验证 | 目标目录须不存在，恢复后核外键、数量、hash和授权检索；失败目录隔离 |
+| SF-OPS-06 | 安装使用说明 | 锁定依赖、迁移、初始化、启动、账号交付和排障按步骤给出，独立电脑复现 |
+| SF-OPS-07 | 验收证据与贡献 | SF→版本→输入/预期/实际→证据→结论；贡献/AI使用署名，失败和复测记录追加 |
+
+
+## 2026年11月6日功能增补同步
+
+本节将实施计划v1.2及2026年11月4日REG、KB、EXT增补纳入当前基线。当前完成状态按新版逐项复测，旧107/127属于历史记录。完整旧功能和增补对应关系见[当前功能清单与增补映射](../docs/evidence/implementation/current-function-inventory.md)。
+
+| 编号 | 模块 | 当前补充要求 |
+| --- | --- | --- |
+| REG-01 | AUTH/ACCOUNT | 学生与教师自助注册、密码确认、重复账号、注册后登录、禁止自选管理员 |
+| KB-01 | RESOURCE | TXT/MD/PDF/DOCX/PPTX批量上传、标签、草稿、发布及逐文件反馈 |
+| KB-02 | RESOURCE | 文档提取、课件备注、图片和扫描PDF OCR、音视频自动转写、低置信度人工复核 |
+| KB-03 | RESOURCE/SEARCH | 下载与预览、PDF页码、课件页号、DOCX段落和字幕时间定位 |
+| KB-04 | SEARCH | 授权正文检索、知识点覆盖判断、缺失节点及原因 |
+| KB-05 | SEARCH | 缺资料时实时搜索真实网址、来源、理由、获取时间与未核实标识 |
+| KB-06 | RESOURCE/SEARCH | 教师审核外部网址、授权抓取、正文解析索引及正式RAG准入 |
+| EXT-01 | RESOURCE | 分阶段状态、版本、字幕、班级发布范围、失败原因 |
+| EXT-02 | SEARCH | 关键词与向量混合召回、来源片段定位、覆盖缺口和可核验网址 |
+| EXT-03 | PROFILE/ACCOUNT | 画像证据、历史快照、更新时间、偏好修正 |
+| EXT-04 | TASK/ASSESS | 自动评分、待批改、已批改、退回补交、评分更正与审计 |
+| EXT-05 | REPLAN/GOAL | 重规划差异、证据解释、先修校验及统一预算预览 |
+| EXT-06 | PROFILE/CLASS | 班级薄弱点、逾期原因和授权学生下钻 |
+| EXT-07 | OPS/RESOURCE | 失败重试、在线索引重建、恢复结果与审计查询 |
+| EXT-08 | ASSESS/OPS | 代码题隔离执行、自动判题、CPU内存时间及网络限制 |
+
+教师上传的课程资料与学生私有资料分别授权。正文提取、索引和发布独立记录；DOCX按段落、PPTX按实际演示顺序与备注、PDF按页、字幕按有效时间段保留来源。仅有附件时不得宣称OCR/转写完成，未知媒体时长不得宣称已检查字幕超长。在线索引重建只限资源所有者、检查资料版本、仅操作当前就绪正文并事务提交及留审计。
+
+当前实现尚未覆盖全部新增功能，具体缺口及验证以清单和测试记录为准。EXT-08作为后期独立范围。
+
+
+## 2026年11月6日剩余功能编码落地
+
+本次按REG、KB和EXT增补推进源码，当前功能范围与状态以[完整功能清单](../docs/evidence/implementation/current-function-inventory.md)及[本轮验收记录](../docs/evidence/implementation/remaining-functions-acceptance.md)为准。旧107/127仅保留为历史验收快照。
+
+已接入本地图片与扫描PDF OCR、音视频离线转写、低置信度复核、媒体处理取消/重试、重复上传去重、PDF预览和字幕定位；新增本地中文向量、知识结构与题库映射检查、时效窗口、真实供应商搜索适配器和教师授权网页导入；新增云端四智能体、新主题图谱与三套独立题库、隔离代码判题、审计结果筛选、独立演示归档重置及60场景评价命令。
+
+实现选择采用RapidOCR、faster-whisper、FastEmbed与SQLite向量片段存储。云端四智能体使用现有LangGraph并经确定性业务服务核验，模型配置随运行冻结。代码执行要求预置Docker镜像，宿主进程不执行学生代码。
+
+模型与搜索密钥按用户选择暂不申请，相关供应商真实调用与60场景评价尚未执行。本机无Docker，真实容器验收待部署。独立电脑试用和人工语义评价仍需真实证据。这些状态均不得写为已验收通过。
+
+### 增量接口与数据契约
+
+迁移0010添加识别元数据、复核状态与任务类型；0011添加embedding_jobs和vector_chunks；0012保存搜索运行；0013冻结模型参数与运行配置；0014增加审计结果；0015冻结路径题库；0016增加代码用例和判题租约。
+
+- POST /resources/{id}/process启动本地OCR或转写，正文候选绑定expected_version，成功切草稿，低置信度不入索引。
+- GET /resources/{id}/parse-jobs及POST对应cancel/retry提供持久任务查询、取消和最多三次尝试；独立进程有15分钟时限，取消和租约转移均阻止结果提交。
+- POST /resources/{id}/review-extraction产生人工复核新版本；原图、原媒体和识别前版本保留。
+- POST /retrieval/search在授权当前版本中合并FTS5与本地中文向量，排序后再次检查当前授权与版本。
+- POST /retrieval/coverage检查已审核映射、题库、结构、学时与正文标题匹配，requires_current启用来源日期窗口。候选覆盖不等于语义正确性证明。
+- POST /retrieval/supplement尊重upload_only，外搜最多两轮，网址去重，返回未核实状态；供应商未返回真实来源时拒绝将模型文字作为搜索结果。
+- POST /resources/{id}/import-link要求教师确认抓取权，校验公共DNS并固定连接IP，限制重定向和2MiB正文；导入后须审核发布。
+- POST /goals/{id}/planning-runs及replan-previews通过engine=cloud选择云端。四节点调用经授权过滤、两次JSON格式修复、最多三次路径修复和180秒提交门控，取消或输入变更阻止提交正式候选。
+- POST /admin/graphs/generate根据已授权正文生成待审图谱，图谱启用要求初测、重测和练习题完整。路径练习题单独保存于path_question_bank，公开图谱删除题目答案。
+- code模式任务冻结标准输入输出用例，判题在数据库事务外执行；提交前再次检查成员、任务版本及运行租约。Docker禁网、只读根、无挂载、无特权、128MiB、0.5CPU、32进程、5秒每用例和64KiB输出上限。
+- 审计新增success/failed结果，失败业务请求仅记录路径、状态码与操作人，不记录请求凭据和正文。
+
+### 模型激活的质量复核门槛
+
+迁移0017新增持久质量报告。模型配置先完成JSON能力试验，再由评价命令记录60个场景的真实输出及硬判据。全部硬判据通过后，管理员逐例勾选确认教学语义并填写依据，才可批准报告和激活对应配置。不同配置不能复用报告，已复核报告不能原位改写。
+
+升级时，旧active配置转为approved待质量复核，已有路径历史保留。尚无真实密钥时只能进行接口契约验证，不得登记真实质量评价通过。
+
+模型调用轨迹追加配置ID、提示词版本、真实耗时及供应商最后响应提供的令牌用量和请求编号。未提供用量时保留null，不由模型估算。
+
+
+## 2026年11月8日OpenAI GPT接入
+
+模型配置支持OpenAI官方Base URL https://api.openai.com/v1，默认密钥环境变量为OPENAI_API_KEY。管理员页面可选择OpenAI GPT，再填写账号实际可用且支持Chat Completions与JSON输出的模型ID。
+
+GPT请求使用max_completion_tokens和模型默认采样参数。模型配置、授权正文、四Agent编排、60场景质量报告与逐例人工复核沿用现有流程。千问配置继续使用原参数。
+
+本次完成接口配置与响应契约验证，尚未配置真实OpenAI密钥或发起供应商调用。运行服务需重启后加载新接口代码。
+
+接口依据见[OpenAI官方Chat Completions文档](https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create)。
+
+
+## 2026年11月8日DeepSeek配置支持
+
+管理员的云端模型配置新增DeepSeek选项，默认Base URL为https://api.deepseek.com，模型预设为deepseek-flash，密钥环境变量为DEEPSEEK_API_KEY。模型名称仍可按账号实际权限修改。
+
+本轮默认采用非思考模式、JSON对象输出、max_tokens长度上限及可配置温度。空白或非法JSON沿用最多两次格式修复；四Agent、资料授权、60场景质量评价及人工复核门槛沿用现有流程。
+
+模型接入不自动切换联网搜索服务。当前代码支持千问、OpenAI GPT与DeepSeek三种配置。运行服务重启后加载新增选项，尚未设置真实DeepSeek密钥或执行供应商调用。
+
+接口依据见[DeepSeek官方接入说明](https://api-docs.deepseek.com/)与[JSON输出说明](https://api-docs.deepseek.com/guides/json_mode/)。
+
+
+## 2026-11-09 登录安全增补：手机绑定与短信验证码
+
+- 登录页显示密码文字同一行最右侧设置“修改密码”按钮；打开后可选当前密码验证或短信验证码验证。登录页另提供“绑定手机号”。
+- 绑定必须验证账号当前密码，再向新手机号发送短信。仅支持大陆11位手机号，一账号一号码、一号码一账号；当前不开放换绑，需管理员核实处理。
+- 短信验证码为随机6位，5分钟有效、一次使用、最多错误5次；手机号或账号维度60秒间隔、每小时5次。仅存储验证码Argon2摘要，不回传或记录明文验证码。
+- 短信验证改密必须匹配账号已绑定号码，成功后清除该账号全部会话。当前密码改密方式保留。
+- 新增0018迁移：user_phones、sms_codes；GET /auth/phone，POST /auth/phone/send、/bind、/reset/send、/reset（统一/api/v1前缀）。
+- 服务端配置SMS_GATEWAY_URL（HTTPS）及SMS_GATEWAY_TOKEN。网关接收Bearer认证及JSON phone/code/expires_in，必须HTTP200返回accepted=true才视为受理。此为项目短信适配协议，需要运营方网关对接真实短信服务商及已审核签名模板；不是直接配置任意服务商原生API地址。
+- 未配置返回503 SMS_NOT_CONFIGURED，发送异常返回502。不会显示模拟发送成功；当前无真实短信凭据，不宣称真实短信已发送。
+- 部署前备份数据库、执行0018迁移并重启后端。保留既有账号、密码、课程及资料。8000旧进程不自动加载新接口。
+
+
+### 2026-11-09 目标诊断页面修复
+
+目标与诊断新增模型状态刷新及激活说明，明确管理员在模型配置中完成密钥配置、真实能力试验、60场景评价、逐例人工批准后激活；学生不获得管理权限。GET /planning/model-status仅返回active/ready/model/reason，不返回密钥或环境变量名称。
+
+题库目录GET /curriculum/skills增加逐知识点diagnostic_available；页面提供重新获取题库按钮、连接或接口失败提示、无题库知识点禁选；目录失败/空选时禁止保存。诊断使用本地或审核题库，不以云端激活为前提。
+
+验收：前端构建通过；2项新增后端测试通过，原test_batch4.py的22项诊断相关回归通过；独立浏览器验收目录3项、创建目标并显示诊断试卷、模型激活说明可见且无脚本错误。检测到8000服务停止后已恢复并加载本次代码，未执行数据库迁移、重置或新增真实模型调用。截图见docs/evidence/implementation/form-layout/goal-readiness.png。

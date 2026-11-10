@@ -1,0 +1,125 @@
+{
+  "results": [
+    {
+      "role": "admin",
+      "page": "♙账号管理",
+      "passed": true
+    },
+    {
+      "role": "admin",
+      "page": "▤共享课程知识库",
+      "passed": true
+    },
+    {
+      "role": "admin",
+      "page": "⚙模型配置",
+      "passed": true
+    },
+    {
+      "role": "admin",
+      "page": "◷操作审计",
+      "passed": true
+    },
+    {
+      "role": "admin",
+      "page": "⌘知识图谱",
+      "passed": true
+    },
+    {
+      "role": "admin",
+      "page": "修改密码入口",
+      "passed": true
+    },
+    {
+      "role": "teacher",
+      "page": "◫班级总览",
+      "passed": true
+    },
+    {
+      "role": "teacher",
+      "page": "♙学生详情",
+      "passed": true
+    },
+    {
+      "role": "teacher",
+      "page": "▤课程知识库",
+      "passed": true
+    },
+    {
+      "role": "teacher",
+      "page": "▦任务管理",
+      "passed": true
+    },
+    {
+      "role": "teacher",
+      "page": "↗班级进度",
+      "passed": true
+    },
+    {
+      "role": "teacher",
+      "page": "⌕知识库检索",
+      "passed": true
+    },
+    {
+      "role": "teacher",
+      "page": "修改密码入口",
+      "passed": true
+    },
+    {
+      "role": "teacher",
+      "page": "窄屏上传并提交",
+      "passed": true
+    },
+    {
+      "role": "student",
+      "page": "◫学习概览",
+      "passed": true
+    },
+    {
+      "role": "student",
+      "page": "♙我的班级",
+      "passed": true
+    },
+    {
+      "role": "student",
+      "page": "◎目标与诊断",
+      "passed": true
+    },
+    {
+      "role": "student",
+      "page": "⌁我的学习路径",
+      "passed": true
+    },
+    {
+      "role": "student",
+      "page": "▤课程知识库",
+      "passed": true
+    },
+    {
+      "role": "student",
+      "page": "✓任务与反馈",
+      "passed": true
+    },
+    {
+      "role": "student",
+      "page": "◷学习记录",
+      "passed": true
+    },
+    {
+      "role": "student",
+      "page": "⌕资料检索与补充",
+      "passed": true
+    },
+    {
+      "role": "student",
+      "page": "修改密码入口",
+      "passed": true
+    },
+    {
+      "role": "student",
+      "page": "窄屏上传并提交",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

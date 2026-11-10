@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-31",
+  "modules": 14,
+  "subfunctions": 127,
+  "files": [
+    "docs\\superpowers\\specs\\2026-10-27-smart-learning-planner-requirements-spec.md",
+    "docs\\superpowers\\specs\\2026-10-27-smart-learning-planner-design.md",
+    "docs\\superpowers\\specs\\2026-10-27-smart-learning-planner-technical-design.md"
+  ],
+  "checks": [
+    "三份文档SF集合一致",
+    "新增区块SF无重复",
+    "FR-001～050与AT原编号保留"
+  ],
+  "status": "文档静态检查通过，未运行业务测试"
+}

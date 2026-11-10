@@ -1,0 +1,106 @@
+{
+  "results": [
+    {
+      "id": "SF-TASK-01",
+      "status": "passed",
+      "actual": "页面创建草稿并编辑四种题型快照"
+    },
+    {
+      "id": "SF-TASK-02",
+      "status": "passed",
+      "actual": "发布预览仅指定学生，发布后不可编辑，另一成员无分配"
+    },
+    {
+      "id": "SF-TASK-03",
+      "status": "passed",
+      "actual": "发布预览仅指定学生，发布后不可编辑，另一成员无分配"
+    },
+    {
+      "id": "SF-TASK-04",
+      "status": "passed",
+      "actual": "暂存后刷新恢复全部答案，进行中筛选有效"
+    },
+    {
+      "id": "SF-ASSESS-01",
+      "status": "passed",
+      "actual": "四种题型页面提交100%，展示答案解析知识点建议"
+    },
+    {
+      "id": "SF-ASSESS-02",
+      "status": "passed",
+      "actual": "四种题型页面提交100%，展示答案解析知识点建议"
+    },
+    {
+      "id": "SF-TASK-05",
+      "status": "passed",
+      "actual": "文本链接打卡三种普通任务页面提交成功"
+    },
+    {
+      "id": "SF-TASK-06",
+      "status": "passed",
+      "actual": "页面逾期筛选与补交标记有效"
+    },
+    {
+      "id": "SF-ASSESS-03",
+      "status": "passed",
+      "actual": "主观题页面待复核且无评分"
+    },
+    {
+      "id": "SF-TASK-09",
+      "status": "passed",
+      "actual": "教师查看本人提交并按公开rubric复核，页面更新评分状态"
+    },
+    {
+      "id": "SF-ASSESS-04",
+      "status": "passed",
+      "actual": "教师查看本人提交并按公开rubric复核，页面更新评分状态"
+    },
+    {
+      "id": "SF-ASSESS-05",
+      "status": "passed",
+      "actual": "评分更正原因与历史反馈可见"
+    },
+    {
+      "id": "SF-TASK-07",
+      "status": "passed",
+      "actual": "教师页面撤回关闭以及关联修订草稿创建成功"
+    },
+    {
+      "id": "SF-TASK-08",
+      "status": "passed",
+      "actual": "教师页面撤回关闭以及关联修订草稿创建成功"
+    },
+    {
+      "id": "SF-PROFILE-01",
+      "status": "passed",
+      "actual": "记录页按任务查询并显示阅读提交掌握分层、BKT概率版本依据"
+    },
+    {
+      "id": "SF-PROFILE-02",
+      "status": "passed",
+      "actual": "记录页按任务查询并显示阅读提交掌握分层、BKT概率版本依据"
+    },
+    {
+      "id": "SF-PROFILE-03",
+      "status": "passed",
+      "actual": "记录页按任务查询并显示阅读提交掌握分层、BKT概率版本依据"
+    },
+    {
+      "id": "SF-ASSESS-07",
+      "status": "passed",
+      "actual": "记录页按任务查询并显示阅读提交掌握分层、BKT概率版本依据"
+    },
+    {
+      "id": "SF-ASSESS-08",
+      "status": "passed",
+      "actual": "页面保存比例、困难和备注后可见，掌握证据数量未增长"
+    },
+    {
+      "id": "SF-TASK-10",
+      "status": "passed",
+      "actual": "页面发布后保留预算冲突提示，学生路径仍为原活动版本"
+    }
+  ],
+  "errors": [],
+  "checked_at": "2026-11-03T12:36:50.155Z"
+}

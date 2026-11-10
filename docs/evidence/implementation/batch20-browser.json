@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "id": "SF-AUTH-03",
+      "status": "passed"
+    },
+    {
+      "id": "SF-AUTH-04",
+      "status": "passed"
+    },
+    {
+      "id": "SF-AUTH-07",
+      "status": "passed"
+    },
+    {
+      "id": "SF-AUTH-13",
+      "status": "passed"
+    },
+    {
+      "id": "SF-ACCOUNT-08",
+      "status": "passed"
+    }
+  ],
+  "checked_at": "2026-11-02T11:15:10.803Z"
+}

@@ -1,0 +1,105 @@
+{
+  "checked_at": "2026-11-03T11:49:34.424Z",
+  "results": [
+    {
+      "id": "SF-CLASS-03",
+      "status": "observed",
+      "observation": "自定义有效期与次数可填写，生成成功后显示复制入口；剪贴板内容待验证"
+    },
+    {
+      "id": "SF-CLASS-07",
+      "status": "observed",
+      "observation": "教师成员列表显示移除入口，实际移除及退班后续验证"
+    },
+    {
+      "id": "SF-CLASS-08",
+      "status": "observed",
+      "observation": "归档入口可见，归档后只读待独立操作验证"
+    },
+    {
+      "id": "SF-RESOURCE-01",
+      "status": "observed",
+      "observation": "页面组合筛选触发kind=text服务端查询并返回200"
+    },
+    {
+      "id": "SF-RESOURCE-02",
+      "status": "observed",
+      "observation": "上传信息与云端授权字段可见"
+    },
+    {
+      "id": "SF-RESOURCE-03",
+      "status": "observed",
+      "observation": "混合上传页面显示正常文件，伪装媒体失败提示需结合接口证据"
+    },
+    {
+      "id": "SF-RESOURCE-04",
+      "status": "observed",
+      "observation": "伪装MP4在上传结果显示格式失败"
+    },
+    {
+      "id": "SF-RESOURCE-05",
+      "status": "observed",
+      "observation": "详情显示正文ready解析状态；排队失败重试待演练"
+    },
+    {
+      "id": "SF-RESOURCE-06",
+      "status": "observed",
+      "observation": "版本历史与新正文上传入口可用，候选切换由接口测试覆盖"
+    },
+    {
+      "id": "SF-RESOURCE-08",
+      "status": "observed",
+      "observation": "正文脚本文本未执行，原文件下载入口可见"
+    },
+    {
+      "id": "SF-RESOURCE-07",
+      "status": "observed",
+      "observation": "教师页面发布成功并切换为下架操作"
+    },
+    {
+      "id": "SF-RESOURCE-11",
+      "status": "observed",
+      "observation": "网址及推荐理由可编辑，保存发布待验证"
+    },
+    {
+      "id": "SF-RESOURCE-13",
+      "status": "observed",
+      "observation": "学生通过详情页面保存17分钟学习记录"
+    },
+    {
+      "id": "SF-RESOURCE-12",
+      "status": "observed",
+      "observation": "学生私有上传入口可操作，隔离由接口测试覆盖"
+    },
+    {
+      "id": "SF-ACCOUNT-04",
+      "status": "observed",
+      "observation": "页面修改姓名成功，服务端重读一致"
+    },
+    {
+      "id": "SF-ACCOUNT-01",
+      "status": "pending",
+      "observation": "本次页面演练未覆盖完整判据"
+    },
+    {
+      "id": "SF-CLASS-09",
+      "status": "pending",
+      "observation": "本次页面演练未覆盖完整判据"
+    },
+    {
+      "id": "SF-RESOURCE-09",
+      "status": "pending",
+      "observation": "本次页面演练未覆盖完整判据"
+    },
+    {
+      "id": "SF-RESOURCE-10",
+      "status": "pending",
+      "observation": "本次页面演练未覆盖完整判据"
+    },
+    {
+      "id": "SF-RESOURCE-14",
+      "status": "pending",
+      "observation": "本次页面演练未覆盖完整判据"
+    }
+  ]
+}

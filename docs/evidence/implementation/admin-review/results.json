@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "page": "账号管理",
+      "visible": true
+    },
+    {
+      "page": "共享课程知识库",
+      "visible": true
+    },
+    {
+      "page": "模型配置",
+      "visible": true
+    },
+    {
+      "page": "操作审计",
+      "visible": true
+    },
+    {
+      "page": "知识图谱",
+      "visible": true
+    }
+  ],
+  "errors": [],
+  "scope": "Isolated browser fixture; read-only page checks; no cloud calls"
+}

@@ -1,0 +1,34 @@
+{
+  "time": "2026-11-05T18:04:50.584Z",
+  "results": [
+    {
+      "name": "模型参数与提示词版本页面",
+      "passed": true
+    },
+    {
+      "name": "60场景逐例复核与模型激活门槛（契约样例）",
+      "passed": true
+    },
+    {
+      "name": "审计结果筛选页面",
+      "passed": true
+    },
+    {
+      "name": "新主题草稿与题库入口",
+      "passed": true
+    },
+    {
+      "name": "教师上传图片并执行真实本地OCR",
+      "passed": true
+    },
+    {
+      "name": "本地与云端四智能体模式选择",
+      "passed": true
+    },
+    {
+      "name": "授权检索、来源版本和未配置搜索状态",
+      "passed": true
+    }
+  ],
+  "pageErrors": []
+}

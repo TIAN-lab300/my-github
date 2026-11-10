@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-03",
+  "ids": [
+    "SF-PATH-01",
+    "SF-PATH-02",
+    "SF-PATH-03",
+    "SF-PATH-04",
+    "SF-PATH-05",
+    "SF-PATH-06",
+    "SF-PATH-07",
+    "SF-PATH-08",
+    "SF-PATH-09",
+    "SF-REPLAN-01",
+    "SF-REPLAN-02",
+    "SF-REPLAN-03",
+    "SF-REPLAN-04",
+    "SF-REPLAN-05",
+    "SF-REPLAN-06",
+    "SF-REPLAN-07",
+    "SF-AI-05",
+    "SF-AI-07",
+    "SF-OPS-04",
+    "SF-OPS-05"
+  ],
+  "passed": 20,
+  "overall_passed": 107,
+  "remaining": 20,
+  "backend_tests": 130,
+  "final_regression": 46,
+  "browser_passed": 18,
+  "cli_passed": 2,
+  "page_errors": []
+}

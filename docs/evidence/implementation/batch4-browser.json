@@ -1,0 +1,106 @@
+{
+  "results": [
+    {
+      "id": "SF-PROFILE-04",
+      "status": "passed",
+      "actual": "本人完整画像六部分可读，无测验时显示未知"
+    },
+    {
+      "id": "SF-PROFILE-09",
+      "status": "passed",
+      "actual": "本人完整画像六部分可读，无测验时显示未知"
+    },
+    {
+      "id": "SF-PROFILE-08",
+      "status": "passed",
+      "actual": "页面可选择历史画像版本并显示统计窗口与生成时间"
+    },
+    {
+      "id": "SF-PROFILE-07",
+      "status": "passed",
+      "actual": "刷新当前画像及事件水位页面可查询"
+    },
+    {
+      "id": "SF-GOAL-02",
+      "status": "passed",
+      "actual": "自然语言提取技能日期每周时间偏好，学生修正后确认保存"
+    },
+    {
+      "id": "SF-GOAL-07",
+      "status": "passed",
+      "actual": "预算可排但证据不足时页面明确列缺口，未虚报路径完成"
+    },
+    {
+      "id": "SF-GOAL-05",
+      "status": "passed",
+      "actual": "默认私有，页面关联班级后教师可见，取消关联后投影移除"
+    },
+    {
+      "id": "SF-PROFILE-06",
+      "status": "passed",
+      "actual": "默认私有，页面关联班级后教师可见，取消关联后投影移除"
+    },
+    {
+      "id": "SF-GOAL-01",
+      "status": "passed",
+      "actual": "目标列表详情与3版历史可查看，变更保存新版本"
+    },
+    {
+      "id": "SF-GOAL-06",
+      "status": "passed",
+      "actual": "目标列表详情与3版历史可查看，变更保存新版本"
+    },
+    {
+      "id": "SF-DIAG-01",
+      "status": "passed",
+      "actual": "页面6题诊断与版本、知识点来源一致，提交前无答案"
+    },
+    {
+      "id": "SF-DIAG-02",
+      "status": "passed",
+      "actual": "页面6题诊断与版本、知识点来源一致，提交前无答案"
+    },
+    {
+      "id": "SF-DIAG-03",
+      "status": "passed",
+      "actual": "暂存后刷新重新打开恢复1题答案和未答进度"
+    },
+    {
+      "id": "SF-DIAG-04",
+      "status": "passed",
+      "actual": "交卷取消零请求，确认后展示逐题反馈和诊断时掌握度"
+    },
+    {
+      "id": "SF-DIAG-05",
+      "status": "passed",
+      "actual": "交卷取消零请求，确认后展示逐题反馈和诊断时掌握度"
+    },
+    {
+      "id": "SF-DIAG-06",
+      "status": "passed",
+      "actual": "补强前重测拒绝，有学习记录后页面取得独立等价题并保留历史"
+    },
+    {
+      "id": "SF-GOAL-04",
+      "status": "passed",
+      "actual": "个人设置页面保存日周预算、时区与可学习日，旧路径保持历史"
+    },
+    {
+      "id": "SF-GOAL-03",
+      "status": "passed",
+      "actual": "未知目标请求补充范围，诊断明确缺题库且没有占位试卷"
+    },
+    {
+      "id": "SF-DIAG-07",
+      "status": "passed",
+      "actual": "未知目标请求补充范围，诊断明确缺题库且没有占位试卷"
+    },
+    {
+      "id": "SF-PROFILE-05",
+      "status": "passed",
+      "actual": "教师班级画像显示授权统计和掌握分布，历史快照可选"
+    }
+  ],
+  "errors": [],
+  "checked_at": "2026-11-03T12:55:51.320Z"
+}

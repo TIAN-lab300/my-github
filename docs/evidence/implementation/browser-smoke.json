@@ -1,0 +1,10 @@
+{
+  "roles": [
+    "student",
+    "teacher",
+    "admin"
+  ],
+  "screenshots": 4,
+  "errors": [],
+  "checked_at": "2026-10-31T12:33:12.649Z"
+}

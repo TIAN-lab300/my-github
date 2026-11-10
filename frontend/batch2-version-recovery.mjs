@@ -1,0 +1,43 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
+const context=await browser.newContext(),page=await context.newPage();
+const base='http://127.0.0.1:8003',api=base+'/api/v1',results=[];
+try{
+ await page.goto(base);
+ await page.getByLabel('账号',{exact:true}).fill('teacher');
+ await page.getByLabel('密码',{exact:true}).fill('AcceptanceOnly!123');
+ await page.getByRole('button',{name:'登录',exact:true}).click();
+ await page.getByRole('button',{name:'退出登录'}).waitFor();
+ const c=await context.request.post(api+'/classes',{data:{name:'版本验收-'+Date.now(),description:'test'}});
+ const cid=(await c.json()).id;
+ const name='failed-'+Date.now()+'.txt';
+ const upload=await context.request.post(api+'/resources',{multipart:{class_id:cid,description:'正文',tags:'test',source_license:'own',files:{name,mimeType:'text/plain',buffer:Buffer.from([255])}}});
+ assert.equal(upload.status(),201);
+ const rid=(await upload.json())[0].id;
+ await page.getByRole('link',{name:'课程知识库'}).click();
+ const card=page.locator('section.card').filter({has:page.getByRole('heading',{name,exact:true})});
+ await card.getByRole('button',{name:'查看资料'}).click();
+ await page.getByText('解析状态：failed',{exact:true}).waitFor();
+ const retry=page.waitForResponse(r=>r.url().endsWith('/retry-parse'));
+ await page.getByRole('button',{name:'重试正文解析'}).click();
+ assert.equal((await retry).status(),200);
+ await page.getByRole('heading',{name:'正文版本管理'}).waitFor();
+ await page.getByText('解析状态：failed',{exact:true}).waitFor({timeout:20000});
+ results.push({id:'SF-RESOURCE-05',status:'observed',actual:'页面重试请求成功，保持详情，后台失败后状态可见'});
+ const before=await (await context.request.get(api+'/resources/'+rid)).json();
+ await page.getByLabel('上传新正文').setInputFiles({name:'recovered.txt',mimeType:'text/plain',buffer:Buffer.from('恢复后的函数正文')});
+ await page.getByRole('button',{name:'保存新版本'}).click();
+ await page.getByText('新正文已解析为草稿，请审核后重新发布',{exact:true}).waitFor({timeout:20000});
+ await page.locator('article').filter({hasText:'恢复后的函数正文'}).waitFor();
+ const after=await (await context.request.get(api+'/resources/'+rid)).json();
+ assert.notEqual(before.current_version,after.current_version);
+ assert.equal(after.status,'draft');
+ await page.getByRole('button',{name:'查看版本历史'}).click();
+ await page.getByText('recovered.txt',{exact:false}).last().waitFor();
+ results.push({id:'SF-RESOURCE-06',status:'observed',actual:'新版本异步完成后页面详情自动更新，草稿待审且历史可查询'});
+ await page.screenshot({path:'../docs/evidence/implementation/batch2-version-recovery.png',fullPage:true});
+}catch(e){results.push({id:'FLOW',status:'failed',error:e.message})}
+finally{await browser.close();fs.writeFileSync('../docs/evidence/implementation/batch2-version-recovery.json',JSON.stringify({checked_at:new Date().toISOString(),results},null,2))}
+console.log(JSON.stringify(results,null,2));

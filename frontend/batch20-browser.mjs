@@ -1,0 +1,17 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const base='http://127.0.0.1:8002',evidence='../docs/evidence/implementation';
+const browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
+const results=[];
+async function check(id,fn){const context=await browser.newContext();try{await fn(context);results.push({id,status:'passed'})}catch(e){results.push({id,status:'failed',error:e.message});throw e}finally{await context.close()}}
+async function open(context){const page=await context.newPage();await page.goto(base);await page.getByRole('heading',{name:'欢迎回来'}).waitFor();return page}
+async function login(page,name='student'){await page.getByLabel('账号',{exact:true}).fill(name);await page.getByLabel('密码',{exact:true}).fill('AcceptanceOnly!123');await page.getByRole('button',{name:'登录',exact:true}).click();await page.getByRole('button',{name:'退出登录'}).waitFor()}
+try{
+ await check('SF-AUTH-03',async c=>{const p=await open(c),pw=p.getByLabel('密码',{exact:true});await pw.fill('VisibleOnly!123');assert.equal(await pw.getAttribute('type'),'password');await p.getByLabel('显示密码').check();assert.equal(await pw.getAttribute('type'),'text');assert.equal(await pw.inputValue(),'VisibleOnly!123');await p.getByLabel('显示密码').uncheck();assert.equal(await pw.getAttribute('type'),'password')});
+ await check('SF-AUTH-04',async c=>{const p=await open(c);let requests=0;await p.route('**/api/v1/auth/login',async route=>{requests++;await new Promise(r=>setTimeout(r,500));await route.continue()});await p.getByLabel('账号',{exact:true}).fill('student');await p.getByLabel('密码',{exact:true}).fill('AcceptanceOnly!123');await p.getByRole('button',{name:'登录',exact:true}).evaluate(b=>{b.click();b.click()});await p.getByRole('button',{name:'退出登录'}).waitFor();assert.equal(requests,1)});
+ await check('SF-AUTH-07',async c=>{const p=await open(c);await p.getByText('忘记密码？请联系管理员重置。使用临时密码的账号首次登录须改密。',{exact:true}).waitFor();assert.equal(await p.locator('input[type=email]').count(),0)});
+ await check('SF-AUTH-13',async c=>{const p=await open(c);await login(p);const other=await c.newPage();await other.goto(base);await other.getByRole('button',{name:'退出登录'}).waitFor();await p.getByRole('button',{name:'退出登录'}).click();await other.getByRole('heading',{name:'欢迎回来'}).waitFor();const r=await c.request.get(base+'/api/v1/auth/me');assert.equal(r.status(),401)});
+ await check('SF-ACCOUNT-08',async c=>{const p=await open(c);await login(p,'admin');await p.getByRole('heading',{name:'创建教师/学生账号'}).waitFor();let writes=0,dialogs=0;p.on('request',r=>{if(r.method()==='POST'&&/\/(disable|enable|reset-password)$/.test(r.url()))writes++});p.on('dialog',async d=>{dialogs++;await d.dismiss()});const row=p.getByRole('row').filter({hasText:'student'}).first();await row.getByRole('button',{name:'停用',exact:true}).click();await row.getByRole('button',{name:'重置密码',exact:true}).click();assert.equal(dialogs,2);assert.equal(writes,0);await p.getByLabel('筛选身份').selectOption('teacher');await p.getByRole('button',{name:'筛选',exact:true}).click();await p.getByRole('cell').filter({hasText:'teacher'}).first().waitFor();await p.screenshot({path:evidence+'/batch20-account-filter.png',fullPage:true})});
+}finally{await browser.close();fs.writeFileSync(evidence+'/batch20-browser.json',JSON.stringify({results,checked_at:new Date().toISOString()},null,2))}
+console.log(`${results.length} browser subfunctions passed`);

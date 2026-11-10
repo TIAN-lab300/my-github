@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-03",
+  "ids": [
+    "SF-GOAL-01",
+    "SF-GOAL-02",
+    "SF-GOAL-03",
+    "SF-GOAL-04",
+    "SF-GOAL-05",
+    "SF-GOAL-06",
+    "SF-GOAL-07",
+    "SF-DIAG-01",
+    "SF-DIAG-02",
+    "SF-DIAG-03",
+    "SF-DIAG-04",
+    "SF-DIAG-05",
+    "SF-DIAG-06",
+    "SF-DIAG-07",
+    "SF-PROFILE-04",
+    "SF-PROFILE-05",
+    "SF-PROFILE-06",
+    "SF-PROFILE-07",
+    "SF-PROFILE-08",
+    "SF-PROFILE-09"
+  ],
+  "passed": 20,
+  "overall_passed": 87,
+  "remaining": 40,
+  "backend_tests": 106,
+  "browser_passed": 20,
+  "page_errors": []
+}

@@ -56,11 +56,11 @@
 
 | 文件 | 本次处理 | 使用方式 |
 | --- | --- | --- |
-| [项目设计方案](2026-10-27-smart-learning-planner-design.md) | 保留产品/架构内容，修正原位置的冲突，新增需求/验收与补齐索引 | 产品概览与范围说明 |
-| [需求规格说明书](2026-10-27-smart-learning-planner-requirements-spec.md) | FR扩展至047，AT扩展至030；5.8至5.12补规则、状态、预算、隐私、时效 | 产品行为与验收基准 |
+| [项目设计方案](../../../docx/2026-10-27-smart-learning-planner-design.md) | 保留产品/架构内容，修正原位置的冲突，新增需求/验收与补齐索引 | 产品概览与范围说明 |
+| [需求规格说明书](../../../docx/2026-10-27-smart-learning-planner-requirements-spec.md) | FR扩展至047，AT扩展至030；5.8至5.12补规则、状态、预算、隐私、时效 | 产品行为与验收基准 |
 | [澄清与决策登记](2026-10-27-smart-learning-planner-srs-questions.md) | 原100题更新为决策记录，新增Q-101至110 | 查边界、建议默认值和外部待确认项 |
 | [课堂汇报设计稿](2026-10-27-smart-learning-planner-class-report-design.md) | 重写17页并配对讲稿，加入30分钟与四项材料模板 | 后续更新PPT的依据；本次不含PPT文件 |
-| [技术设计说明书](2026-10-27-smart-learning-planner-technical-design.md) | 修正门控/示例/API/计划；第20节补数据、事务、权限、供应商、评测和手算用例 | 编码与测试参考 |
+| [技术设计说明书](../../../docx/2026-10-27-smart-learning-planner-technical-design.md) | 修正门控/示例/API/计划；第20节补数据、事务、权限、供应商、评测和手算用例 | 编码与测试参考 |
 | [课堂演讲稿](2026-10-27-smart-learning-planner-class-report-speech.md) | 17页逐页对应，A/B分工；附真实版本/原型/失败分支和个人成果讲法 | 可朗读主体，个人成果字段必须按真实进度填写 |
 
 保留原文件正文的大部分设计细节，以便追踪；新增完整规则集中在SRS5.8至5.12和技术20节，概览通过相对链接指向统一定义。

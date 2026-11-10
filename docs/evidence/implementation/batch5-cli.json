@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "id": "SF-OPS-04",
+      "status": "passed",
+      "actual": "CLI生成数据库、附件、配置引用、版本及SHA-256清单，备份源为独立验收库"
+    },
+    {
+      "id": "SF-OPS-05",
+      "status": "passed",
+      "actual": "CLI独立目录恢复，记录数量/附件hash/外键核对通过，索引重建后真实关键词命中"
+    }
+  ],
+  "schema_revision": "0009",
+  "table_count": 35,
+  "attachment_count": 1
+}

@@ -1,0 +1,96 @@
+{
+  "results": [
+    {
+      "id": "SF-PATH-01",
+      "status": "passed",
+      "actual": "管理员页面拒绝循环图，登记并启用无环图谱版本"
+    },
+    {
+      "id": "SF-PATH-02",
+      "status": "passed",
+      "actual": "页面显示缺来源失败，补资料后重试成功；刷新从运行历史恢复阶段、输入版本与检查点"
+    },
+    {
+      "id": "SF-AI-05",
+      "status": "passed",
+      "actual": "页面显示缺来源失败，补资料后重试成功；刷新从运行历史恢复阶段、输入版本与检查点"
+    },
+    {
+      "id": "SF-AI-07",
+      "status": "passed",
+      "actual": "页面显示缺来源失败，补资料后重试成功；刷新从运行历史恢复阶段、输入版本与检查点"
+    },
+    {
+      "id": "SF-PATH-03",
+      "status": "passed",
+      "actual": "候选待接受，八条规则逐条通过，能打开精确资源版本正文及定位摘要"
+    },
+    {
+      "id": "SF-PATH-06",
+      "status": "passed",
+      "actual": "候选待接受，八条规则逐条通过，能打开精确资源版本正文及定位摘要"
+    },
+    {
+      "id": "SF-PATH-07",
+      "status": "passed",
+      "actual": "候选待接受，八条规则逐条通过，能打开精确资源版本正文及定位摘要"
+    },
+    {
+      "id": "SF-PATH-04",
+      "status": "passed",
+      "actual": "待学先修闭包按掌握度生成，执行顺序显示日期分钟材料和验收，后续节点锁定"
+    },
+    {
+      "id": "SF-PATH-05",
+      "status": "passed",
+      "actual": "待学先修闭包按掌握度生成，执行顺序显示日期分钟材料和验收，后续节点锁定"
+    },
+    {
+      "id": "SF-PATH-09",
+      "status": "passed",
+      "actual": "待学先修闭包按掌握度生成，执行顺序显示日期分钟材料和验收，后续节点锁定"
+    },
+    {
+      "id": "SF-PATH-08",
+      "status": "passed",
+      "actual": "页面确认接受后形成活动路径，历史列表保存原版本"
+    },
+    {
+      "id": "SF-REPLAN-01",
+      "status": "passed",
+      "actual": "学习后页面预览掌握薄弱依据、前后节点排期差异及独立补强，旧完成事实保留"
+    },
+    {
+      "id": "SF-REPLAN-03",
+      "status": "passed",
+      "actual": "学习后页面预览掌握薄弱依据、前后节点排期差异及独立补强，旧完成事实保留"
+    },
+    {
+      "id": "SF-REPLAN-07",
+      "status": "passed",
+      "actual": "学习后页面预览掌握薄弱依据、前后节点排期差异及独立补强，旧完成事实保留"
+    },
+    {
+      "id": "SF-REPLAN-05",
+      "status": "passed",
+      "actual": "页面拒绝返回原活动路径，并显示保留风险提醒"
+    },
+    {
+      "id": "SF-REPLAN-02",
+      "status": "passed",
+      "actual": "预算变化超过30%时页面显示全局重规划，先前小范围采用局部"
+    },
+    {
+      "id": "SF-REPLAN-06",
+      "status": "passed",
+      "actual": "来源下架后接受旧预览返回过期提示，原路径仍活动"
+    },
+    {
+      "id": "SF-REPLAN-04",
+      "status": "passed",
+      "actual": "页面接受有效预览原子切换旧路径，独立补强可记录和进入测验"
+    }
+  ],
+  "errors": [],
+  "checked_at": "2026-11-03T13:34:28.440Z"
+}

@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="153" time="189.291" timestamp="2026-11-06T01:16:07.766558+08:00" hostname="LAPTOP-AT1S7AAR"><testcase classname="backend.tests.test_acceptance_remaining" name="test_sf_class_02_and_06" time="1.383" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_sf_class_01" time="1.050" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_sf_class_04" time="1.074" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_sf_ops_03" time="0.963" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_resource_filters_preserve_authorization" time="1.521" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_audit_filters_and_access" time="1.021" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-AUTH-01]" time="1.294" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-AUTH-02]" time="1.085" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-AUTH-05]" time="1.256" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-AUTH-06]" time="1.288" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-AUTH-08]" time="0.927" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-AUTH-09]" time="0.940" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-AUTH-10]" time="1.068" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-AUTH-11]" time="1.012" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-AUTH-12]" time="1.436" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-AUTH-14]" time="1.101" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-ACCOUNT-02]" time="1.209" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-ACCOUNT-03]" time="0.960" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-ACCOUNT-05]" time="1.132" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-ACCOUNT-06]" time="1.082" /><testcase classname="backend.tests.test_batch20" name="test_subfunction[SF-ACCOUNT-07]" time="0.943" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_account_01_initialize_is_idempotent" time="0.717" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_account_04_validation_and_persistence" time="0.989" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_class_07_cancels_only_unfinished[leave]" time="1.112" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_class_07_cancels_only_unfinished[remove]" time="1.041" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_resource_08_download_and_secret_fields" time="1.043" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_resource_11_link_review" time="1.034" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_resource_13_session_update_and_isolation" time="1.102" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-TASK-01]" time="1.127" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-TASK-02]" time="1.010" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-TASK-03]" time="1.037" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-TASK-04]" time="1.011" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-TASK-05]" time="1.107" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-TASK-06]" time="1.015" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-TASK-07]" time="1.007" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-TASK-08]" time="1.121" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-TASK-09]" time="0.991" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-TASK-10]" time="0.977" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-ASSESS-01]" time="0.952" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-ASSESS-02]" time="1.051" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-ASSESS-03]" time="1.048" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-ASSESS-04]" time="1.020" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-ASSESS-05]" time="1.012" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-ASSESS-07]" time="0.999" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-ASSESS-08]" time="3.890" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-PROFILE-01]" time="1.048" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-PROFILE-02]" time="1.066" /><testcase classname="backend.tests.test_batch3" name="test_batch3[SF-PROFILE-03]" time="1.037" /><testcase classname="backend.tests.test_batch3" name="test_task_frozen_source_remains_readable_to_assignee" time="1.129" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-GOAL-01]" time="0.993" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-GOAL-02]" time="0.964" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-GOAL-03]" time="1.003" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-GOAL-04]" time="1.212" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-GOAL-05]" time="1.035" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-GOAL-06]" time="1.262" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-GOAL-07]" time="1.029" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-DIAG-01]" time="0.896" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-DIAG-02]" time="0.942" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-DIAG-03]" time="0.959" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-DIAG-04]" time="1.037" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-DIAG-05]" time="1.000" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-DIAG-06]" time="1.240" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-DIAG-07]" time="0.980" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-PROFILE-04]" time="0.924" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-PROFILE-05]" time="0.983" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-PROFILE-06]" time="1.029" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-PROFILE-07]" time="1.042" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-PROFILE-08]" time="1.023" /><testcase classname="backend.tests.test_batch4" name="test_batch4[SF-PROFILE-09]" time="0.968" /><testcase classname="backend.tests.test_batch4" name="test_class_refresh_failure_and_history_respect_goal_unlink" time="1.018" /><testcase classname="backend.tests.test_batch4" name="test_goal_archive_preserves_completed_reservations_and_blocks_new_work" time="1.110" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-PATH-01]" time="1.151" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-PATH-02]" time="1.174" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-PATH-03]" time="1.152" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-PATH-04]" time="1.256" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-PATH-05]" time="1.217" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-PATH-06]" time="1.138" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-PATH-07]" time="1.142" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-PATH-08]" time="1.231" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-PATH-09]" time="1.338" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-REPLAN-01]" time="1.219" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-REPLAN-02]" time="1.294" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-REPLAN-03]" time="1.204" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-REPLAN-04]" time="1.309" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-REPLAN-05]" time="1.285" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-REPLAN-06]" time="1.266" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-REPLAN-07]" time="1.325" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-AI-05]" time="1.238" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-AI-07]" time="1.230" /><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-OPS-04]" time="1.363"><failure message="AssertionError: assert ('0014' == '0009'&#10;  &#10;  - 0009&#10;  + 0014)">sf = 'SF-OPS-04'
+clients = {'admin': &lt;starlette.testclient.TestClient object at 0x000002956F431710&gt;, 'teacher': &lt;starlette.testclient.TestClient ...stClient object at 0x000002956F42A6D0&gt;, 'student': &lt;starlette.testclient.TestClient object at 0x000002956F429A90&gt;, ...}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002956F217690&gt;
+tmp_path = WindowsPath('D:/卓越工程/backend/data/pytest-all-functions/test_batch5_SF_OPS_04_0')
+
+    @pytest.mark.parametrize('sf',IDS)
+    def test_batch5(sf,clients,monkeypatch,tmp_path):
+        student=clients['student'];teacher=clients['teacher'];admin=clients['admin']
+        if sf=='SF-PATH-01':
+            nodes=[{'id':'functions','minutes':35},{'id':'recursion','minutes':45},{'id':'stack','minutes':45}]
+            edges=[['functions','recursion'],['recursion','stack']]
+            assert admin.post(P+'/admin/graphs',json={'nodes':nodes,'edges':edges+[['stack','functions']]}).status_code==422
+            assert admin.post(P+'/admin/graphs',json={'nodes':[{'id':[],'minutes':1}],'edges':[]}).status_code==422
+            graph=admin.post(P+'/admin/graphs',json={'nodes':nodes,'edges':edges}).json()['id']
+            assert teacher.post(P+'/admin/graphs/'+graph+'/activate').status_code==403
+            assert admin.post(P+'/admin/graphs/'+graph+'/activate').status_code==200
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid);pid=planning(student,gid)
+            assert student.get(P+'/paths/'+pid).json()['validation']['graph_version']==graph
+            assert student.get(P+'/goals/'+gid+'/feasibility').json()['required_minutes']==125
+        elif sf=='SF-PATH-02':
+            cid,_=classroom(clients);gid=goal(clients,cid)
+            created=student.post(P+f'/goals/{gid}/planning-runs',headers={'Idempotency-Key':'failure'})
+            rid=created.json()['run_id'];failed=student.get(P+'/runs/'+rid).json()
+            assert failed['status']=='failed' and failed['error']
+            resource(clients,cid)
+            assert student.post(P+'/runs/'+rid+'/retry').status_code==202
+            recovered=student.get(P+'/runs/'+rid).json()
+            assert recovered['status']=='succeeded' and recovered['retry_count']==1
+            assert student.get(P+f'/goals/{gid}/runs').json()[0]['id']==rid
+            assert clients['student2'].get(P+'/runs/'+rid).status_code==404
+        elif sf=='SF-PATH-03':
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid);pid=planning(student,gid)
+            with transaction() as db:
+                assert not rows(db,'SELECT id FROM reservations WHERE goal_id=:g',g=gid)
+                run(db,"UPDATE paths SET content_status='draft' WHERE id=:p",p=pid)
+            assert student.post(P+'/paths/'+pid+'/accept').status_code==409
+        elif sf=='SF-PATH-04':
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid)
+            correct_functions(clients,cid)
+            pid=planning(student,gid)
+            path=student.get(P+'/paths/'+pid).json()
+            assert [i['skill_id'] for i in path['tasks']]==['recursion','stack']
+            assert path['validation']['rules'][0]['passed']
+        elif sf=='SF-PATH-05':
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid)
+            settings=student.get(P+'/learners/me/budget').json()
+            student.patch(P+'/learners/me/budget',json={**settings,'daily_minutes':20,'weekly_minutes':80})
+            pid=planning(student,gid)
+            path=student.get(P+'/paths/'+pid).json()
+            assert sum(d['minutes'] for d in path['validation']['schedule'])==120
+            assert all(type(d['minutes']) is int and d['minutes']&lt;=20 for d in path['validation']['schedule'])
+            assert sum(sum(d['minutes'] for d in item['dates']) for item in path['tasks'])==120
+        elif sf=='SF-PATH-06':
+            from app.services.planning_rules import validate
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid);pid=planning(student,gid)
+            state=candidate_state(pid)
+            with transaction() as db:
+                assert len(validate(state,db))==8 and all(r['passed'] for r in validate(state,db))
+                state['execution']=list(reversed(state['execution']))
+                assert not validate(state,db)[0]['passed']
+                state['sources']=[]
+                assert not validate(state,db)[4]['passed']
+        elif sf=='SF-PATH-07':
+            cid,_=classroom(clients);rid=resource(clients,cid);gid=goal(clients,cid);pid=planning(student,gid)
+            path=student.get(P+'/paths/'+pid).json();source=path['sources'][0]
+            assert source['locations'] and source['excerpt'] and path['reason']
+            body=teacher.get(P+'/resources/'+rid).json()['body']
+            for location in source['locations']:
+                assert body[location['start']:location['end']] in source['excerpt']
+            assert all(item['assessment'] and item['citations'] for item in path['tasks'])
+        elif sf=='SF-PATH-08':
+            cid,rid,gid,pid=active_path(clients)
+            candidate=planning(student,gid,True)
+            assert student.post(P+'/paths/'+candidate+'/accept').status_code==200
+            assert student.get(P+'/paths/'+pid).json()['status']=='superseded'
+            assert student.post(P+'/paths/'+candidate+'/accept').status_code==200
+            with transaction() as db:assert len(rows(db,"SELECT id FROM paths WHERE goal_id=:g AND status='active'",g=gid))==1
+        elif sf=='SF-PATH-09':
+            cid,rid,gid,pid=active_path(clients)
+            original=student.get(P+'/paths/'+pid).json()
+            second=original['tasks'][1]['id']
+            assert student.post(P+'/check-ins',json={'path_id':pid,'item_id':second,'minutes':5,'proportion':1}).status_code==409
+            first=original['tasks'][0]['id']
+            student.post(P+'/check-ins',json={'path_id':pid,'item_id':first,'minutes':5,'proportion':1})
+            assert student.get(P+'/paths/'+pid).json()['tasks'][1]['locked']
+            correct_functions(clients,cid)
+            assert not student.get(P+'/paths/'+pid).json()['tasks'][1]['locked']
+        elif sf=='SF-REPLAN-01':
+            cid,rid,gid,pid=active_path(clients)
+            for _ in range(2):
+                tid=task(clients,cid)
+                with transaction() as db:run(db,"UPDATE tasks SET due_at='2000-01-01T00:00:00+00:00' WHERE id=:id",id=tid)
+            candidate=planning(student,gid,True);triggers=student.get(P+'/paths/'+candidate).json()['validation']['triggers']
+            assert '掌握薄弱' in triggers and '连续至少两个任务到期未完成' in triggers
+        elif sf=='SF-REPLAN-02':
+            cid,rid,gid,pid=active_path(clients)
+            candidate=planning(student,gid,True)
+            assert student.get(P+'/paths/'+candidate).json()['validation']['mode']=='local'
+            settings=student.get(P+'/learners/me/budget').json()
+            student.patch(P+'/learners/me/budget',json={**settings,'daily_minutes':settings['daily_minutes']*2})
+            candidate=planning(student,gid,True)
+            assert student.get(P+'/paths/'+candidate).json()['validation']['mode']=='global'
+        elif sf=='SF-REPLAN-03':
+            cid,rid,gid,pid=active_path(clients);candidate=planning(student,gid,True)
+            metadata=student.get(P+'/paths/'+candidate).json()['validation']
+            assert all(k in metadata['diff'] for k in ['added','removed','kept','reinforced','before_schedule','after_schedule','risks'])
+            assert len(metadata['rules'])==8 and metadata['triggers']
+        elif sf=='SF-REPLAN-04':
+            cid,rid,gid,pid=active_path(clients)
+            other=goal(clients,cid);otherpath=planning(student,other);student.post(P+'/paths/'+otherpath+'/accept')
+            with transaction() as db:
+                before=rows(db,'SELECT * FROM reservations WHERE goal_id=:g ORDER BY id',g=other)
+                own=one(db,'SELECT id FROM reservations WHERE goal_id=:g LIMIT 1',g=gid)
+                run(db,"UPDATE reservations SET status='completed' WHERE id=:id",id=own['id'])
+            candidate=planning(student,gid,True);assert student.post(P+'/paths/'+candidate+'/accept').status_code==200
+            with transaction() as db:
+                assert rows(db,'SELECT * FROM reservations WHERE goal_id=:g ORDER BY id',g=other)==before
+                assert one(db,'SELECT status FROM reservations WHERE id=:id',id=own['id'])['status']=='completed'
+        elif sf=='SF-REPLAN-05':
+            cid,rid,gid,pid=active_path(clients);candidate=planning(student,gid,True)
+            with transaction() as db:before=rows(db,'SELECT * FROM reservations WHERE goal_id=:g ORDER BY id',g=gid)
+            assert student.post(P+'/paths/'+candidate+'/reject').status_code==200
+            active=student.get(P+'/paths/'+pid).json()
+            assert active['status']=='active' and active['replan_warnings']
+            with transaction() as db:assert rows(db,'SELECT * FROM reservations WHERE goal_id=:g ORDER BY id',g=gid)==before
+        elif sf=='SF-REPLAN-06':
+            cid,rid,gid,pid=active_path(clients);candidate=planning(student,gid,True)
+            teacher.post(P+'/resources/'+rid+'/withdraw')
+            assert student.post(P+'/paths/'+candidate+'/accept').status_code in (404,409)
+            assert student.get(P+'/paths/'+pid).json()['status']=='active'
+        elif sf=='SF-REPLAN-07':
+            cid,rid,gid,pid=active_path(clients)
+            old=student.get(P+'/paths/'+pid).json();item=old['tasks'][0]
+            student.post(P+'/check-ins',json={'path_id':pid,'item_id':item['id'],'minutes':5,'proportion':1})
+            candidate=planning(student,gid,True);path=student.get(P+'/paths/'+candidate).json()
+            assert item['skill_id'] not in [t['skill_id'] for t in path['tasks']]
+            assert path['remediations'][0]['source_item_id']==item['id']
+            assert path['validation']['preserved'][0]['item']['id']==item['id']
+            assert student.post(P+'/paths/'+candidate+'/accept').status_code==200
+            reinforcement=student.get(P+'/paths/'+candidate).json()['remediations'][0]
+            assert student.post(P+'/check-ins',json={'path_id':candidate,'item_id':reinforcement['id'],'minutes':5,'proportion':1}).status_code==200
+            assert student.get(P+f"/paths/{candidate}/items/{reinforcement['id']}/assessment").status_code==200
+            assert student.get(P+'/paths/'+pid).json()['tasks'][0]['checkin']['minutes']==5
+        elif sf=='SF-AI-05':
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid);pid=planning(student,gid)
+            with transaction() as db:rid=one(db,'SELECT id FROM agent_runs WHERE result_id=:p',p=pid)['id']
+            trace=student.get(P+'/runs/'+rid).json()
+            assert len(trace['steps'])==4
+            assert all(step['input_fingerprint'] and step['output_summary'] and step['created_at'] for step in trace['steps'])
+            assert trace['checkpoint']['last_agent']=='LearningReplanAgent'
+            assert 'password_hash' not in json.dumps(trace) and 'state' not in trace['checkpoint']
+        elif sf=='SF-AI-07':
+            from app.services import planning as service
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid)
+            original=service.validate
+            def interrupted(*args):raise RuntimeError('injected interruption')
+            monkeypatch.setattr(service,'validate',interrupted)
+            failed=student.post(P+f'/goals/{gid}/planning-runs',headers={'Idempotency-Key':'checkpoint'})
+            rid=failed.json()['run_id'];trace=student.get(P+'/runs/'+rid).json()
+            assert trace['status']=='failed' and trace['checkpoint']['last_agent']=='PathBuildingAgent'
+            monkeypatch.setattr(service,'validate',original)
+            assert student.post(P+'/runs/'+rid+'/retry').status_code==202
+            trace=student.get(P+'/runs/'+rid).json()
+            assert trace['status']=='succeeded' and len([s for s in trace['steps'] if s['agent']=='GoalDiagnosisAgent'])==1
+            with transaction() as db:
+                cancel_id=uid();insert_values={'id':cancel_id,'actor_id':'student','goal_id':gid,'kind':'initial','status':'queued','idem_key':'cancel','created_at':now()}
+                from app.core.db import insert
+                insert(db,'agent_runs',**insert_values)
+            assert student.post(P+'/runs/'+cancel_id+'/cancel').status_code==200
+            service.execute(cancel_id)
+            assert student.get(P+'/runs/'+cancel_id).json()['status']=='cancelled'
+            assert student.post(P+'/runs/'+cancel_id+'/retry').status_code==409
+        elif sf in ('SF-OPS-04','SF-OPS-05'):
+            from app.cli import backup,restore,rebuild_index
+            monkeypatch.setenv('BACKUP_TEST_SECRET','never-include-this-value')
+            assert admin.post(P+'/admin/model-configs',json={'model':'qwen-plus','secret_env':'BACKUP_TEST_SECRET'}).status_code==201
+            cid,_=classroom(clients);rid=resource(clients,cid)
+            destination=tmp_path/'backup';restored=tmp_path/'restored'
+            backup(destination)
+            manifest=json.loads((destination/'manifest.json').read_text(encoding='utf-8'))
+&gt;           assert manifest['schema_revision']=='0009' and manifest['record_counts']['resources']==1
+E           AssertionError: assert ('0014' == '0009'
+E             
+E             - 0009
+E             + 0014)
+
+backend\tests\test_batch5.py:206: AssertionError</failure></testcase><testcase classname="backend.tests.test_batch5" name="test_batch5[SF-OPS-05]" time="1.445"><failure message="AssertionError: assert ('0014' == '0009'&#10;  &#10;  - 0009&#10;  + 0014)">sf = 'SF-OPS-05'
+clients = {'admin': &lt;starlette.testclient.TestClient object at 0x000002956D1F8130&gt;, 'teacher': &lt;starlette.testclient.TestClient ...stClient object at 0x000002956F42B5B0&gt;, 'student': &lt;starlette.testclient.TestClient object at 0x000002956F3F8210&gt;, ...}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002956F327070&gt;
+tmp_path = WindowsPath('D:/卓越工程/backend/data/pytest-all-functions/test_batch5_SF_OPS_05_0')
+
+    @pytest.mark.parametrize('sf',IDS)
+    def test_batch5(sf,clients,monkeypatch,tmp_path):
+        student=clients['student'];teacher=clients['teacher'];admin=clients['admin']
+        if sf=='SF-PATH-01':
+            nodes=[{'id':'functions','minutes':35},{'id':'recursion','minutes':45},{'id':'stack','minutes':45}]
+            edges=[['functions','recursion'],['recursion','stack']]
+            assert admin.post(P+'/admin/graphs',json={'nodes':nodes,'edges':edges+[['stack','functions']]}).status_code==422
+            assert admin.post(P+'/admin/graphs',json={'nodes':[{'id':[],'minutes':1}],'edges':[]}).status_code==422
+            graph=admin.post(P+'/admin/graphs',json={'nodes':nodes,'edges':edges}).json()['id']
+            assert teacher.post(P+'/admin/graphs/'+graph+'/activate').status_code==403
+            assert admin.post(P+'/admin/graphs/'+graph+'/activate').status_code==200
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid);pid=planning(student,gid)
+            assert student.get(P+'/paths/'+pid).json()['validation']['graph_version']==graph
+            assert student.get(P+'/goals/'+gid+'/feasibility').json()['required_minutes']==125
+        elif sf=='SF-PATH-02':
+            cid,_=classroom(clients);gid=goal(clients,cid)
+            created=student.post(P+f'/goals/{gid}/planning-runs',headers={'Idempotency-Key':'failure'})
+            rid=created.json()['run_id'];failed=student.get(P+'/runs/'+rid).json()
+            assert failed['status']=='failed' and failed['error']
+            resource(clients,cid)
+            assert student.post(P+'/runs/'+rid+'/retry').status_code==202
+            recovered=student.get(P+'/runs/'+rid).json()
+            assert recovered['status']=='succeeded' and recovered['retry_count']==1
+            assert student.get(P+f'/goals/{gid}/runs').json()[0]['id']==rid
+            assert clients['student2'].get(P+'/runs/'+rid).status_code==404
+        elif sf=='SF-PATH-03':
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid);pid=planning(student,gid)
+            with transaction() as db:
+                assert not rows(db,'SELECT id FROM reservations WHERE goal_id=:g',g=gid)
+                run(db,"UPDATE paths SET content_status='draft' WHERE id=:p",p=pid)
+            assert student.post(P+'/paths/'+pid+'/accept').status_code==409
+        elif sf=='SF-PATH-04':
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid)
+            correct_functions(clients,cid)
+            pid=planning(student,gid)
+            path=student.get(P+'/paths/'+pid).json()
+            assert [i['skill_id'] for i in path['tasks']]==['recursion','stack']
+            assert path['validation']['rules'][0]['passed']
+        elif sf=='SF-PATH-05':
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid)
+            settings=student.get(P+'/learners/me/budget').json()
+            student.patch(P+'/learners/me/budget',json={**settings,'daily_minutes':20,'weekly_minutes':80})
+            pid=planning(student,gid)
+            path=student.get(P+'/paths/'+pid).json()
+            assert sum(d['minutes'] for d in path['validation']['schedule'])==120
+            assert all(type(d['minutes']) is int and d['minutes']&lt;=20 for d in path['validation']['schedule'])
+            assert sum(sum(d['minutes'] for d in item['dates']) for item in path['tasks'])==120
+        elif sf=='SF-PATH-06':
+            from app.services.planning_rules import validate
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid);pid=planning(student,gid)
+            state=candidate_state(pid)
+            with transaction() as db:
+                assert len(validate(state,db))==8 and all(r['passed'] for r in validate(state,db))
+                state['execution']=list(reversed(state['execution']))
+                assert not validate(state,db)[0]['passed']
+                state['sources']=[]
+                assert not validate(state,db)[4]['passed']
+        elif sf=='SF-PATH-07':
+            cid,_=classroom(clients);rid=resource(clients,cid);gid=goal(clients,cid);pid=planning(student,gid)
+            path=student.get(P+'/paths/'+pid).json();source=path['sources'][0]
+            assert source['locations'] and source['excerpt'] and path['reason']
+            body=teacher.get(P+'/resources/'+rid).json()['body']
+            for location in source['locations']:
+                assert body[location['start']:location['end']] in source['excerpt']
+            assert all(item['assessment'] and item['citations'] for item in path['tasks'])
+        elif sf=='SF-PATH-08':
+            cid,rid,gid,pid=active_path(clients)
+            candidate=planning(student,gid,True)
+            assert student.post(P+'/paths/'+candidate+'/accept').status_code==200
+            assert student.get(P+'/paths/'+pid).json()['status']=='superseded'
+            assert student.post(P+'/paths/'+candidate+'/accept').status_code==200
+            with transaction() as db:assert len(rows(db,"SELECT id FROM paths WHERE goal_id=:g AND status='active'",g=gid))==1
+        elif sf=='SF-PATH-09':
+            cid,rid,gid,pid=active_path(clients)
+            original=student.get(P+'/paths/'+pid).json()
+            second=original['tasks'][1]['id']
+            assert student.post(P+'/check-ins',json={'path_id':pid,'item_id':second,'minutes':5,'proportion':1}).status_code==409
+            first=original['tasks'][0]['id']
+            student.post(P+'/check-ins',json={'path_id':pid,'item_id':first,'minutes':5,'proportion':1})
+            assert student.get(P+'/paths/'+pid).json()['tasks'][1]['locked']
+            correct_functions(clients,cid)
+            assert not student.get(P+'/paths/'+pid).json()['tasks'][1]['locked']
+        elif sf=='SF-REPLAN-01':
+            cid,rid,gid,pid=active_path(clients)
+            for _ in range(2):
+                tid=task(clients,cid)
+                with transaction() as db:run(db,"UPDATE tasks SET due_at='2000-01-01T00:00:00+00:00' WHERE id=:id",id=tid)
+            candidate=planning(student,gid,True);triggers=student.get(P+'/paths/'+candidate).json()['validation']['triggers']
+            assert '掌握薄弱' in triggers and '连续至少两个任务到期未完成' in triggers
+        elif sf=='SF-REPLAN-02':
+            cid,rid,gid,pid=active_path(clients)
+            candidate=planning(student,gid,True)
+            assert student.get(P+'/paths/'+candidate).json()['validation']['mode']=='local'
+            settings=student.get(P+'/learners/me/budget').json()
+            student.patch(P+'/learners/me/budget',json={**settings,'daily_minutes':settings['daily_minutes']*2})
+            candidate=planning(student,gid,True)
+            assert student.get(P+'/paths/'+candidate).json()['validation']['mode']=='global'
+        elif sf=='SF-REPLAN-03':
+            cid,rid,gid,pid=active_path(clients);candidate=planning(student,gid,True)
+            metadata=student.get(P+'/paths/'+candidate).json()['validation']
+            assert all(k in metadata['diff'] for k in ['added','removed','kept','reinforced','before_schedule','after_schedule','risks'])
+            assert len(metadata['rules'])==8 and metadata['triggers']
+        elif sf=='SF-REPLAN-04':
+            cid,rid,gid,pid=active_path(clients)
+            other=goal(clients,cid);otherpath=planning(student,other);student.post(P+'/paths/'+otherpath+'/accept')
+            with transaction() as db:
+                before=rows(db,'SELECT * FROM reservations WHERE goal_id=:g ORDER BY id',g=other)
+                own=one(db,'SELECT id FROM reservations WHERE goal_id=:g LIMIT 1',g=gid)
+                run(db,"UPDATE reservations SET status='completed' WHERE id=:id",id=own['id'])
+            candidate=planning(student,gid,True);assert student.post(P+'/paths/'+candidate+'/accept').status_code==200
+            with transaction() as db:
+                assert rows(db,'SELECT * FROM reservations WHERE goal_id=:g ORDER BY id',g=other)==before
+                assert one(db,'SELECT status FROM reservations WHERE id=:id',id=own['id'])['status']=='completed'
+        elif sf=='SF-REPLAN-05':
+            cid,rid,gid,pid=active_path(clients);candidate=planning(student,gid,True)
+            with transaction() as db:before=rows(db,'SELECT * FROM reservations WHERE goal_id=:g ORDER BY id',g=gid)
+            assert student.post(P+'/paths/'+candidate+'/reject').status_code==200
+            active=student.get(P+'/paths/'+pid).json()
+            assert active['status']=='active' and active['replan_warnings']
+            with transaction() as db:assert rows(db,'SELECT * FROM reservations WHERE goal_id=:g ORDER BY id',g=gid)==before
+        elif sf=='SF-REPLAN-06':
+            cid,rid,gid,pid=active_path(clients);candidate=planning(student,gid,True)
+            teacher.post(P+'/resources/'+rid+'/withdraw')
+            assert student.post(P+'/paths/'+candidate+'/accept').status_code in (404,409)
+            assert student.get(P+'/paths/'+pid).json()['status']=='active'
+        elif sf=='SF-REPLAN-07':
+            cid,rid,gid,pid=active_path(clients)
+            old=student.get(P+'/paths/'+pid).json();item=old['tasks'][0]
+            student.post(P+'/check-ins',json={'path_id':pid,'item_id':item['id'],'minutes':5,'proportion':1})
+            candidate=planning(student,gid,True);path=student.get(P+'/paths/'+candidate).json()
+            assert item['skill_id'] not in [t['skill_id'] for t in path['tasks']]
+            assert path['remediations'][0]['source_item_id']==item['id']
+            assert path['validation']['preserved'][0]['item']['id']==item['id']
+            assert student.post(P+'/paths/'+candidate+'/accept').status_code==200
+            reinforcement=student.get(P+'/paths/'+candidate).json()['remediations'][0]
+            assert student.post(P+'/check-ins',json={'path_id':candidate,'item_id':reinforcement['id'],'minutes':5,'proportion':1}).status_code==200
+            assert student.get(P+f"/paths/{candidate}/items/{reinforcement['id']}/assessment").status_code==200
+            assert student.get(P+'/paths/'+pid).json()['tasks'][0]['checkin']['minutes']==5
+        elif sf=='SF-AI-05':
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid);pid=planning(student,gid)
+            with transaction() as db:rid=one(db,'SELECT id FROM agent_runs WHERE result_id=:p',p=pid)['id']
+            trace=student.get(P+'/runs/'+rid).json()
+            assert len(trace['steps'])==4
+            assert all(step['input_fingerprint'] and step['output_summary'] and step['created_at'] for step in trace['steps'])
+            assert trace['checkpoint']['last_agent']=='LearningReplanAgent'
+            assert 'password_hash' not in json.dumps(trace) and 'state' not in trace['checkpoint']
+        elif sf=='SF-AI-07':
+            from app.services import planning as service
+            cid,_=classroom(clients);resource(clients,cid);gid=goal(clients,cid)
+            original=service.validate
+            def interrupted(*args):raise RuntimeError('injected interruption')
+            monkeypatch.setattr(service,'validate',interrupted)
+            failed=student.post(P+f'/goals/{gid}/planning-runs',headers={'Idempotency-Key':'checkpoint'})
+            rid=failed.json()['run_id'];trace=student.get(P+'/runs/'+rid).json()
+            assert trace['status']=='failed' and trace['checkpoint']['last_agent']=='PathBuildingAgent'
+            monkeypatch.setattr(service,'validate',original)
+            assert student.post(P+'/runs/'+rid+'/retry').status_code==202
+            trace=student.get(P+'/runs/'+rid).json()
+            assert trace['status']=='succeeded' and len([s for s in trace['steps'] if s['agent']=='GoalDiagnosisAgent'])==1
+            with transaction() as db:
+                cancel_id=uid();insert_values={'id':cancel_id,'actor_id':'student','goal_id':gid,'kind':'initial','status':'queued','idem_key':'cancel','created_at':now()}
+                from app.core.db import insert
+                insert(db,'agent_runs',**insert_values)
+            assert student.post(P+'/runs/'+cancel_id+'/cancel').status_code==200
+            service.execute(cancel_id)
+            assert student.get(P+'/runs/'+cancel_id).json()['status']=='cancelled'
+            assert student.post(P+'/runs/'+cancel_id+'/retry').status_code==409
+        elif sf in ('SF-OPS-04','SF-OPS-05'):
+            from app.cli import backup,restore,rebuild_index
+            monkeypatch.setenv('BACKUP_TEST_SECRET','never-include-this-value')
+            assert admin.post(P+'/admin/model-configs',json={'model':'qwen-plus','secret_env':'BACKUP_TEST_SECRET'}).status_code==201
+            cid,_=classroom(clients);rid=resource(clients,cid)
+            destination=tmp_path/'backup';restored=tmp_path/'restored'
+            backup(destination)
+            manifest=json.loads((destination/'manifest.json').read_text(encoding='utf-8'))
+&gt;           assert manifest['schema_revision']=='0009' and manifest['record_counts']['resources']==1
+E           AssertionError: assert ('0014' == '0009'
+E             
+E             - 0009
+E             + 0014)
+
+backend\tests\test_batch5.py:206: AssertionError</failure></testcase><testcase classname="backend.tests.test_batch5" name="test_local_failure_falls_back_to_remaining_work_global_schedule" time="1.332" /><testcase classname="backend.tests.test_batch5" name="test_cancel_after_build_prevents_final_commit" time="1.142" /><testcase classname="backend.tests.test_batch5" name="test_backup_database_hash_and_manifest_counts_are_verified" time="1.410" /><testcase classname="backend.tests.test_batch5" name="test_membership_change_invalidates_pending_preview" time="1.275" /><testcase classname="backend.tests.test_class_supplement" name="test_late_join_supplement_preserves_original" time="1.170" /><testcase classname="backend.tests.test_class_supplement" name="test_archive_cancels_pending_load_and_keeps_history" time="1.125" /><testcase classname="backend.tests.test_cloud_evidence" name="test_cloud_four_agent_entry_and_privacy" time="1.205" /><testcase classname="backend.tests.test_cloud_evidence" name="test_upload_only_and_bounded_search" time="0.946" /><testcase classname="backend.tests.test_cloud_evidence" name="test_authorized_link_import_and_audit_result" time="1.173" /><testcase classname="backend.tests.test_cloud_evidence" name="test_fetch_rejects_private_and_credential_urls[http://127.0.0.1/]" time="0.437" /><testcase classname="backend.tests.test_cloud_evidence" name="test_fetch_rejects_private_and_credential_urls[http://[::1]/]" time="0.444" /><testcase classname="backend.tests.test_cloud_evidence" name="test_fetch_rejects_private_and_credential_urls[http://169.254.169.254/]" time="0.462" /><testcase classname="backend.tests.test_cloud_evidence" name="test_fetch_rejects_private_and_credential_urls[https://user:pass@example.com/]" time="0.441" /><testcase classname="backend.tests.test_cloud_evidence" name="test_fetch_rejects_private_and_credential_urls[file:///etc/passwd]" time="0.452" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_office_upload_parse_search_and_permissions[.docx-\u6bb5\u843d 2]" time="1.181" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_office_upload_parse_search_and_permissions[.pptx-\u5e7b\u706f\u7247 1]" time="1.114" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_media_types_and_subtitle_immutable_validation[audio.wav-audio/wav-RIFF\x00\x00\x00\x00WAVEdata]" time="1.035" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_media_types_and_subtitle_immutable_validation[audio.m4a-audio/mp4-\x00\x00\x00\x18ftypM4A ]" time="1.021" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_media_types_and_subtitle_immutable_validation[video.mov-video/quicktime-\x00\x00\x00\x18ftypqt  ]" time="1.026" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_invalid_vtt_is_rejected[WEBVTT\n\n00:99.000 --&gt; 00:02.000\ntext]" time="0.435" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_invalid_vtt_is_rejected[WEBVTT\n\nmissing time]" time="0.476" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_invalid_vtt_is_rejected[WEBVTT\n\n00:01.000 --&gt; 00:02.000]" time="0.484" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_corrupt_office_does_not_extract" time="0.462" /><testcase classname="backend.tests.test_parse_jobs" name="test_parse_retry_is_durable_and_authorized" time="1.062" /><testcase classname="backend.tests.test_parse_jobs" name="test_pdf_queue_and_retry_limit" time="1.950" /><testcase classname="backend.tests.test_parse_jobs" name="test_candidate_switch_is_atomic" time="1.155" /><testcase classname="backend.tests.test_parse_jobs" name="test_upload_rejects_disguised_media_but_keeps_other_files" time="0.941" /><testcase classname="backend.tests.test_platform" name="test_auth_password_lifecycle_and_csrf" time="1.522" /><testcase classname="backend.tests.test_platform" name="test_reset_and_disable_revoke_sessions" time="1.309" /><testcase classname="backend.tests.test_platform" name="test_invites_are_hashed_idempotent_and_scoped" time="1.055" /><testcase classname="backend.tests.test_platform" name="test_resource_permission_search_and_idempotent_reading" time="1.137" /><testcase classname="backend.tests.test_platform" name="test_task_real_feedback_and_business_deduplication" time="1.064" /><testcase classname="backend.tests.test_platform" name="test_subjective_review_correction_replays_evidence" time="0.994" /><testcase classname="backend.tests.test_platform" name="test_full_planning_accept_reject_and_stale_preview" time="1.272" /><testcase classname="backend.tests.test_platform" name="test_missing_sources_do_not_create_verified_path" time="1.028" /><testcase classname="backend.tests.test_platform" name="test_private_goal_excluded_from_teacher_projection" time="1.009" /><testcase classname="backend.tests.test_platform" name="test_bkt_reference" time="0.440" /><testcase classname="backend.tests.test_platform" name="test_model_missing_secret_is_explicit" time="0.943" /><testcase classname="backend.tests.test_platform" name="test_path_practice_updates_once_and_preserves_checkin_boundary" time="1.197" /><testcase classname="backend.tests.test_platform" name="test_graph_cycle_and_draft_edit_guard" time="0.986" /><testcase classname="backend.tests.test_platform" name="test_backup_restore_and_restart_persistence" time="4.766" /><testcase classname="backend.tests.test_platform" name="test_edit_and_targeted_assignment" time="1.126" /><testcase classname="backend.tests.test_platform" name="test_resource_version_replacement_is_atomic_and_requires_publication" time="1.120" /><testcase classname="backend.tests.test_platform" name="test_profile_refresh_failure_preserves_valid_snapshot" time="1.013" /><testcase classname="backend.tests.test_platform" name="test_preferences_and_weekday_validation" time="0.938" /><testcase classname="backend.tests.test_platform" name="test_persistent_profile_worker_and_record_filters" time="1.143" /><testcase classname="backend.tests.test_platform" name="test_diagnostic_draft_and_equivalent_retest" time="1.309" /><testcase classname="backend.tests.test_platform" name="test_task_reissue_preserves_original_and_rechecks_resource" time="1.157" /><testcase classname="backend.tests.test_processing_pipeline" name="test_processing_review_cancel_and_version_gate" time="1.218" /><testcase classname="backend.tests.test_processing_pipeline" name="test_processing_conflict_preserves_existing_body" time="1.000" /><testcase classname="backend.tests.test_processing_pipeline" name="test_real_local_ocr_child_process" time="9.500" /><testcase classname="backend.tests.test_processing_pipeline" name="test_real_vector_index_is_authorized" time="1.045" /><testcase classname="backend.tests.test_registration" name="test_self_registration[student]" time="0.758" /><testcase classname="backend.tests.test_registration" name="test_self_registration[teacher]" time="0.740" /><testcase classname="backend.tests.test_resource_batch" name="test_resource_private_and_metadata_guards" time="1.039" /><testcase classname="backend.tests.test_resource_batch" name="test_subtitles_create_reviewable_version" time="1.070" /><testcase classname="backend.tests.test_resource_batch" name="test_private_resource_can_support_own_accepted_path" time="1.188" /><testcase classname="backend.tests.test_resource_batch" name="test_sf_resource_02_upload_metadata" time="1.064" /><testcase classname="backend.tests.test_resource_batch" name="test_sf_resource_14_attachment_is_not_evidence" time="1.134" /><testcase classname="backend.tests.test_resource_batch" name="test_historical_reference_survives_replacement_and_withdrawal" time="1.345" /><testcase classname="backend.tests.test_resource_batch" name="test_upload_count_size_mime_and_attachment_metadata" time="1.068" /><testcase classname="backend.tests.test_resource_batch" name="test_batch_total_limit_and_pdf_modes" time="9.357" /></testsuite></testsuites>

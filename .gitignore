@@ -24,3 +24,21 @@ coverage/
 Thumbs.db
 .idea/
 .vscode/
+
+# Persistent local users, passwords, uploads and session database
+backend/data/
+/data/
+*.db
+*.db-wal
+*.db-shm
+test-results/
+playwright-report/
+
+# Private environment variants and temporary Office files
+.env.*
+!.env.example
+~$*
+
+
+# Local backend archive; publish source files instead
+/backend.rar

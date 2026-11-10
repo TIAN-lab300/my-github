@@ -1,0 +1,33 @@
+import {chromium,expect} from '../frontend/node_modules/@playwright/test/index.mjs';
+const browser=await chromium.launch({channel:'msedge',headless:true});
+try {
+ const page=await browser.newPage();
+ await page.goto('http://127.0.0.1:8000/?ui=20261109-login2');
+ await expect(page.locator('.login-version')).toContainText('2026-11-09');
+ const label=page.locator('.password-visibility');
+ const checkbox=label.locator('input');
+ const a=await checkbox.boundingBox(),b=await label.locator('span').boundingBox();
+ if(a.y+a.height>b.y || Math.abs(a.x-b.x)>1) throw new Error('Password layout mismatch');
+ await checkbox.check();
+ await expect(page.locator('input[name=password]')).toHaveAttribute('type','text');
+ const change=page.getByRole('button',{name:'修改密码',exact:true});
+ const c=await change.boundingBox();
+ if(c.x<=b.x || Math.abs(c.y-b.y)>3)throw new Error('Change-password button is not at the right of the text');
+ await page.screenshot({path:'docs/evidence/implementation/form-layout/live-login-8000.png',fullPage:true});
+ await change.click();
+ await expect(page.getByRole('heading',{name:'修改密码',exact:true})).toBeVisible();
+ await expect(page.getByLabel('当前密码',{exact:true})).toBeVisible();
+ await expect(page.getByRole('button',{name:'确认修改密码'})).toBeVisible();
+ await page.getByRole('button',{name:'返回登录',exact:true}).click();
+ await expect(change).toBeVisible();
+ await page.getByRole('button',{name:'绑定手机号',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'绑定手机号',exact:true})).toBeVisible();
+ await expect(page.getByRole('button',{name:'发送短信验证码',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'返回',exact:true}).click();
+ await change.click();
+ await page.getByRole('button',{name:'使用短信验证码修改密码',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'短信验证修改密码',exact:true})).toBeVisible();
+ await expect(page.getByLabel('手机号',{exact:true})).toBeVisible();
+ await expect(page.getByLabel('短信验证码',{exact:true})).toBeVisible();
+ console.log(JSON.stringify({url:page.url(),version:await page.locator('.login-version').innerText(),checkbox:a,text:b,changeButton:c,passed:true}));
+} finally {await browser.close();}

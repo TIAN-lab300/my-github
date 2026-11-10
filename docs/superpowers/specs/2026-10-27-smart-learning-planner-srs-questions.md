@@ -4,7 +4,7 @@
 >
 > 日期：2026-10-27
 >
-> 对齐基线：[需求规格说明书](2026-10-27-smart-learning-planner-requirements-spec.md) v3.1
+> 对齐基线：[需求规格说明书](../../../docx/2026-10-27-smart-learning-planner-requirements-spec.md) v3.1
 >
 > 状态：原100题编号保留，过时问题更新为现方案；已落实规则与新增建议分开说明
 

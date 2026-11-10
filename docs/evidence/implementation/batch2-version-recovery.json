@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-11-03T12:06:20.986Z",
+  "results": [
+    {
+      "id": "SF-RESOURCE-05",
+      "status": "observed",
+      "actual": "页面重试请求成功，保持详情，后台失败后状态可见"
+    },
+    {
+      "id": "SF-RESOURCE-06",
+      "status": "observed",
+      "actual": "新版本异步完成后页面详情自动更新，草稿待审且历史可查询"
+    }
+  ]
+}

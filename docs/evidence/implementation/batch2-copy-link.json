@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-11-03T12:02:38.495Z",
+  "results": [
+    {
+      "id": "SF-CLASS-03",
+      "status": "passed",
+      "actual": "页面设置6小时/3次，服务端状态一致，剪贴板原码逐字相等"
+    },
+    {
+      "id": "SF-RESOURCE-11",
+      "status": "passed",
+      "actual": "页面登记、待审核草稿及发布成功，外链显示正文未验证"
+    }
+  ]
+}

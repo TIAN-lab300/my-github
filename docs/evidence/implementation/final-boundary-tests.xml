@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="23" time="32.943" timestamp="2026-11-06T01:36:54.088813+08:00" hostname="LAPTOP-AT1S7AAR"><testcase classname="backend.tests.test_delivery_operations" name="test_demo_reset_requires_marker_and_preserves_archive" time="5.008"><failure message="PermissionError: [WinError 5] 拒绝访问。: 'D:\\卓越工程\\backend\\data\\pytest-final-boundaries\\test_demo_reset_requires_marke0\\isolated-demo' -&gt; 'D:\\卓越工程\\backend\\data\\pytest-final-boundaries\\test_demo_reset_requires_marke0\\isolated-demo-before-reset-9dfdec96292440c599adc781c5a4c150'">tmp_path = WindowsPath('D:/卓越工程/backend/data/pytest-final-boundaries/test_demo_reset_requires_marke0')
+
+    def test_demo_reset_requires_marker_and_preserves_archive(tmp_path):
+        target=tmp_path/'isolated-demo'
+        with pytest.raises(SystemExit):reset_demo_sandbox(target,'isolated-demo')
+        create_demo_sandbox(target)
+        with sqlite3.connect(target/'zhixing.db') as database:
+            original=database.execute("SELECT id FROM users WHERE username='admin'").fetchone()[0]
+        with pytest.raises(SystemExit):reset_demo_sandbox(target,'wrong-confirmation')
+        assert (target/'zhixing.db').exists()
+&gt;       reset_demo_sandbox(target,'isolated-demo')
+
+backend\tests\test_delivery_operations.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\app\cli.py:143: in reset_demo_sandbox
+    target.rename(archived)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/卓越工程/backend/data/pytest-final-boundaries/test_demo_reset_requires_marke0/isolated-demo')
+target = WindowsPath('D:/卓越工程/backend/data/pytest-final-boundaries/test_demo_reset_requires_marke0/isolated-demo-before-reset-9dfdec96292440c599adc781c5a4c150')
+
+    def rename(self, target):
+        """
+        Rename this path to the target path.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       os.rename(self, target)
+E       PermissionError: [WinError 5] 拒绝访问。: 'D:\\卓越工程\\backend\\data\\pytest-final-boundaries\\test_demo_reset_requires_marke0\\isolated-demo' -&gt; 'D:\\卓越工程\\backend\\data\\pytest-final-boundaries\\test_demo_reset_requires_marke0\\isolated-demo-before-reset-9dfdec96292440c599adc781c5a4c150'
+
+D:\APP\Anaconda\Lib\pathlib\_local.py:767: PermissionError</failure></testcase><testcase classname="backend.tests.test_knowledge_extensions" name="test_office_upload_parse_search_and_permissions[.docx-\u6bb5\u843d 2]" time="1.839" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_office_upload_parse_search_and_permissions[.pptx-\u5e7b\u706f\u7247 1]" time="1.201" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_media_types_and_subtitle_immutable_validation[audio.wav-audio/wav-RIFF\x00\x00\x00\x00WAVEdata]" time="1.440" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_media_types_and_subtitle_immutable_validation[audio.m4a-audio/mp4-\x00\x00\x00\x18ftypM4A ]" time="1.106" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_media_types_and_subtitle_immutable_validation[video.mov-video/quicktime-\x00\x00\x00\x18ftypqt  ]" time="1.118" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_invalid_vtt_is_rejected[WEBVTT\n\n00:99.000 --&gt; 00:02.000\ntext]" time="0.484" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_invalid_vtt_is_rejected[WEBVTT\n\nmissing time]" time="0.487" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_invalid_vtt_is_rejected[WEBVTT\n\n00:01.000 --&gt; 00:02.000]" time="0.499" /><testcase classname="backend.tests.test_knowledge_extensions" name="test_corrupt_office_does_not_extract" time="0.471" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_account_01_initialize_is_idempotent" time="0.762" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_account_04_validation_and_persistence" time="0.938" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_class_07_cancels_only_unfinished[leave]" time="1.039" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_class_07_cancels_only_unfinished[remove]" time="1.108" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_resource_08_download_and_secret_fields" time="1.116" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_resource_11_link_review" time="1.136" /><testcase classname="backend.tests.test_batch2_closure" name="test_sf_resource_13_session_update_and_isolation" time="1.249" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_sf_class_02_and_06" time="1.073" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_sf_class_01" time="1.092" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_sf_class_04" time="4.536" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_sf_ops_03" time="1.165" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_resource_filters_preserve_authorization" time="1.039" /><testcase classname="backend.tests.test_acceptance_remaining" name="test_audit_filters_and_access" time="1.093" /></testsuite></testsuites>

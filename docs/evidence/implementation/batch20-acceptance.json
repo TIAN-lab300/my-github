@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-02",
+  "passed": 20,
+  "evidence": {
+    "SF-AUTH-01": "backend/tests/test_batch20.py::test_subfunction[SF-AUTH-01]",
+    "SF-AUTH-02": "backend/tests/test_batch20.py::test_subfunction[SF-AUTH-02]",
+    "SF-AUTH-05": "backend/tests/test_batch20.py::test_subfunction[SF-AUTH-05]",
+    "SF-AUTH-06": "backend/tests/test_batch20.py::test_subfunction[SF-AUTH-06]",
+    "SF-AUTH-08": "backend/tests/test_batch20.py::test_subfunction[SF-AUTH-08]",
+    "SF-AUTH-09": "backend/tests/test_batch20.py::test_subfunction[SF-AUTH-09]",
+    "SF-AUTH-10": "backend/tests/test_batch20.py::test_subfunction[SF-AUTH-10]",
+    "SF-AUTH-11": "backend/tests/test_batch20.py::test_subfunction[SF-AUTH-11]",
+    "SF-AUTH-12": "backend/tests/test_batch20.py::test_subfunction[SF-AUTH-12]",
+    "SF-AUTH-14": "backend/tests/test_batch20.py::test_subfunction[SF-AUTH-14]",
+    "SF-ACCOUNT-02": "backend/tests/test_batch20.py::test_subfunction[SF-ACCOUNT-02]",
+    "SF-ACCOUNT-03": "backend/tests/test_batch20.py::test_subfunction[SF-ACCOUNT-03]",
+    "SF-ACCOUNT-05": "backend/tests/test_batch20.py::test_subfunction[SF-ACCOUNT-05]",
+    "SF-ACCOUNT-06": "backend/tests/test_batch20.py::test_subfunction[SF-ACCOUNT-06]",
+    "SF-ACCOUNT-07": "backend/tests/test_batch20.py::test_subfunction[SF-ACCOUNT-07]",
+    "SF-AUTH-03": "frontend/batch20-browser.mjs",
+    "SF-AUTH-04": "frontend/batch20-browser.mjs",
+    "SF-AUTH-07": "frontend/batch20-browser.mjs",
+    "SF-AUTH-13": "frontend/batch20-browser.mjs",
+    "SF-ACCOUNT-08": "frontend/batch20-browser.mjs"
+  }
+}

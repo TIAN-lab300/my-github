@@ -1,0 +1,35 @@
+{
+  "checked_at": "2026-11-03T11:56:04.833Z",
+  "results": [
+    {
+      "id": "SF-RESOURCE-14",
+      "status": "observed",
+      "observation": "无正文音频可通过页面发布，明确显示无可检索正文"
+    },
+    {
+      "id": "SF-RESOURCE-09",
+      "status": "observed",
+      "observation": "音频实际播放成功，上传字幕后回草稿，重新打开显示字幕正文"
+    },
+    {
+      "id": "SF-RESOURCE-10",
+      "status": "observed",
+      "observation": "图片成功解码预览，点击下载取得原始文件名"
+    },
+    {
+      "id": "SF-CLASS-09",
+      "status": "observed",
+      "observation": "通过页面选人并创建补发草稿，服务端重读为draft；原任务保持已发布"
+    },
+    {
+      "id": "SF-CLASS-07",
+      "status": "observed",
+      "observation": "教师页面确认移除后，成员行不再提供有效成员移除按钮"
+    },
+    {
+      "id": "SF-CLASS-08",
+      "status": "observed",
+      "observation": "确认归档后归档、编辑和生成邀请均禁用"
+    }
+  ]
+}
