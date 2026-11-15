@@ -42,3 +42,8 @@ playwright-report/
 
 # Local backend archive; publish source files instead
 /backend.rar
+
+# Local teammate handoff archives and alternate runtime database
+/知行_2026-11-15/
+/知行_2026-11-15.zip
+/runtime-data/

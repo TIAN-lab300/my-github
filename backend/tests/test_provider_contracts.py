@@ -30,7 +30,9 @@ def test_native_search_requires_real_source_metadata(monkeypatch):
         status_code=200
         def json(self):return {'output':{'choices':[{'message':{'content':'I searched the web'}}]}}
     class Client:
-        def __init__(self,**kwargs):pass
+        def __init__(self,**kwargs):
+            assert kwargs['timeout'].read==60
+            assert kwargs['timeout'].connect==10
         def __enter__(self):return self
         def __exit__(self,*args):pass
         def post(self,*args,**kwargs):calls.append(kwargs);return Response()
@@ -57,10 +59,15 @@ def test_quality_evaluation_records_all_cases_without_overwrite(monkeypatch,tmp_
         insert(db,'model_configs',id='quality-test',model='test-model',endpoint='https://dashscope.aliyuncs.com/compatible-mode/v1',secret_env='QUALITY_TEST_KEY',created_at=now())
     def reply(config,prompt):
         case=json.loads(prompt)['case']
-        return {'status':case['expected_status'],'tasks':[{'skill_id':case['skill_id'],'minutes':10}] if case['evidence_available'] else [],'reason':'测试契约响应'}
+        assert 'expected_status' not in case
+        decision={'unknown':'diagnose','weak':'remediate','mastered':'proceed'}[case['prerequisite']['state']]
+        kinds=([decision] if decision!='proceed' else [])+['practice','assessment']
+        tasks=[{'skill_id':case['prerequisite']['skill_id'] if kind in ('diagnose','remediate') else case['skill_id'],'minutes':5,'kind':kind,'activity':'逐步分析示例并记录每次调用变化','deliverable':'提交完整的调用变化记录及解释','source_id':case['sources'][-1 if kind in ('diagnose','remediate') else 0]['id'],'quote':case['sources'][-1 if kind in ('diagnose','remediate') else 0]['text']} for kind in kinds] if case['sources'] else []
+        return {'status':'candidate' if case['sources'] else 'draft','tasks':tasks,'reason':'依据资料与先修证据安排学习','prerequisite_decision':decision,'prerequisite_evidence_id':case['prerequisite']['evidence_id']}
     monkeypatch.setattr(models,'call_model',reply)
     output=tmp_path/'new-folder'/'quality.json'
     report=evaluate('quality-test',output,'contract-test')
     assert report['total']==60 and report['automated_passed']==60
     assert json.loads(output.read_text(encoding='utf-8'))['human_review']=='pending'
     with pytest.raises(ValueError,match='已存在'):evaluate('quality-test',output,'contract-test')
+

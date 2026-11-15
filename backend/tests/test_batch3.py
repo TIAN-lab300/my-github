@@ -122,7 +122,8 @@ def test_batch3(sf,clients):
         item=json.loads(path['tasks'])[0]['id']
         for minutes,proportion in [(0,.5),(5,-.1),(5,1.1)]:
             assert student.post(P+'/check-ins',json={'path_id':path['id'],'item_id':item,'minutes':minutes,'proportion':proportion}).status_code==422
-        assert student.post(P+'/check-ins',json={'path_id':path['id'],'item_id':item,'minutes':5,'proportion':1,'difficulty':'hard','note':'review'}).status_code==200
+        with transaction() as db:current=one(db,'SELECT minutes FROM checkins WHERE path_id=:p AND item_id=:i',p=path['id'],i=item)
+        assert student.post(P+'/check-ins',json={'path_id':path['id'],'item_id':item,'minutes':current['minutes'],'proportion':1,'difficulty':'hard','note':'review'}).status_code==200
         with transaction() as db:
             saved=one(db,'SELECT * FROM checkins WHERE path_id=:p AND item_id=:i',p=path['id'],i=item)
             assert saved['difficulty']=='hard' and saved['note']=='review'
@@ -159,3 +160,4 @@ def test_task_frozen_source_remains_readable_to_assignee(clients):
     assert clients['student2'].get(url).status_code==404
     teacher.post(P+f'/teacher/tasks/{tid}/withdraw')
     assert student.get(url).status_code==404
+

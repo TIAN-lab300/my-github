@@ -33,10 +33,10 @@ export function ModelQuality({configId}:{configId:string}){
         catch(error){setMessage((error as Error).message)}finally{setBusy(false)}
       }}>查看场景响应并复核</button>
     </div>)}
-    {selected&&<details open><summary>60场景响应</summary>
+    {selected&&<details open><summary>60场景响应 · {selected.rubric_version||"旧版判据"}</summary>
       {selected.results.map((entry:any)=><fieldset key={entry.case.id}>
         <legend>{entry.case.id} · {entry.case.topic} · 预算{entry.case.budget_minutes}分钟</legend>
-        <p>预期状态 {entry.case.expected_status} · {entry.automated_pass?'硬判据通过':'硬判据未通过'}</p>
+        <pre style={{whiteSpace:"pre-wrap"}}>{JSON.stringify({先修依据:entry.case.prerequisite,资料:entry.case.sources,判据:entry.checks,模型输出:entry.response},null,2)}</pre><p>预期状态 {entry.case.expected_status} · {entry.automated_pass?'硬判据通过':'硬判据未通过'}</p>
         <p>{typeof entry.response?.reason==='string'?entry.response.reason:entry.error||'响应缺少有效原因说明'}</p>
         {Array.isArray(entry.response?.tasks)&&entry.response.tasks.map((task:any,index:number)=><p key={index}>{String(task?.skill_id??'无效知识点')} · {String(task?.minutes??'未知')}分钟</p>)}
         <label><input type="checkbox" disabled={selected.review_status!=='pending'} checked={reviewed.includes(entry.case.id)} onChange={event=>setReviewed(event.target.checked?[...reviewed,entry.case.id]:reviewed.filter(value=>value!==entry.case.id))}/>已核对本场景教学语义</label>
@@ -47,3 +47,4 @@ export function ModelQuality({configId}:{configId:string}){
     </details>}
   </section>;
 }
+

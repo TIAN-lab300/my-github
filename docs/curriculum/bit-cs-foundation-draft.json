@@ -1,0 +1,1364 @@
+{
+  "schema_version": "draft-1",
+  "basis": "用户提供的课程范围；非官方培养方案复刻",
+  "cohort_reference": 2024,
+  "import_ready": false,
+  "notes": [
+    "知识点由助手提出，需按教学大纲审核",
+    "学期、课程代码、先修关系和学习目标尚未核实",
+    "汇编课程的具体指令集架构尚未确认",
+    "人工智能与计算科学A需特别核对教学范围",
+    "空题库及资料表示尚未采集，不代表已有数据"
+  ],
+  "courses": [
+    {
+      "id": "C01",
+      "name": "程序设计基础（C语言）",
+      "year": 1,
+      "semester": null,
+      "scope_source": "user_provided_2026-11-14",
+      "official_curriculum_verified": false,
+      "status": "draft",
+      "skills": [
+        {
+          "id": "C01-K001",
+          "name": "程序编译与运行",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K002",
+          "name": "基本数据类型与表达式",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K003",
+          "name": "输入输出",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K004",
+          "name": "分支结构",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K005",
+          "name": "循环结构",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K006",
+          "name": "数组与字符串",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K007",
+          "name": "函数与参数传递",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K008",
+          "name": "递归基础",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K009",
+          "name": "指针与内存",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K010",
+          "name": "结构体与联合体",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K011",
+          "name": "动态内存分配",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C01-K012",
+          "name": "文件读写",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "name": "人工智能与计算科学A",
+      "year": 1,
+      "semester": null,
+      "scope_source": "user_provided_2026-11-14",
+      "official_curriculum_verified": false,
+      "status": "draft",
+      "skills": [
+        {
+          "id": "C02-K001",
+          "name": "计算与信息表示",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C02-K002",
+          "name": "算法与计算思维",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C02-K003",
+          "name": "问题建模",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C02-K004",
+          "name": "搜索策略",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C02-K005",
+          "name": "知识表示与推理",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C02-K006",
+          "name": "机器学习基本流程",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C02-K007",
+          "name": "训练集与测试集",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C02-K008",
+          "name": "分类与回归",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C02-K009",
+          "name": "模型评价基础",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C02-K010",
+          "name": "人工智能应用与伦理",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "name": "数据结构",
+      "year": 2,
+      "semester": null,
+      "scope_source": "user_provided_2026-11-14",
+      "official_curriculum_verified": false,
+      "status": "draft",
+      "skills": [
+        {
+          "id": "C03-K001",
+          "name": "算法复杂度",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K002",
+          "name": "顺序表与链表",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K003",
+          "name": "栈",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K004",
+          "name": "队列",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K005",
+          "name": "字符串与模式匹配",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K006",
+          "name": "树与二叉树",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K007",
+          "name": "二叉搜索树",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K008",
+          "name": "堆与优先队列",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K009",
+          "name": "图的表示",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K010",
+          "name": "图遍历",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K011",
+          "name": "最短路径与最小生成树",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K012",
+          "name": "查找与哈希",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C03-K013",
+          "name": "内部排序",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "C04",
+      "name": "离散数学",
+      "year": 2,
+      "semester": null,
+      "scope_source": "user_provided_2026-11-14",
+      "official_curriculum_verified": false,
+      "status": "draft",
+      "skills": [
+        {
+          "id": "C04-K001",
+          "name": "命题逻辑",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K002",
+          "name": "谓词逻辑",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K003",
+          "name": "逻辑推理与证明",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K004",
+          "name": "集合运算",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K005",
+          "name": "二元关系",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K006",
+          "name": "等价关系与偏序",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K007",
+          "name": "函数与映射",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K008",
+          "name": "数学归纳法",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K009",
+          "name": "计数原理",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K010",
+          "name": "递推关系",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K011",
+          "name": "图论基础",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K012",
+          "name": "树与连通性",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C04-K013",
+          "name": "代数结构初步",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "name": "数字逻辑",
+      "year": 2,
+      "semester": null,
+      "scope_source": "user_provided_2026-11-14",
+      "official_curriculum_verified": false,
+      "status": "draft",
+      "skills": [
+        {
+          "id": "C05-K001",
+          "name": "数制与编码",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K002",
+          "name": "布尔代数",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K003",
+          "name": "逻辑门与真值表",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K004",
+          "name": "逻辑表达式化简",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K005",
+          "name": "组合逻辑设计",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K006",
+          "name": "编码器与译码器",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K007",
+          "name": "多路选择器",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K008",
+          "name": "加法器与比较器",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K009",
+          "name": "锁存器与触发器",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K010",
+          "name": "时序逻辑分析",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K011",
+          "name": "寄存器与计数器",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C05-K012",
+          "name": "有限状态机",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "C06",
+      "name": "面向对象程序设计（C++）",
+      "year": 2,
+      "semester": null,
+      "scope_source": "user_provided_2026-11-14",
+      "official_curriculum_verified": false,
+      "status": "draft",
+      "skills": [
+        {
+          "id": "C06-K001",
+          "name": "C++类型与引用",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K002",
+          "name": "函数重载",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K003",
+          "name": "类与对象",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K004",
+          "name": "构造析构与对象生命周期",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K005",
+          "name": "封装与访问控制",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K006",
+          "name": "运算符重载",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K007",
+          "name": "继承",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K008",
+          "name": "虚函数与多态",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K009",
+          "name": "模板基础",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K010",
+          "name": "异常处理",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K011",
+          "name": "标准容器与迭代器",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C06-K012",
+          "name": "资源管理与RAII",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "C07",
+      "name": "汇编语言程序设计",
+      "year": 2,
+      "semester": null,
+      "scope_source": "user_provided_2026-11-14",
+      "official_curriculum_verified": false,
+      "status": "draft",
+      "skills": [
+        {
+          "id": "C07-K001",
+          "name": "指令集与寄存器",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K002",
+          "name": "数据表示与字节序",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K003",
+          "name": "寻址方式",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K004",
+          "name": "数据传送指令",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K005",
+          "name": "算术与逻辑指令",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K006",
+          "name": "条件码与分支",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K007",
+          "name": "循环实现",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K008",
+          "name": "栈与过程调用",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K009",
+          "name": "参数传递与调用约定",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K010",
+          "name": "数组及字符串访问",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K011",
+          "name": "汇编与高级语言对应",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C07-K012",
+          "name": "调试与反汇编",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "C08",
+      "name": "数据库原理与设计",
+      "year": 2,
+      "semester": null,
+      "scope_source": "user_provided_2026-11-14",
+      "official_curriculum_verified": false,
+      "status": "draft",
+      "skills": [
+        {
+          "id": "C08-K001",
+          "name": "数据库系统基本概念",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K002",
+          "name": "关系模型",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K003",
+          "name": "关系代数",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K004",
+          "name": "SQL查询与连接",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K005",
+          "name": "聚合与子查询",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K006",
+          "name": "数据更新与完整性约束",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K007",
+          "name": "ER建模",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K008",
+          "name": "关系模式转换",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K009",
+          "name": "函数依赖与规范化",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K010",
+          "name": "索引与查询优化基础",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K011",
+          "name": "事务与ACID",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K012",
+          "name": "并发控制基础",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        },
+        {
+          "id": "C08-K013",
+          "name": "备份恢复与权限",
+          "status": "pending_syllabus_review",
+          "learning_objective": null,
+          "prerequisite_ids": [],
+          "resource_links": [],
+          "questions": {
+            "diagnostic": [],
+            "retest": [],
+            "practice": []
+          }
+        }
+      ]
+    }
+  ]
+}

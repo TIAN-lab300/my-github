@@ -9,7 +9,11 @@ def activate_cloud(clients,monkeypatch):
     def reply(config,prompt):
         if prompt.startswith('{') and 'case' in json.loads(prompt):
             case=json.loads(prompt)['case']
-            return {'status':case['expected_status'],'tasks':[{'skill_id':case['skill_id'],'minutes':10}] if case['evidence_available'] else [],'reason':'测试契约响应'}
+            assert "expected_status" not in case
+            decision={'unknown':'diagnose','weak':'remediate','mastered':'proceed'}[case['prerequisite']['state']]
+            kinds=([decision] if decision!='proceed' else [])+['practice','assessment']
+            tasks=[{'skill_id':case['prerequisite']['skill_id'] if kind in ('diagnose','remediate') else case['skill_id'],'minutes':5,'kind':kind,'activity':'逐步分析示例并记录每次调用变化','deliverable':'提交完整的调用变化记录及解释','source_id':case['sources'][-1 if kind in ('diagnose','remediate') else 0]['id'],'quote':case['sources'][-1 if kind in ('diagnose','remediate') else 0]['text']} for kind in kinds] if case['sources'] else []
+            return {'status':'candidate' if case['sources'] else 'draft','tasks':tasks,'reason':'依据资料与先修证据安排学习','prerequisite_decision':decision,'prerequisite_evidence_id':case['prerequisite']['evidence_id']}
         if 'agent' not in prompt:return {'ok':True}
         request=json.loads(prompt);task=request['task'];agent=request['agent']
         if agent=='GoalDiagnosisAgent':return {'summary':'根据诊断安排先修知识','risks':[]}
@@ -86,3 +90,15 @@ def test_authorized_link_import_and_audit_result(clients,monkeypatch):
 def test_fetch_rejects_private_and_credential_urls(url):
     from app.services.web_evidence import public_target
     with pytest.raises(ValueError):public_target(url)
+
+
+
+def test_search_evaluation_is_admin_only(clients,monkeypatch):
+    from app.api import evidence
+    calls=[]
+    monkeypatch.setattr(evidence,'search_web',lambda query: calls.append(query) or [])
+    for role in ('student','teacher'):
+        assert clients[role].post(P+'/admin/search/evaluate').status_code==403
+    assert calls==[]
+    assert clients['admin'].post(P+'/admin/search/evaluate').status_code==200
+    assert len(calls)==1

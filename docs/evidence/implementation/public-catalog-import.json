@@ -1,0 +1,18 @@
+{
+  "database": "D:\\卓越工程\\backend\\data\\zhixing.db",
+  "migration": "0019",
+  "existing_business_rows_unchanged": true,
+  "imported_courses": 36,
+  "imported_skills": 377,
+  "imported_sources": 40,
+  "course_source_links": 54,
+  "questions_imported": 0,
+  "backend_tests_passed": 3,
+  "frontend_build_passed": true,
+  "browser_verified": {
+    "courses": 36,
+    "chinese_guide_visible": true,
+    "original_link_preserved": true,
+    "page_errors": []
+  }
+}

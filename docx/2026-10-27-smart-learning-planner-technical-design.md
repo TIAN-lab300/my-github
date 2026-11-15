@@ -2780,3 +2780,88 @@ GPT请求使用max_completion_tokens和模型默认采样参数。模型配置�
 题库目录GET /curriculum/skills增加逐知识点diagnostic_available；页面提供重新获取题库按钮、连接或接口失败提示、无题库知识点禁选；目录失败/空选时禁止保存。诊断使用本地或审核题库，不以云端激活为前提。
 
 验收：前端构建通过；2项新增后端测试通过，原test_batch4.py的22项诊断相关回归通过；独立浏览器验收目录3项、创建目标并显示诊断试卷、模型激活说明可见且无脚本错误。检测到8000服务停止后已恢复并加载本次代码，未执行数据库迁移、重置或新增真实模型调用。截图见docs/evidence/implementation/form-layout/goal-readiness.png。
+
+
+## 2026-11-14 知识检测与课程数据关联专项设计（待实施）
+
+本节为本轮新增设计，覆盖旧文中仅使用固定示例题库或图谱内嵌题目的限制；历史验收记录不代表本节已完成。沿用原功能编号，本节KD编号用于追踪增补，不据此重新累加127项总数。课程库指课程、章节及其教学资料集合，班级是授课与访问范围，两者分别建模。
+### 实现边界与拟新增结构
+
+复用users/classes/memberships/resources/resource_versions/goals/diagnoses/observations及现有评分、权限校验。当前topic_bank.py从graph_versions.nodes内嵌题目读取，diagnose会取整套活动题库；新增实现须按课程与选定知识点过滤，不能仅检查目标范围被包含后仍下发整套试卷。
+
+拟新增表（迁移编号在编码时依据最新head确定）：
+
+| 表 | 主要字段及约束 |
+|---|---|
+| courses / course_chapters | id、owner_id、title、scope、status、version；章节含course_id、position |
+| course_classes | course_id、class_id联合唯一；验证教师课程与班级管理权 |
+| course_skills / skill_prerequisites | course_id、skill_id、name、description、minutes、status、version；先修边同课程且无环 |
+| skill_resource_links | course_id、chapter_id、skill_id、resource_id、resource_version_id、locator_json、status；定位须校验页数/时间边界 |
+| questions / question_versions | 稳定question_id、owner_id；版本含course_id、primary_skill_id、phase、difficulty、prompt、options_json、answer、explanation、source_json、status、reviewer_id |
+| assessment_blueprints | course_id、phase、per_skill_count、difficulty_policy、version；默认每知识点2题 |
+| assessment_items | diagnosis_id、question_version_id、position、snapshot_json；诊断与题版本唯一 |
+
+diagnoses新增可空course_id及blueprint_version，旧数据保持兼容。题目来源保留授权说明；公开DTO白名单排除答案，提交后按已冻结快照输出解析。辅助知识点只作检索标签，避免一次答题向多个知识点重复计证据。
+
+### 接口与事务（拟新增，均带/api/v1前缀）
+
+GET/POST /courses；GET/PATCH /courses/{id}；课程下 /chapters、/skills、/resource-links 提供授权查询与新增更新；GET/POST /courses/{id}/questions；PATCH /questions/{id} 新建草稿版本；POST /question-versions/{id}/submit-review、/approve、/reject、/disable。审核接口仅管理员可调用，编辑使用version乐观锁，冲突返回409。
+
+GET /courses/{id}/coverage?phase=diagnostic 返回逐知识点缺口及原因。既有POST /goals/{id}/diagnoses扩展课程、范围和蓝图校验；请求范围须属于该目标及授权课程。GET /diagnoses/{id}与draft/submit接口复用。学生无目标时先创建课程范围目标再进入相同检测链路，不维护第二套评分逻辑。
+
+组卷在同一事务内校验身份、课程发布态、范围、题目版本及配额后选题并冻结；只选已发布、匹配用途且未公开的题版本。题量不足返回409 QUESTION_COVERAGE_GAP及缺失知识点。提交时校验目标版本与权限、已提交状态，原子保存结果及observations；并发重复提交不重复评分。管理员停用错误题后未交卷试卷阻止提交并提示重建，已提交历史保留。
+
+资料读取每次调用既有resource_access再次验证；修改映射不改变历史试卷。课程授权不能扩大资料自身权限。日志仅记录对象ID与操作，不记录学生密码或未公开答案。
+
+迁移先备份，新增结构后以稳定旧skill ID导入函数/递归/调用栈，标注来源curated-v1；旧图谱题库采用只读适配，切换到新课程库后禁止同时把两套数据作为可编辑来源。历史diagnoses快照不改写。对比迁移前后题数、关联数、试卷和成绩，失败使用备份恢复。
+
+
+## 2026-11-14 全学段专业课程范围修订（待实施）
+
+本轮范围为用户提供的大一至大四18门专业课程及18门专业选修课，共36门；课程年级沿用用户清单，选修池不默认分配学期或要求全部修读。2024级仅作参考，未宣称官方培养方案及教学大纲已核实。用户勾选标记不代表系统实现状态。
+
+完整目录及377个候选知识/能力点见[全学段课程草案](../docs/curriculum/bit-cs-all-years-draft.md)，结构化字段见[JSON草案](../docs/curriculum/bit-cs-all-years-draft.json)。替代此前仅前两年8门课程范围。所有候选点待大纲审核，题库及资料关联当前为空，禁止据此标记课程库就绪。
+
+实施与验收：每门课程维护章节、知识点、先修关系、资料定位及题库覆盖；课程授权与选修选择共同决定学生可检测范围。理论课程采用诊断/练习/重测；编程课程补充环境、测例和实践任务；卓越工程综合训练及毕业设计使用里程碑、成果提交、教师评分量规及反馈，不以客观题替代项目验收。后续数据模型须为assessment_mode保留扩展，项目结果不直接套用选择题BKT规则。
+
+实施按课程分批交付，每批完成录入、审核、组卷或实践任务、结果报告及三角色页面验证；全学段目录先齐备，逐门补足有效数据。最终按36门逐门记录覆盖及缺口，不把目录完成等同所有功能完成。跨课程同名知识点通过显式等价关系审核，不自动共用题目或传播掌握度。
+
+
+## 2026-11-14 公开教学来源采集记录
+
+已为用户指定的36门课程整理40个公开来源条目，包含课程讲义、教材、练习/试题索引、工具文档及项目管理通知。详见[公开资料清单](../docs/curriculum/public-sources-catalog.md)与[来源元数据](../docs/curriculum/public-sources-catalog.json)。已核查目标页或索引，但逐知识点映射、题目提取、答案审核、授权导入均未完成；候选来源不能用于把课程或题库标为已验收。
+
+
+## 2026-11-14 中文资料目录入库（已实施）
+
+新增0019迁移：curriculum_catalog_courses、curriculum_catalog_skills、public_source_catalog、curriculum_catalog_sources，分别保存课程、候选知识点、来源元数据及课程来源关系。导入36门课程、377候选点、40份中文导读、54条来源关系；课程与知识点仍为待审核，独立于活动诊断图谱和正式题库。GET /curriculum/catalog供已登录三角色浏览；资料归入现有校级resources，kind=link、正文为中文阅读说明、原文地址保留，cloud_allowed=false，parse/index=not_applicable，不将目录卡片作为RAG正文证据。
+
+课程知识库新增课程选择、知识点展开及阅读中文导读按钮；资料详情保留外部原文入口。本轮中文化是元数据、内容概述与阅读指导，不是第三方全文翻译；外部题目和答案未提取，questions_imported=0。
+
+导入命令为python -m app.cli import-public-catalog，事务失败整体回滚；相同来源摘要重复导入跳过，不覆盖用户编辑内容；来源变更要求显式处理新版本。正式执行前已备份backend/data/backups/before-public-catalog-20261114。当前运行库由0017顺序升级至0019（含0018手机表），未修改原用户、班级、任务、成绩、学习记录及目标路径记录。验证记录见docs/evidence/implementation/public-catalog-import.json；导入、重复执行与权限、失败回滚共3项测试通过。
+
+
+## 2026-11-14 公开试题与官方答案核查（待题库审核）
+
+本轮搜集37个题组来源，31个已读取PDF或网页题解，6个附件受限；整理15条带原题编号与知识点的中文题答摘要，均待教师与许可审核，不是15道已发布题目。课程级候选涉及22门，可读取来源涉及19门；其余缺口见逐课程矩阵。未更改运行题库或评分数据。
+
+详见[试题与答案清单](../docs/curriculum/question-answer-sources.md)、[来源配对元数据](../docs/curriculum/question-answer-sources.json)及[中文题答草稿](../docs/curriculum/question-review-drafts.json)。每个草稿保留来源、题号、候选知识点及原题上下文依赖，不把题组数当题数。官方指出有误的分布式试题与年份不一致的编译题答均列出排除/复核原因。
+
+
+## 2026-11-15 待审核题答入库
+
+0020迁移新增question_source_packs与question_review_candidates。37个来源及15条中文题答摘要已导入，来源与课程知识点关联，保留题号与原题上下文依赖；重复导入跳过现有记录，不覆盖人工编辑。GET /admin/question-candidates仅管理员可读，管理员“知识图谱”新增待审核题库查看入口。学生和教师不能通过此接口读取答案。当前仅供审核准备，不提供直接发布，正式题干、条件、附件、评分及许可审核尚未补全。未修改诊断图谱、正式题库、评分和掌握度证据。备份位于backend/data/backups/before-question-candidates-20261115，既有业务表逐行对比保持一致；隔离导入权限测试与前端构建通过。
+
+
+## 2026-11-15 学习—测验—评价关系表与闭环
+
+0021迁移已新增11张关系表，复用课程、知识点、资料版本及账号。详见[数据关系和操作说明](../docs/curriculum/learning-assessment-database.md)、[已应用表结构](../docs/curriculum/learning-assessment-tables.sql)。新增章节—知识点、知识点—资料版本、课程—题目—题目版本、学生—学习会话、学生—试卷—题目快照—作答、试卷总评与逐知识点评价关联。
+
+管理员可关联已发布校级正文、录入完整单选题、核对后发布及停用；学生可按知识点学习、记录分钟、组卷、暂存、交卷、查看总分/解析及知识点正确率和BKT估计、恢复历史。每次提交原子保存且幂等，交卷前隐藏答案，重测排除已见题目身份。旧题答摘要仍未审核，不自动发布。教师正式题库维护需课程授权后另行开放。编程题执行、项目量规评分、旧目标规划掌握度联动尚未集成本次闭环。
+
+8项隔离回归与前端构建通过；独立浏览器完成学习与单选测验并展示评价，无脚本错误。正式库迁移前已备份，原有业务表及课程、知识点、题答草稿逐行对比保持一致；正式题目版本当前仍为0，须逐门补充合格内容，不能宣称36门课均能出题。
+
+
+## 2026-11-15 队友云端更新合并
+
+队友云端输出契约、引用校验、供应商错误分类、教师题库及管理员审核、路径测验会话恢复和增量质量评价已合并。0019/0020重编号为0022/0023，保留本机原课程学习评价结构。启动默认backend/data并尊重ZHIXING_DATA。229项后端回归、前端构建、三身份及学习测验浏览器验收通过；真实模型及搜索调用0次。详见[合并与操作说明](../docs/evidence/implementation/teammate-merge-20261115.md)。

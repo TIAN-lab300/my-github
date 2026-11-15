@@ -79,3 +79,15 @@ $env:PYTHONPATH = 'backend'
 ## 新增能力配置与验收
 
 完整配置步骤见[运行与验收说明](docs/evidence/implementation/remaining-functions-setup.md)，当前逐模块范围见[功能清单](docs/evidence/implementation/current-function-inventory.md)。依赖锁已包含本地处理依赖，模型需通过prepare-models命令单独准备。
+
+## 本机作为局域网服务器
+
+执行 `powershell -ExecutionPolicy Bypass -File .\scripts\start-lan.ps1`，将显示的局域网网址发给同学。详细步骤见 [局域网使用说明](docs/lan-server.md)。
+
+## 公开资料中文目录
+
+课程知识库中可按36门课程查看377个候选知识点及40份中文导读。首次导入前备份并迁移数据库，再执行 `python -m app.cli import-public-catalog`（需设置PYTHONPATH=backend）。目录卡片不等于全文译本或正式题库。来源见 [资料清单](docs/curriculum/public-sources-catalog.md)。
+
+## 云端更新合并
+
+队友更新与课程学习功能已合并，默认继续使用backend/data。云端启动可运行 `powershell -ExecutionPolicy Bypass -File .\scripts\start-cloud.ps1 -Provider DeepSeek`，也支持DashScope、OpenAI。详见[合并说明](docs/evidence/implementation/teammate-merge-20261115.md)。

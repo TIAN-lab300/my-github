@@ -217,6 +217,16 @@ def diagnose(id:str,user=Depends(current_user)):
         if existing: return {'id':existing['id'],'questions':public_questions(json.loads(existing['questions'])),'attempt_id':existing['attempt_id']}
         bank,bank_version=question_bank(db,'diagnostic')
         questions=question_snapshot(bank,bank_version)
+        published = rows(db, "SELECT * FROM bank_versions WHERE status='published' ORDER BY created_at,id")
+        managed = []
+        for version in published:
+            content = json.loads(version['content'])
+            if content['purpose']=='diagnostic' and content['skill'] in {node['id'] for node in graph}:
+                managed.append({**content, 'id':version['id'], 'question_id':version['question_id'], 'version':version['version']})
+        if managed:
+            managed_skills = {question['skill'] for question in managed}
+            questions = [question for question in questions if question['skill'] not in managed_skills] + managed
+            bank_version = 'managed-diagnostic-v1'
         missing=set(json.loads(g['skills']))-{q['skill'] for q in questions}
         if not questions or missing:fail(409,'诊断题库覆盖不足，请补充材料或重试','DIAGNOSTIC_COVERAGE_GAP')
         did=uid();insert(db,'diagnoses',id=did,goal_id=id,student_id=user['id'],questions=dump(questions),goal_version=g['version'],bank_version=bank_version,created_at=now())
@@ -335,6 +345,8 @@ def accept(id:str,user=Depends(current_user)):
                    'previous':one(db,'SELECT * FROM paths WHERE id=:id',id=metadata['previous']) if metadata.get('previous') else None}
             if not all(rule['passed'] for rule in validate(state,db)):fail(409,'路径规则重新审查失败，请重新生成')
         schedule=allocate(db,user['id'],minutes,g['due_date'],g['id'],g['weekly_minutes']) if minutes else []
+        if schedule != metadata.get('schedule', schedule):
+            fail(409,'排期已变化，请重新生成预览并确认','STALE_PREVIEW')
         run(db,"UPDATE paths SET status='superseded' WHERE goal_id=:g AND status='active'",g=g['id'])
         run(db,"UPDATE reservations SET status='cancelled' WHERE goal_id=:g AND status='active'",g=g['id'])
         run(db,"UPDATE remediation_tasks SET status='cancelled' WHERE path_id IN (SELECT id FROM paths WHERE goal_id=:g AND id!=:p) AND status IN ('active','candidate')",g=g['id'],p=id)
@@ -361,23 +373,31 @@ def checkin(body:Checkin,user=Depends(current_user)):
         if not p: fail(404,'活动路径不存在')
         if goal_access(db,user,p['goal_id'])['status']=='archived': fail(409,'归档目标不能新增学习记录')
         old=one(db,'SELECT * FROM checkins WHERE path_id=:p AND item_id=:i',p=body.path_id,i=body.item_id)
-        if old:
-            if old['difficulty']!=body.difficulty or old['note']!=body.note:
-                run(db,'UPDATE checkins SET difficulty=:d,note=:n WHERE id=:id',d=body.difficulty,n=body.note,id=old['id'])
-                touch(db,user['id'])
-            return {**old,'difficulty':body.difficulty,'note':body.note}
+        if old and (body.proportion < old['proportion'] or body.minutes < old['minutes']):
+            fail(422,'累计完成比例和累计学习分钟不能减少')
+        if old and all(old[key]==getattr(body,key) for key in ('proportion','minutes','difficulty','note')):
+            return old
         item=next((t for t in json.loads(p['tasks'])+json.loads(p['validation']).get('remediations',[]) if t['id']==body.item_id),None)
         if not item: fail(404,'路径任务不存在')
         m=mastery(db,user['id'])
         if any(m.get(s,{}).get('probability',.2)<.75 for s in item['prerequisites']): fail(409,'先修知识尚未通过有效测验，不能开始此任务')
-        id=uid();insert(db,'checkins',id=id,student_id=user['id'],**body.model_dump(),created_at=now())
+        if old:
+            id=old['id']
+            run(db,'UPDATE checkins SET proportion=:p,minutes=:m,difficulty=:d,note=:n WHERE id=:id',p=body.proportion,m=body.minutes,d=body.difficulty,n=body.note,id=id)
+        else:
+            id=uid();insert(db,'checkins',id=id,student_id=user['id'],**body.model_dump(),created_at=now())
         run(db,"UPDATE remediation_tasks SET status='studied' WHERE id=:id AND path_id=:p",id=body.item_id,p=p['id'])
         # Release this work's planned minutes; actual minutes are counted independently.
-        remaining=round(item['minutes']*body.proportion)
-        for r in rows(db,"SELECT * FROM reservations WHERE source_id=:p AND status='active' ORDER BY local_date",p=p['id']):
-            release=min(remaining,r['minutes']);remaining-=release
-            run(db,'UPDATE reservations SET minutes=minutes-:m WHERE id=:id',m=release,id=r['id'])
-            if remaining==0: break
+        before=int(item['minutes']*(old['proportion'] if old else 0))
+        after=int(item['minutes']*body.proportion)
+        for day in item.get('dates',[]):
+            released_before=min(before,day['minutes']);before-=released_before
+            released_after=min(after,day['minutes']);after-=released_after
+            remaining=released_after-released_before
+            for r in rows(db,"SELECT * FROM reservations WHERE source_id=:p AND status='active' AND local_date=:d ORDER BY id",p=p['id'],d=day['date']):
+                release=min(remaining,r['minutes']);remaining-=release
+                run(db,'UPDATE reservations SET minutes=minutes-:m WHERE id=:id',m=release,id=r['id'])
+                if remaining==0: break
         touch(db,user['id'])
     return {'id':id,'message':'已记录学习；掌握度仅由有效测验证据更新'}
 
@@ -392,36 +412,15 @@ def assessment_item(db,user,path_id,item_id):
     return p,item
 
 @router.get('/paths/{id}/items/{item}/assessment')
-def path_assessment(id:str,item:str,user=Depends(current_user)):
+def path_assessment(id: str, item: str, user=Depends(current_user)):
+    from app.services.assessment_sessions import begin_session, session_dto
     with transaction() as db:
-        p,t=assessment_item(db,user,id,item)
-        # Equivalent practice variants differ from disclosed diagnosis questions.
-        frozen=one(db,'SELECT questions FROM path_question_bank WHERE path_id=:p AND item_id=:i',p=id,i=item)
-        qs=json.loads(frozen['questions']) if frozen else PRACTICE.get(t['skill_id'],[])
-        old=one(db,'SELECT attempt_id FROM path_assessments WHERE path_id=:p AND item_id=:i',p=id,i=item)
-        result=one(db,'SELECT * FROM attempts WHERE id=:id',id=old['attempt_id']) if old else None
-        return {'questions':public_questions(qs),'result':result}
+        return session_dto(db, begin_session(db, id, item, user))
 
 @router.post('/paths/{id}/items/{item}/attempts')
-def path_attempt(id:str,item:str,body:Submission,user=Depends(current_user)):
+def path_attempt(id: str, item: str, body: Submission, user=Depends(current_user)):
+    from app.services.assessment_sessions import begin_session
+    from app.api.question_bank import submit, Answers
     with transaction() as db:
-        p,t=assessment_item(db,user,id,item)
-        old=one(db,'SELECT attempt_id FROM path_assessments WHERE path_id=:p AND item_id=:i',p=id,i=item)
-        if old: return one(db,'SELECT * FROM attempts WHERE id=:id',id=old['attempt_id'])
-    # Read the same server-owned question version used by the assessment DTO.
-    dto=path_assessment(id,item,user)
-    with transaction() as db:
-        frozen=one(db,'SELECT questions FROM path_question_bank WHERE path_id=:p AND item_id=:i',p=id,i=item)
-        qs=json.loads(frozen['questions']) if frozen else PRACTICE.get(t['skill_id'],[])
-    if not qs or any(q['id'] not in body.answers for q in qs): fail(422,'请完成测验')
-    with transaction() as db:
-        p,t=assessment_item(db,user,id,item)
-        old=one(db,'SELECT attempt_id FROM path_assessments WHERE path_id=:p AND item_id=:i',p=id,i=item)
-        if old: return one(db,'SELECT * FROM attempts WHERE id=:id',id=old['attempt_id'])
-        g=goal_access(db,user,p['goal_id']);aid=uid()
-        insert(db,'attempts',id=aid,student_id=user['id'],goal_id=g['id'],class_id=g['class_id'],answers=dump(body.answers),feedback='[]',status='scored',minutes=body.minutes,created_at=now())
-        f,s=observations(db,aid,qs,body.answers,user['id'],g['class_id'])
-        run(db,'UPDATE attempts SET feedback=:f,score=:s WHERE id=:id',f=dump(f),s=s,id=aid)
-        insert(db,'path_assessments',path_id=id,item_id=item,attempt_id=aid)
-        save_mastery(db,user['id'])
-        return one(db,'SELECT * FROM attempts WHERE id=:id',id=aid)
+        session = begin_session(db, id, item, user)
+    return submit(session['id'], Answers(answers=body.answers, minutes=body.minutes), user)['result']

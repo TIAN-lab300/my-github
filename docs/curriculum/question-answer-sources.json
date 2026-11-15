@@ -1,0 +1,1303 @@
+{
+  "checked_on": "2026-11-14",
+  "scope": "题目与答案来源配对，尚未发布到正式题库",
+  "packs": [
+    {
+      "id": "algorithms-basic-01",
+      "family": "MIT 6.006 数据结构练习",
+      "course_ids": [
+        "C03",
+        "C14"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/pages/practice-problems/",
+      "label": "Problem Session 1 questions (PDF) Problem Session 1 solutions (PDF)",
+      "question_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob1/",
+      "solution_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob1sol/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob1/",
+        "final_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/8a750a72b9b9c29f6a0402866bac34b7_MIT6_006S20_prob1.pdf",
+        "status": "pdf_read",
+        "pages": 3,
+        "sha256": "e93ac2e86ce4ce8ec3f04f70fede755f729add27a2987ac5685d0a6657b90c87",
+        "first_page_years": [
+          "2019"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob1sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/1ecbb4149fe5f5166033bdde285dba07_MIT6_006S20_prob1sol.pdf",
+        "status": "pdf_read",
+        "pages": 6,
+        "sha256": "b418d0e4795d3762fced7bbe8e09c7f105d4cf45a878fdf455151369dd860c5d",
+        "first_page_years": [
+          "2019"
+        ]
+      }
+    },
+    {
+      "id": "algorithms-basic-02",
+      "family": "MIT 6.006 数据结构练习",
+      "course_ids": [
+        "C03",
+        "C14"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/pages/practice-problems/",
+      "label": "Problem Session 2 questions (PDF) Problem Session 2 solutions (PDF)",
+      "question_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob2/",
+      "solution_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob2sol/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob2/",
+        "final_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/48d7efc2151c012c3b5825def33f0be5_MIT6_006S20_prob2.pdf",
+        "status": "pdf_read",
+        "pages": 3,
+        "sha256": "855f6ec62242c60991f4c6f720f098de94e343d9fbdbfb28a140408d1a54472d",
+        "first_page_years": []
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob2sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/82d7668dde8dcfe0ae2d89cfeeeb9adc_MIT6_006s20_prob2sol.pdf",
+        "status": "pdf_read",
+        "pages": 7,
+        "sha256": "e1a82b219cc9c9e25bf00e517a8944769eec73861b2d760e7e908bc14d79d76e",
+        "first_page_years": []
+      }
+    },
+    {
+      "id": "algorithms-basic-03",
+      "family": "MIT 6.006 数据结构练习",
+      "course_ids": [
+        "C03",
+        "C14"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/pages/practice-problems/",
+      "label": "Problem Session 3 questions (PDF) Problem Session 3 solutions (PDF)",
+      "question_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob3/",
+      "solution_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob3sol/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob3/",
+        "final_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/9749b7108850c4a10833c99875b42639_MIT6_006S20_prob3.pdf",
+        "status": "pdf_read",
+        "pages": 3,
+        "sha256": "0c61841dcfce293f5496cd5c0c531be8f44f337e02df307839987f21f6324858",
+        "first_page_years": []
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/mit6_006s20_prob3sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/f8b8fef7a3838b471c82c5bdcb6570f9_MIT6_006s20_prob3sol.pdf",
+        "status": "pdf_read",
+        "pages": 7,
+        "sha256": "e395e2e33d3dcf525411a7de21ccdd4cd0367640c92b7e1fd3b153bff7135117",
+        "first_page_years": []
+      }
+    },
+    {
+      "id": "algorithms-advanced-01",
+      "family": "MIT 6.046J 算法作业",
+      "course_ids": [
+        "C14"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/pages/assignments/",
+      "label": "Problem Set 1 (PDF) Solutions to Problem Set 1 (PDF)",
+      "question_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/problem-set-1/",
+      "solution_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/solutions-to-problem-set-1/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/problem-set-1/",
+        "final_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/43d974c6c4bfc5d88086a67e023fd88d_MIT6_046JS15_pset1.pdf",
+        "status": "pdf_read",
+        "pages": 4,
+        "sha256": "6cc04a5b38a74880154d633bcc5476bad783846e5d75b94d65c883c849977099",
+        "first_page_years": [
+          "2015"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/solutions-to-problem-set-1/",
+        "final_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/b14791a78432996a1d403e8b1deb0749_MIT6_046JS15_pset1sols.pdf",
+        "status": "pdf_read",
+        "pages": 8,
+        "sha256": "e347bf149b18caa7ecc3264528118731fc768a2280750f80e69ec208386b06f1",
+        "first_page_years": [
+          "2015"
+        ]
+      }
+    },
+    {
+      "id": "algorithms-advanced-02",
+      "family": "MIT 6.046J 算法作业",
+      "course_ids": [
+        "C14"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/pages/assignments/",
+      "label": "Problem Set 2 (PDF) Solutions to Problem Set 2 (PDF)",
+      "question_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/problem-set-2/",
+      "solution_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/solutions-to-problem-set-2/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/problem-set-2/",
+        "final_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/4a1b44e7e3f34aa85adb782d70048210_MIT6_046JS15_pset2.pdf",
+        "status": "pdf_read",
+        "pages": 4,
+        "sha256": "6a6938c1b1e8ed833004710f5dbca03c9b96c1ce97c7c1f23acf82f02ad7ebb8",
+        "first_page_years": [
+          "2015"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/solutions-to-problem-set-2/",
+        "final_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/d608c09d3f727411722e3ff5a95b103f_MIT6_046JS15_pset2sols.pdf",
+        "status": "pdf_read",
+        "pages": 8,
+        "sha256": "44cf11332701af54e69e3e02cf5f86a42f00509e53322bd45e29ffc44ba9200f",
+        "first_page_years": [
+          "2015"
+        ]
+      }
+    },
+    {
+      "id": "algorithms-advanced-03",
+      "family": "MIT 6.046J 算法作业",
+      "course_ids": [
+        "C14"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/pages/assignments/",
+      "label": "Problem Set 3 (PDF) Solutions to Problem Set 3 (PDF)",
+      "question_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/problem-set-3/",
+      "solution_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/solutions-to-problem-set-3/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/problem-set-3/",
+        "final_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/c6f512681e64389b446a981c7d963323_MIT6_046JS15_pset3.pdf",
+        "status": "pdf_read",
+        "pages": 2,
+        "sha256": "fd31dc4c016a4a8abe982b9bb4f476840a99f4a99359452e5de2e82c4e35b444",
+        "first_page_years": [
+          "2015"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/solutions-to-problem-set-3/",
+        "final_url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/3e83fa6454e5ebe6bf1bcb1b4a122f6d_MIT6_046JS15_pset3sols.pdf",
+        "status": "pdf_read",
+        "pages": 5,
+        "sha256": "d3d97e079c804ec9bca76f7cb19372285beb730722f32fc58b64c7994e5fa83a",
+        "first_page_years": [
+          "2015"
+        ]
+      }
+    },
+    {
+      "id": "discrete-01",
+      "family": "MIT 6.042J 离散数学考试",
+      "course_ids": [
+        "C04",
+        "C35"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/pages/exams/",
+      "label": "Midterm practice problems ( PDF ) ( PDF )",
+      "question_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_mid_practice/",
+      "solution_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_mid_pctce_sol/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_mid_practice/",
+        "final_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/3179fb7a80dcb5a10c5c85cf2b9ab585_MIT6_042JF10_mid_practice.pdf",
+        "status": "pdf_read",
+        "pages": 11,
+        "sha256": "1ae542f4683e5a7fbbfbf96d0108c95befabd20e96465f1238b7eb7b31271f63",
+        "first_page_years": [
+          "2010"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_mid_pctce_sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/b7bffa977868220bb3c262f4cb8875eb_MIT6_042JF10_mid_pctce_sol.pdf",
+        "status": "pdf_read",
+        "pages": 10,
+        "sha256": "158e62e3ff29986e569df488f32cf9b1adb462daeb26ba12acea4c049b361b19",
+        "first_page_years": [
+          "2010"
+        ]
+      }
+    },
+    {
+      "id": "discrete-02",
+      "family": "MIT 6.042J 离散数学考试",
+      "course_ids": [
+        "C04",
+        "C35"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/pages/exams/",
+      "label": "Midterm ( PDF ) ( PDF )",
+      "question_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_midterm/",
+      "solution_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_midterm_sol/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_midterm/",
+        "final_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/4ee24d59458be01224204a330cff7eca_MIT6_042JF10_midterm.pdf",
+        "status": "pdf_read",
+        "pages": 14,
+        "sha256": "74de6a83d98cb016555420ea921998939830f397d4e36879852a4c4c1a9ee50c",
+        "first_page_years": [
+          "2010"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_midterm_sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/6ed3117782fbe0bdacb11d65476a21f6_MIT6_042JF10_midterm_sol.pdf",
+        "status": "pdf_read",
+        "pages": 14,
+        "sha256": "2d43480efa1cc06908cea3cc47df43f54009db6f19f8e7977403f2ee3bf310c5",
+        "first_page_years": [
+          "2010"
+        ]
+      }
+    },
+    {
+      "id": "discrete-03",
+      "family": "MIT 6.042J 离散数学考试",
+      "course_ids": [
+        "C04",
+        "C35"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/pages/exams/",
+      "label": "2004 final exam ( PDF ) ( PDF )",
+      "question_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_final_2004/",
+      "solution_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_fnl_2004_sol/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_final_2004/",
+        "final_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/a0a01e8d4c8e5f864ca7f8d7cb6bb141_MIT6_042JF10_final_2004.pdf",
+        "status": "pdf_read",
+        "pages": 14,
+        "sha256": "38b16b61212125930cbd823e33e647214da03b1a135f33a2cc4cb059448949d8",
+        "first_page_years": [
+          "2004"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_fnl_2004_sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/ada5226b2986f45a03ce10a46137d8ee_MIT6_042JF10_fnl_2004_sol.pdf",
+        "status": "pdf_read",
+        "pages": 13,
+        "sha256": "c71b4cee8da458bcbb9159d9fb3c345b16cc365f82a43653738397962a68bc14",
+        "first_page_years": [
+          "2004"
+        ]
+      }
+    },
+    {
+      "id": "digital-01",
+      "family": "MIT 6.004 数字与计算机结构考试",
+      "course_ids": [
+        "C05",
+        "C09",
+        "C13"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/pages/exams/",
+      "label": "Quiz 1 ( PDF ) ( PDF )",
+      "question_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz01/",
+      "solution_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz01_sol/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz01/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/f445e9aecd4f6fa0446b6417eac0068a_MIT6_004s09_quiz01.pdf",
+        "status": "pdf_read",
+        "pages": 5,
+        "sha256": "6c61ede9c48c59aa97772df02f93c9f10fc7f1efcec8d364da8f47ba1e561b04",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz01_sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/069499651244ea36ac78ef8e4c8f16dc_MIT6_004s09_quiz01_sol.pdf",
+        "status": "pdf_read",
+        "pages": 5,
+        "sha256": "9a88149ca4da58d4e255753220b9655a882a075e5f4672ae37e6517f6981d57a",
+        "first_page_years": [
+          "2009"
+        ]
+      }
+    },
+    {
+      "id": "digital-02",
+      "family": "MIT 6.004 数字与计算机结构考试",
+      "course_ids": [
+        "C05",
+        "C09",
+        "C13"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/pages/exams/",
+      "label": "Quiz 2 ( PDF ) ( PDF )",
+      "question_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz02/",
+      "solution_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz02_sol/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz02/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/1083b2708ff095302f2f36dd895bd8c4_MIT6_004s09_quiz02.pdf",
+        "status": "pdf_read",
+        "pages": 6,
+        "sha256": "d9a06ae869f8e11cb5da824264f12c9c190e6d05149a5df12de4f6d6b7a82299",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz02_sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/c9d995f67312634823b472696a250420_MIT6_004s09_quiz02_sol.pdf",
+        "status": "pdf_read",
+        "pages": 6,
+        "sha256": "a3b7d10847e7333bf3e2375bb9daac361ad3a032e2e8b0c36a4577c942248ada",
+        "first_page_years": [
+          "2009"
+        ]
+      }
+    },
+    {
+      "id": "digital-03",
+      "family": "MIT 6.004 数字与计算机结构考试",
+      "course_ids": [
+        "C05",
+        "C09",
+        "C13"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/pages/exams/",
+      "label": "Quiz 3 ( PDF ) ( PDF )",
+      "question_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz03/",
+      "solution_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz03_sol/",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz03/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/385890fca34776c85f3638d9f7337c3a_MIT6_004s09_quiz03.pdf",
+        "status": "pdf_read",
+        "pages": 11,
+        "sha256": "ed50c7b51286f154b1c7cfd2dc26022acb6bd24ef6016026bdf138c63a9e3768",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_quiz03_sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/1d890cbfba8ae3d05011db1c4f86de71_MIT6_004s09_quiz03_sol.pdf",
+        "status": "pdf_read",
+        "pages": 6,
+        "sha256": "13af198024905c60ba0244f696a5e5d763d277e7bbfd89d280782aa663a26065",
+        "first_page_years": [
+          "2009"
+        ]
+      }
+    },
+    {
+      "id": "software-01",
+      "family": "MIT 6.102 软件构造考试",
+      "course_ids": [
+        "C15",
+        "C16"
+      ],
+      "index_url": "https://web.mit.edu/6.102/www/sp26/exams/archive/",
+      "label": "Spring 2025 quiz 1 and solutions quiz 2 and solutions",
+      "question_url": "http://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz1.pdf",
+      "solution_url": "http://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz1-solutions.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "http://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz1.pdf",
+        "final_url": "https://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz1.pdf",
+        "status": "pdf_read",
+        "pages": 11,
+        "sha256": "42b4e26f7d547f6985d1b80bb4166db64fb87d3959e115af1a05587576839daf",
+        "first_page_years": [
+          "2025"
+        ]
+      },
+      "solution_document": {
+        "url": "http://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz1-solutions.pdf",
+        "final_url": "https://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz1-solutions.pdf",
+        "status": "pdf_read",
+        "pages": 15,
+        "sha256": "894c3512fab8e217adcec05bdac7fed2a27e112e77fbf8a846652b273e6661af",
+        "first_page_years": [
+          "2025"
+        ]
+      }
+    },
+    {
+      "id": "software-02",
+      "family": "MIT 6.102 软件构造考试",
+      "course_ids": [
+        "C15",
+        "C16"
+      ],
+      "index_url": "https://web.mit.edu/6.102/www/sp26/exams/archive/",
+      "label": "Spring 2025 quiz 1 and solutions quiz 2 and solutions",
+      "question_url": "http://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz2.pdf",
+      "solution_url": "http://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz2-solutions.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "http://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz2.pdf",
+        "final_url": "https://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz2.pdf",
+        "status": "pdf_read",
+        "pages": 14,
+        "sha256": "bd28a7d98de79226dd4ed1ff93a3eb2c24f7513e680fb057fd57b68fc8f6b252",
+        "first_page_years": [
+          "2025"
+        ]
+      },
+      "solution_document": {
+        "url": "http://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz2-solutions.pdf",
+        "final_url": "https://web.mit.edu/6.102/www/sp25/quizzes/archive/quiz2-solutions.pdf",
+        "status": "pdf_read",
+        "pages": 14,
+        "sha256": "1c5ade9af43d50528dfc595738a3c3634de0a62976708d7e952247738536068a",
+        "first_page_years": [
+          "2025"
+        ]
+      }
+    },
+    {
+      "id": "software-03",
+      "family": "MIT 6.102 软件构造考试",
+      "course_ids": [
+        "C15",
+        "C16"
+      ],
+      "index_url": "https://web.mit.edu/6.102/www/sp26/exams/archive/",
+      "label": "Spring 2024 quiz 1 and solutions quiz 2 and solutions",
+      "question_url": "http://web.mit.edu/6.102/www/sp24/quizzes/archive/quiz1.pdf",
+      "solution_url": "http://web.mit.edu/6.102/www/sp24/quizzes/archive/quiz1-solutions.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "http://web.mit.edu/6.102/www/sp24/quizzes/archive/quiz1.pdf",
+        "final_url": "https://web.mit.edu/6.102/www/sp24/quizzes/archive/quiz1.pdf",
+        "status": "pdf_read",
+        "pages": 13,
+        "sha256": "86f8ba3fc6b29fefa3d1555279687acd222dfe7147d41577e8fda0765fd3cb92",
+        "first_page_years": [
+          "2024"
+        ]
+      },
+      "solution_document": {
+        "url": "http://web.mit.edu/6.102/www/sp24/quizzes/archive/quiz1-solutions.pdf",
+        "final_url": "https://web.mit.edu/6.102/www/sp24/quizzes/archive/quiz1-solutions.pdf",
+        "status": "pdf_read",
+        "pages": 13,
+        "sha256": "4c07a839b5a33da58872a0f9931fec4bc93bf05fe8f26f88e3614d9d5a2c2469",
+        "first_page_years": [
+          "2024"
+        ]
+      }
+    },
+    {
+      "id": "ai-01",
+      "family": "Berkeley CS188 人工智能考试",
+      "course_ids": [
+        "C02",
+        "C19",
+        "C22"
+      ],
+      "index_url": "https://people.eecs.berkeley.edu/~russell/classes/cs188/f14/exams.html",
+      "label": "Spring 2014 Midterm 1 ( solutions ) Midterm 2 ( solutions ) Final ( solutions )",
+      "question_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm1.pdf",
+      "solution_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm1_solutions.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm1.pdf",
+        "final_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm1.pdf",
+        "status": "pdf_read",
+        "pages": 15,
+        "sha256": "7098267d38cbaa3931e8d87b74cabe8a89c6dd75485bb0df6696f178bce3ff61",
+        "first_page_years": [
+          "2014"
+        ]
+      },
+      "solution_document": {
+        "url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm1_solutions.pdf",
+        "final_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm1_solutions.pdf",
+        "status": "pdf_read",
+        "pages": 19,
+        "sha256": "01e00ac995008154e47573b663295ed0c870dafcd5bb4016bd81a2f57126b8ce",
+        "first_page_years": [
+          "2014"
+        ]
+      }
+    },
+    {
+      "id": "ai-02",
+      "family": "Berkeley CS188 人工智能考试",
+      "course_ids": [
+        "C02",
+        "C19",
+        "C22"
+      ],
+      "index_url": "https://people.eecs.berkeley.edu/~russell/classes/cs188/f14/exams.html",
+      "label": "Spring 2014 Midterm 1 ( solutions ) Midterm 2 ( solutions ) Final ( solutions )",
+      "question_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm2.pdf",
+      "solution_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm2_solutions.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm2.pdf",
+        "final_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm2.pdf",
+        "status": "pdf_read",
+        "pages": 14,
+        "sha256": "aab3af3254cfa8caa1c12b7ff760cbe90a9a63f70ca3d5a681923c5573a98730",
+        "first_page_years": [
+          "2014"
+        ]
+      },
+      "solution_document": {
+        "url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm2_solutions.pdf",
+        "final_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_midterm2_solutions.pdf",
+        "status": "pdf_read",
+        "pages": 17,
+        "sha256": "5d8e5956260a923d8aeeea481e8347b6c4ccf92a9d625e9d64076b6d62275e7d",
+        "first_page_years": [
+          "2014"
+        ]
+      }
+    },
+    {
+      "id": "ai-03",
+      "family": "Berkeley CS188 人工智能考试",
+      "course_ids": [
+        "C02",
+        "C19",
+        "C22"
+      ],
+      "index_url": "https://people.eecs.berkeley.edu/~russell/classes/cs188/f14/exams.html",
+      "label": "Spring 2014 Midterm 1 ( solutions ) Midterm 2 ( solutions ) Final ( solutions )",
+      "question_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_final.pdf",
+      "solution_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_final_solutions.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_final.pdf",
+        "final_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_final.pdf",
+        "status": "pdf_read",
+        "pages": 19,
+        "sha256": "c6ef079689b9a81e4e469f0ddd695f59b38e6c285d7f3dbd85b183b89f97eeb6",
+        "first_page_years": [
+          "2014"
+        ]
+      },
+      "solution_document": {
+        "url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_final_solutions.pdf",
+        "final_url": "https://s3-us-west-2.amazonaws.com/cs188websitecontent/exams/sp14_final_solutions.pdf",
+        "status": "pdf_read",
+        "pages": 28,
+        "sha256": "74ac7b23b92c3c0edfced63459d3b81953b1839347ea2d73deed7feacca87bec",
+        "first_page_years": [
+          "2014"
+        ]
+      }
+    },
+    {
+      "id": "database-01",
+      "family": "Berkeley CS186 数据库考试",
+      "course_ids": [
+        "C08"
+      ],
+      "index_url": "https://cs186berkeley.net/sp24/resources/",
+      "label": "Fall 2023 Exam (Solutions) Exam (Solutions) Exam (Solutions)",
+      "question_url": "https://drive.google.com/file/d/1tey1JpcjHI0UX8eHFnOXEfZpn1JSdAuZ/view?usp=sharing",
+      "solution_url": "https://drive.google.com/file/d/1ga58WCus3GEfNnjPOO5-_As4Qoi5nXZc/view?usp=sharing",
+      "status": "attachments_unverified",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://drive.google.com/file/d/1tey1JpcjHI0UX8eHFnOXEfZpn1JSdAuZ/view?usp=sharing",
+        "status": "unavailable",
+        "error_type": "HTTPStatusError"
+      },
+      "solution_document": {
+        "url": "https://drive.google.com/file/d/1ga58WCus3GEfNnjPOO5-_As4Qoi5nXZc/view?usp=sharing",
+        "status": "unavailable",
+        "error_type": "HTTPStatusError"
+      }
+    },
+    {
+      "id": "database-02",
+      "family": "Berkeley CS186 数据库考试",
+      "course_ids": [
+        "C08"
+      ],
+      "index_url": "https://cs186berkeley.net/sp24/resources/",
+      "label": "Fall 2023 Exam (Solutions) Exam (Solutions) Exam (Solutions)",
+      "question_url": "https://drive.google.com/file/d/17bjh0pDwAmFZN86W3aAsohpCj5nktrxz/view?usp=sharing",
+      "solution_url": "https://drive.google.com/file/d/1XYQXcU3RStCjz1Fhp-NGhm1A6A5HOMxF/view?usp=sharing",
+      "status": "attachments_unverified",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://drive.google.com/file/d/17bjh0pDwAmFZN86W3aAsohpCj5nktrxz/view?usp=sharing",
+        "status": "unavailable",
+        "error_type": "HTTPStatusError"
+      },
+      "solution_document": {
+        "url": "https://drive.google.com/file/d/1XYQXcU3RStCjz1Fhp-NGhm1A6A5HOMxF/view?usp=sharing",
+        "status": "unavailable",
+        "error_type": "HTTPStatusError"
+      }
+    },
+    {
+      "id": "database-03",
+      "family": "Berkeley CS186 数据库考试",
+      "course_ids": [
+        "C08"
+      ],
+      "index_url": "https://cs186berkeley.net/sp24/resources/",
+      "label": "Fall 2023 Exam (Solutions) Exam (Solutions) Exam (Solutions)",
+      "question_url": "https://drive.google.com/file/d/11L4JcL1wWYH8T4ngAzk5iPTppqeiwevv/view?usp=sharing",
+      "solution_url": "https://drive.google.com/file/d/1yU9D52jwt6tCzhC1kIsYwSetlFrJCKPZ/view?usp=sharing",
+      "status": "attachments_unverified",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://drive.google.com/file/d/11L4JcL1wWYH8T4ngAzk5iPTppqeiwevv/view?usp=sharing",
+        "status": "unavailable",
+        "error_type": "HTTPStatusError"
+      },
+      "solution_document": {
+        "url": "https://drive.google.com/file/d/1yU9D52jwt6tCzhC1kIsYwSetlFrJCKPZ/view?usp=sharing",
+        "status": "unavailable",
+        "error_type": "HTTPStatusError"
+      }
+    },
+    {
+      "id": "security-01",
+      "family": "Berkeley CS161 安全考试",
+      "course_ids": [
+        "C24",
+        "C25"
+      ],
+      "index_url": "https://fa24.cs161.org/resources/",
+      "label": "Fall 2024 Questions Solutions , Walkthrough As of SU20, CS 161 no longer had a Midterm 2. Questions Solutions , Walkthrough",
+      "question_url": "https://assets.cs161.org/exams/fa24/fa24mt.pdf",
+      "solution_url": "https://assets.cs161.org/exams/fa24/fa24mtsolutions.pdf",
+      "status": "attachments_unverified",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://assets.cs161.org/exams/fa24/fa24mt.pdf",
+        "final_url": "https://assets.cs161.org/exams/fa24/fa24mt.pdf",
+        "status": "non_pdf_or_access_gate",
+        "bytes": 484
+      },
+      "solution_document": {
+        "url": "https://assets.cs161.org/exams/fa24/fa24mtsolutions.pdf",
+        "final_url": "https://assets.cs161.org/exams/fa24/fa24mtsolutions.pdf",
+        "status": "non_pdf_or_access_gate",
+        "bytes": 504
+      }
+    },
+    {
+      "id": "security-02",
+      "family": "Berkeley CS161 安全考试",
+      "course_ids": [
+        "C24",
+        "C25"
+      ],
+      "index_url": "https://fa24.cs161.org/resources/",
+      "label": "Fall 2024 Questions Solutions , Walkthrough As of SU20, CS 161 no longer had a Midterm 2. Questions Solutions , Walkthrough",
+      "question_url": "https://assets.cs161.org/exams/fa24/fa24final.pdf",
+      "solution_url": "https://assets.cs161.org/exams/fa24/fa24finalsolutions.pdf",
+      "status": "attachments_unverified",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://assets.cs161.org/exams/fa24/fa24final.pdf",
+        "final_url": "https://assets.cs161.org/exams/fa24/fa24final.pdf",
+        "status": "non_pdf_or_access_gate",
+        "bytes": 476
+      },
+      "solution_document": {
+        "url": "https://assets.cs161.org/exams/fa24/fa24finalsolutions.pdf",
+        "final_url": "https://assets.cs161.org/exams/fa24/fa24finalsolutions.pdf",
+        "status": "non_pdf_or_access_gate",
+        "bytes": 496
+      }
+    },
+    {
+      "id": "security-03",
+      "family": "Berkeley CS161 安全考试",
+      "course_ids": [
+        "C24",
+        "C25"
+      ],
+      "index_url": "https://fa24.cs161.org/resources/",
+      "label": "Summer 2024 Questions Solutions , Walkthrough Questions Solutions , Walkthrough",
+      "question_url": "https://assets.cs161.org/exams/su24/su24mt.pdf",
+      "solution_url": "https://assets.cs161.org/exams/su24/su24mtsolutions.pdf",
+      "status": "attachments_unverified",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://assets.cs161.org/exams/su24/su24mt.pdf",
+        "final_url": "https://assets.cs161.org/exams/su24/su24mt.pdf",
+        "status": "non_pdf_or_access_gate",
+        "bytes": 484
+      },
+      "solution_document": {
+        "url": "https://assets.cs161.org/exams/su24/su24mtsolutions.pdf",
+        "final_url": "https://assets.cs161.org/exams/su24/su24mtsolutions.pdf",
+        "status": "non_pdf_or_access_gate",
+        "bytes": 504
+      }
+    },
+    {
+      "id": "assembly-01",
+      "family": "Harvard汇编练习",
+      "course_ids": [
+        "C07"
+      ],
+      "index_url": "https://cs61.seas.harvard.edu/site/2026/AsmEx/",
+      "label": "Harvard汇编练习",
+      "question_url": "https://cs61.seas.harvard.edu/site/2026/AsmEx/",
+      "solution_url": "https://cs61.seas.harvard.edu/site/2026/AsmEx/",
+      "status": "same_document_answers_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://cs61.seas.harvard.edu/site/2026/AsmEx/",
+        "final_url": "https://cs61.seas.harvard.edu/site/2026/AsmEx/",
+        "status": "non_pdf_or_access_gate",
+        "bytes": 335550
+      },
+      "solution_document": {
+        "url": "https://cs61.seas.harvard.edu/site/2026/AsmEx/",
+        "final_url": "https://cs61.seas.harvard.edu/site/2026/AsmEx/",
+        "status": "non_pdf_or_access_gate",
+        "bytes": 335550
+      }
+    },
+    {
+      "id": "cpp-01",
+      "family": "LearnCpp第一章测验",
+      "course_ids": [
+        "C06"
+      ],
+      "index_url": "https://www.learncpp.com/cpp-tutorial/chapter-1-summary-and-quiz/",
+      "label": "LearnCpp第一章测验",
+      "question_url": "https://www.learncpp.com/cpp-tutorial/chapter-1-summary-and-quiz/",
+      "solution_url": "https://www.learncpp.com/cpp-tutorial/chapter-1-summary-and-quiz/",
+      "status": "same_document_answers_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://www.learncpp.com/cpp-tutorial/chapter-1-summary-and-quiz/",
+        "final_url": "https://www.learncpp.com/cpp-tutorial/chapter-1-summary-and-quiz/",
+        "status": "non_pdf_or_access_gate",
+        "bytes": 206961
+      },
+      "solution_document": {
+        "url": "https://www.learncpp.com/cpp-tutorial/chapter-1-summary-and-quiz/",
+        "final_url": "https://www.learncpp.com/cpp-tutorial/chapter-1-summary-and-quiz/",
+        "status": "non_pdf_or_access_gate",
+        "bytes": 206961
+      }
+    },
+    {
+      "id": "nlp-01",
+      "family": "Stanford CS224N 2018期中题解",
+      "course_ids": [
+        "C23",
+        "C21"
+      ],
+      "index_url": "https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1184/midterm/cs224n-midterm-2018-solution.pdf",
+      "label": "Stanford CS224N 2018期中题解",
+      "question_url": "https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1184/midterm/cs224n-midterm-2018-solution.pdf",
+      "solution_url": "https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1184/midterm/cs224n-midterm-2018-solution.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1184/midterm/cs224n-midterm-2018-solution.pdf",
+        "final_url": "https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1184/midterm/cs224n-midterm-2018-solution.pdf",
+        "status": "pdf_read",
+        "pages": 17,
+        "sha256": "7b09d6e71dc8c167c447f12df864542dfa00e929a94a77bff51405fc3b219bb5",
+        "first_page_years": [
+          "2018"
+        ]
+      },
+      "solution_document": {
+        "url": "https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1184/midterm/cs224n-midterm-2018-solution.pdf",
+        "final_url": "https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1184/midterm/cs224n-midterm-2018-solution.pdf",
+        "status": "pdf_read",
+        "pages": 17,
+        "sha256": "7b09d6e71dc8c167c447f12df864542dfa00e929a94a77bff51405fc3b219bb5",
+        "first_page_years": [
+          "2018"
+        ]
+      }
+    },
+    {
+      "id": "rl-01",
+      "family": "Stanford CS234收敛性习题解答",
+      "course_ids": [
+        "C22"
+      ],
+      "index_url": "https://web.stanford.edu/class/archive/cs/cs234/cs234.1224/sessions/Problem_Sessions_CS234_Jan20_solutions.pdf",
+      "label": "Stanford CS234收敛性习题解答",
+      "question_url": "https://web.stanford.edu/class/archive/cs/cs234/cs234.1224/sessions/Problem_Sessions_CS234_Jan20_solutions.pdf",
+      "solution_url": "https://web.stanford.edu/class/archive/cs/cs234/cs234.1224/sessions/Problem_Sessions_CS234_Jan20_solutions.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://web.stanford.edu/class/archive/cs/cs234/cs234.1224/sessions/Problem_Sessions_CS234_Jan20_solutions.pdf",
+        "final_url": "https://web.stanford.edu/class/archive/cs/cs234/cs234.1224/sessions/Problem_Sessions_CS234_Jan20_solutions.pdf",
+        "status": "pdf_read",
+        "pages": 8,
+        "sha256": "84c9aa1d364fa6b2f8187d748bb15e1325b30daeae6e0e06fbc478b0789ce174",
+        "first_page_years": []
+      },
+      "solution_document": {
+        "url": "https://web.stanford.edu/class/archive/cs/cs234/cs234.1224/sessions/Problem_Sessions_CS234_Jan20_solutions.pdf",
+        "final_url": "https://web.stanford.edu/class/archive/cs/cs234/cs234.1224/sessions/Problem_Sessions_CS234_Jan20_solutions.pdf",
+        "status": "pdf_read",
+        "pages": 8,
+        "sha256": "84c9aa1d364fa6b2f8187d748bb15e1325b30daeae6e0e06fbc478b0789ce174",
+        "first_page_years": []
+      }
+    },
+    {
+      "id": "distributed-2024-1",
+      "family": "MIT分布式系统考试",
+      "course_ids": [
+        "C26",
+        "C27"
+      ],
+      "index_url": "https://pdos.csail.mit.edu/6.824/quizzes.html",
+      "label": "2024 Exam 1",
+      "question_url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-1.pdf",
+      "solution_url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-1-sol.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-1.pdf",
+        "final_url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-1.pdf",
+        "status": "pdf_read",
+        "pages": 20,
+        "sha256": "bf9be69d25b0341df1fafd89d9fe33af4fbd958cb5b85fa17780b7f1f436f853",
+        "first_page_years": [
+          "2024"
+        ]
+      },
+      "solution_document": {
+        "url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-1-sol.pdf",
+        "final_url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-1-sol.pdf",
+        "status": "pdf_read",
+        "pages": 21,
+        "sha256": "e26b0c79eb5b1d69963078f1bbf3cef5cf3fb0616adc795a2bf6b404662f9a7b",
+        "first_page_years": [
+          "2024"
+        ]
+      }
+    },
+    {
+      "id": "distributed-2024-2",
+      "family": "MIT分布式系统考试",
+      "course_ids": [
+        "C26",
+        "C27"
+      ],
+      "index_url": "https://pdos.csail.mit.edu/6.824/quizzes.html",
+      "label": "2024 Exam 2",
+      "question_url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-2.pdf",
+      "solution_url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-2-sol.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-2.pdf",
+        "final_url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-2.pdf",
+        "status": "pdf_read",
+        "pages": 17,
+        "sha256": "5fd10bacbdc0ab7059e6c30ddf1393da91ada1a3107f4ed1168e2b81bbccf659",
+        "first_page_years": [
+          "2024"
+        ]
+      },
+      "solution_document": {
+        "url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-2-sol.pdf",
+        "final_url": "https://pdos.csail.mit.edu/6.824/quizzes/q24-2-sol.pdf",
+        "status": "pdf_read",
+        "pages": 19,
+        "sha256": "9573027d310e50ba0b958bd7a163aabaae2b9ad819cac5f908d02573e97133fe",
+        "first_page_years": [
+          "2024"
+        ]
+      }
+    },
+    {
+      "id": "distributed-2023-1",
+      "family": "MIT分布式系统考试",
+      "course_ids": [
+        "C26",
+        "C27"
+      ],
+      "index_url": "https://pdos.csail.mit.edu/6.824/quizzes.html",
+      "label": "2023 Exam 1",
+      "question_url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-1.pdf",
+      "solution_url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-1-sol.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-1.pdf",
+        "final_url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-1.pdf",
+        "status": "pdf_read",
+        "pages": 11,
+        "sha256": "5b64f46776dfeba65db91fa155f7561b1d2fccb580eca4f9f95affd87dd5b4c9",
+        "first_page_years": [
+          "2023"
+        ]
+      },
+      "solution_document": {
+        "url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-1-sol.pdf",
+        "final_url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-1-sol.pdf",
+        "status": "pdf_read",
+        "pages": 13,
+        "sha256": "63406c21514703652949b018482477521b287777cf3fd28ee68bbb6bf61dd05d",
+        "first_page_years": [
+          "2023"
+        ]
+      }
+    },
+    {
+      "id": "distributed-2023-2",
+      "family": "MIT分布式系统考试",
+      "course_ids": [
+        "C26",
+        "C27"
+      ],
+      "index_url": "https://pdos.csail.mit.edu/6.824/quizzes.html",
+      "label": "2023 Exam 2",
+      "question_url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-2.pdf",
+      "solution_url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-2-sol.pdf",
+      "status": "pdf_pair_read",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-2.pdf",
+        "final_url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-2.pdf",
+        "status": "pdf_read",
+        "pages": 15,
+        "sha256": "a6acc494973b9547ae1feff9f886c095d27d5f25e1754d1d74bd9b6e50a15dff",
+        "first_page_years": [
+          "2023"
+        ]
+      },
+      "solution_document": {
+        "url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-2-sol.pdf",
+        "final_url": "https://pdos.csail.mit.edu/6.824/quizzes/q23-2-sol.pdf",
+        "status": "pdf_read",
+        "pages": 16,
+        "sha256": "58f6306fb8f70e2e5262131f1368dd09aeed205d2936e24fecc902dc20a73edd",
+        "first_page_years": [
+          "2023"
+        ]
+      }
+    },
+    {
+      "id": "tutorial-comb",
+      "family": "MIT 6.004专题练习",
+      "label": "组合逻辑综合",
+      "course_ids": [
+        "C05"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/pages/tutorial-problems/",
+      "question_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6004s09tutor05/",
+      "solution_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6004s09tutor05sol/",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6004s09tutor05/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/3c15245967fff4902e594f0fdf4e8dff_MIT6004s09tutor05.pdf",
+        "status": "pdf_read",
+        "pages": 10,
+        "sha256": "e96d846e7c7fa9b40832cc72e70bd6fccfb6c30d5c25dc0ac238dbc505a6d398",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6004s09tutor05sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/26b7c4b0a9a7251db65dbd22237d6dd5_MIT6004s09tutor05sol.pdf",
+        "status": "pdf_read",
+        "pages": 15,
+        "sha256": "57bca53ba0244bc29694d8fea47604569bdd034296cedbde22151dc02fd5fed6",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "status": "pdf_pair_read"
+    },
+    {
+      "id": "tutorial-seq",
+      "family": "MIT 6.004专题练习",
+      "label": "时序逻辑与存储部件",
+      "course_ids": [
+        "C05"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/pages/tutorial-problems/",
+      "question_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6004s09tutor06/",
+      "solution_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6004s09tutor06sol/",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6004s09tutor06/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/cd504466b693eab480f82376ef4b6be3_MIT6004s09tutor06.pdf",
+        "status": "pdf_read",
+        "pages": 7,
+        "sha256": "39e6fb1d3b36f02d7ff0213a0c9a4e2c793e674cabe126e8404e1a771e7d842b",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6004s09tutor06sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/a03e657f543542fe749f61a332f27eae_MIT6004s09tutor06sol.pdf",
+        "status": "pdf_read",
+        "pages": 10,
+        "sha256": "f1e61d4fd6eba8ffef0fd93e64bdc326888958aa08e8fb9661c51f3a39343996",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "status": "pdf_pair_read"
+    },
+    {
+      "id": "tutorial-cache",
+      "family": "MIT 6.004专题练习",
+      "label": "缓存",
+      "course_ids": [
+        "C09",
+        "C13"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/pages/tutorial-problems/",
+      "question_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor16/",
+      "solution_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor16_sol/",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor16/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/6a2e7d46bdcccc7fae3dad0652f7bc3f_MIT6_004s09_tutor16.pdf",
+        "status": "pdf_read",
+        "pages": 6,
+        "sha256": "641754d76515f5d74af08835640b1aedcf892f59b52125cd185c516e01a07422",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor16_sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/5a48c24d9e1fc04da308e3b6dea3a501_MIT6_004s09_tutor16_sol.pdf",
+        "status": "pdf_read",
+        "pages": 9,
+        "sha256": "452f91fa106c4afc4a14dbacbda333d17e222e59e68be7676a8fc09d5824c9ff",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "status": "pdf_pair_read"
+    },
+    {
+      "id": "tutorial-os",
+      "family": "MIT 6.004专题练习",
+      "label": "操作系统问题",
+      "course_ids": [
+        "C10"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/pages/tutorial-problems/",
+      "question_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor18/",
+      "solution_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor18_sol/",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor18/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/d6e533fcbe177e8015e3a143cc378857_MIT6_004s09_tutor18.pdf",
+        "status": "pdf_read",
+        "pages": 5,
+        "sha256": "4b11c91e4c3ae1ee3934de7abcb00ae51f35c0eace332e7d4136b96740e8f69d",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor18_sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/dbadada68dbb645896c5645defd365d2_MIT6_004s09_tutor18_sol.pdf",
+        "status": "pdf_read",
+        "pages": 8,
+        "sha256": "57695eae31b2e5fe5ac33fb2f90279b6dcd7790373932e61adf6c61e95ad6cf0",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "status": "pdf_pair_read"
+    },
+    {
+      "id": "tutorial-semaphore",
+      "family": "MIT 6.004专题练习",
+      "label": "信号量",
+      "course_ids": [
+        "C10"
+      ],
+      "index_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/pages/tutorial-problems/",
+      "question_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor20/",
+      "solution_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor20_sol/",
+      "review_status": "pending",
+      "language": "en",
+      "redistribution": "link_only_pending_asset_license_review",
+      "approved_for_scoring": false,
+      "question_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor20/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/df22fc34d016d293981cffa76c7b5bb7_MIT6_004s09_tutor20.pdf",
+        "status": "pdf_read",
+        "pages": 11,
+        "sha256": "eaa1bcaccd0d355180ebb62f813c0a4ace9cd4b5ae1355a38c54bc2fae595a63",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "solution_document": {
+        "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/resources/mit6_004s09_tutor20_sol/",
+        "final_url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2009/6e8c63edfb70b275b93045f43feb7423_MIT6_004s09_tutor20_sol.pdf",
+        "status": "pdf_read",
+        "pages": 15,
+        "sha256": "53d09faf8e6e8c52f9a45bb38ab4bd4041b2e40c35504d24b300f4a74c7238a2",
+        "first_page_years": [
+          "2009"
+        ]
+      },
+      "status": "pdf_pair_read"
+    }
+  ],
+  "collection_issues": [
+    {
+      "index": "https://cs61c.org/fa26/resources/exams/",
+      "reason": "已核对2024春季试题与答案链接，附件跳转学校认证，不绕过登录。"
+    }
+  ],
+  "exclusions": [
+    {
+      "course_id": "C12",
+      "reason": "Stanford当前WA1标注2026，WA1sol标注2024，尚未确认题目逐项相同，不纳入可靠配对。"
+    },
+    {
+      "course_id": "C26",
+      "locator": "2024 Exam1 Q2",
+      "reason": "官方答案明确标注题目有误，不能用于自动评分。"
+    }
+  ]
+}

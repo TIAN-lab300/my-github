@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse,FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from app.core.db import transaction,run,uid
-from app.api import phone,auth,classes,resources,tasks,goals,profiles,models,management,evidence
+from app.api import learning_catalog,curriculum_catalog,phone,auth,classes,resources,tasks,goals,profiles,models,management,evidence,question_bank
 
 @asynccontextmanager
 async def lifespan(app):
@@ -34,7 +34,8 @@ async def lifespan(app):
         await asyncio.gather(*workers)
 
 app=FastAPI(title='知行智能学习平台',version='0.1.0',lifespan=lifespan)
-app.add_middleware(TrustedHostMiddleware,allowed_hosts=['127.0.0.1','localhost','testserver'])
+extra_hosts=[h.strip() for h in os.getenv('ZHIXING_ALLOWED_HOSTS','').split(',') if h.strip()]
+app.add_middleware(TrustedHostMiddleware,allowed_hosts=['127.0.0.1','localhost','testserver',*extra_hosts])
 
 @app.middleware('http')
 async def safety(request:Request,call_next):
@@ -63,7 +64,7 @@ async def errors(request,exc):
     detail=exc.detail if isinstance(exc.detail,dict) else {'message':str(exc.detail),'code':'REQUEST_FAILED'}
     return JSONResponse({**detail,'request_id':getattr(request.state,'request_id','')},status_code=exc.status_code,headers=exc.headers)
 
-for router in (auth.router,classes.router,resources.router,tasks.router,goals.router,profiles.router,models.router,management.router,evidence.router):
+for router in (auth.router,classes.router,resources.router,tasks.router,goals.router,profiles.router,models.router,management.router,evidence.router,question_bank.router):
     app.include_router(router,prefix='/api/v1')
 
 @app.get('/api/v1/health')
@@ -99,7 +100,8 @@ def health():
     from app.services.web_evidence import search_status
     checks['search']='configured' if search_status()['configured'] else 'not_configured'
     ready = checks['database'] == checks['files'] == 'ok'
-    return JSONResponse({'status': 'ok' if ready else 'degraded', 'version': '0.1.0',
+    from app.runtime_version import runtime_info
+    return JSONResponse({'status': 'ok' if ready else 'degraded', 'version': runtime_info()['version'], 'runtime': runtime_info(),
                          'checks': checks}, status_code=200 if ready else 503)
 
 dist=Path(__file__).resolve().parents[2]/'frontend'/'dist'
@@ -110,3 +112,7 @@ if dist.exists():
     def index(): return FileResponse(dist/'index.html')
 
 app.include_router(phone.router,prefix="/api/v1")
+
+app.include_router(curriculum_catalog.router,prefix="/api/v1")
+
+app.include_router(learning_catalog.router,prefix="/api/v1")

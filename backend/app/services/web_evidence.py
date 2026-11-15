@@ -99,7 +99,7 @@ def search_status():
 def search_web(query):
     status=search_status()
     if not status['configured']:raise ValueError('实时搜索尚未配置，请联系管理员配置搜索服务')
-    with httpx.Client(timeout=15,follow_redirects=False) as client:
+    with httpx.Client(timeout=httpx.Timeout(60.0,connect=10.0),follow_redirects=False) as client:
         if status['provider']=='dashscope':
             response=client.post('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation',
                 headers={'Authorization':'Bearer '+os.environ['DASHSCOPE_API_KEY']},
@@ -128,3 +128,4 @@ def search_web(query):
                            'domain':parsed.hostname,'reason':str(item.get('content') or item.get('snippet') or '本次搜索返回的来源网址，正文需教师核实')[:1000],
                            'status':'unverified','published_at':None,'provider':status['provider']})
     return candidates
+

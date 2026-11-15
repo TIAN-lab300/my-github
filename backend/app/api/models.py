@@ -36,8 +36,14 @@ def call_model(config,prompt):
             if response.status_code in (401,403):fail(503,'模型认证失败，请检查服务端密钥和权限','MODEL_AUTH_ERROR')
             if response.status_code==429:fail(503,'模型服务限流或配额耗尽，请稍后重试','MODEL_RATE_LIMIT')
             if response.status_code==402:fail(503,'模型服务配额不足','MODEL_QUOTA_EXHAUSTED')
+            if response.status_code==404:fail(503,'模型ID或接口路径不可用，请核对供应商配置','MODEL_NOT_FOUND')
+            if response.status_code==413:fail(503,'模型输入超过供应商允许的长度','MODEL_CONTEXT_TOO_LONG')
+            if response.status_code==400:fail(503,'模型ID或请求参数不被供应商接受','MODEL_REQUEST_INVALID')
+            if response.status_code in (500,502,503,504):fail(503,'模型服务暂时不可用，请稍后重试','MODEL_PROVIDER_UNAVAILABLE')
             if response.status_code!=200:fail(503,'模型服务响应异常：HTTP '+str(response.status_code),'MODEL_HTTP_ERROR')
             envelope=response.json()
+            if envelope['choices'][0].get('finish_reason')=='length':
+                fail(503,'模型输出达到令牌上限，请调整配置或缩短资料','MODEL_OUTPUT_TRUNCATED')
             content=envelope['choices'][0]['message']['content']
             result=json.loads(content)
             if isinstance(result,dict):
@@ -56,7 +62,11 @@ def call_model(config,prompt):
 @router.get('/admin/model-configs')
 def configs(user=Depends(current_user)):
     role(user,'admin')
-    with transaction() as db: return rows(db,'SELECT id,model,endpoint,status,evaluation,created_at,timeout_seconds,max_tokens,temperature,prompt_version FROM model_configs ORDER BY created_at DESC')
+    with transaction() as db:
+        records=rows(db,'SELECT id,model,endpoint,status,evaluation,created_at,timeout_seconds,max_tokens,temperature,prompt_version,secret_env FROM model_configs ORDER BY created_at DESC')
+    for record in records:
+        record['key_ready']=bool(os.getenv(record['secret_env']))
+    return records
 
 @router.post('/admin/model-configs',status_code=201)
 def create(body:ModelInput,user=Depends(current_user)):
@@ -178,6 +188,16 @@ def retry(id:str,background:BackgroundTasks,user=Depends(current_user)):
 def planning_model_status(user=Depends(current_user)):
     with transaction() as db:
         c=one(db,"SELECT model,secret_env FROM model_configs WHERE status='active' ORDER BY created_at DESC LIMIT 1")
+        latest=one(db,"SELECT model,status,evaluation,secret_env FROM model_configs ORDER BY created_at DESC LIMIT 1")
     configured=bool(c and os.getenv(c['secret_env']))
+    error_code=None
+    if latest and latest['evaluation']:
+        try:error_code=json.loads(latest['evaluation']).get('error_code')
+        except (ValueError,TypeError):pass
     return {'active':bool(c),'ready':configured,'model':c['model'] if c else None,
-            'reason':'ready' if configured else 'missing_key' if c else 'not_active'}
+            'reason':'ready' if configured else 'missing_key' if c else 'not_active',
+            'latest_status':latest['status'] if latest else None,
+            'latest_model':latest['model'] if latest else None,
+            'key_ready':bool(latest and os.getenv(latest['secret_env'])),
+            'last_error_code':error_code}
+

@@ -1,0 +1,21 @@
+{
+  "migration": "0021",
+  "new_tables": [
+    "learning_chapters",
+    "learning_material_links",
+    "learning_skill_chapters",
+    "learning_questions",
+    "learning_question_versions",
+    "learning_sessions",
+    "learning_assessments",
+    "learning_assessment_items",
+    "learning_responses",
+    "learning_evaluations",
+    "learning_skill_evaluations"
+  ],
+  "existing_business_rows_unchanged": true,
+  "production_question_versions": 0,
+  "isolated_tests_passed": 8,
+  "browser_single_choice_workflow_passed": true,
+  "frontend_build_passed": true
+}

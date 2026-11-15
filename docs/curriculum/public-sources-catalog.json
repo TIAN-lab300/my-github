@@ -1,0 +1,1189 @@
+{
+  "schema_version": "source-catalog-1",
+  "checked_on": "2026-11-14",
+  "scope": "用户提供的36门课程；公开来源候选，不是北理工官方题库",
+  "sources": [
+    {
+      "id": "S01",
+      "title": "北理工C语言程序设计（上）",
+      "url": "https://www.icourse163.org/course/BIT-20019",
+      "language": "zh",
+      "kind": "课程目录",
+      "candidate_topics": "条件分支、循环、C语言基础",
+      "limitations": "视频和测验可能需报名登录，不据此覆盖完整C语言课程",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S02",
+      "title": "CS50公开练习",
+      "url": "https://cs50.harvard.edu/x/practice/",
+      "language": "en",
+      "kind": "练习题",
+      "candidate_topics": "C语言与编程练习",
+      "limitations": "运行检查工具和提交可能需环境及账号；没有本地题目转换",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S03",
+      "title": "MIT 6.006算法课程",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
+      "language": "en",
+      "kind": "讲义与课程",
+      "candidate_topics": "数据结构、算法",
+      "limitations": "课程目录与题库可互相定位",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S04",
+      "title": "MIT 6.006练习页",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/pages/practice-problems/",
+      "language": "en",
+      "kind": "练习题",
+      "candidate_topics": "数据结构与算法练习",
+      "limitations": "仅核对索引，未逐题审核答案或难度",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S05",
+      "title": "MIT 6.042J计算机数学",
+      "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/",
+      "language": "en",
+      "kind": "开放教材",
+      "candidate_topics": "逻辑、证明、离散数学",
+      "limitations": "组合数学的专门深度内容仍需补充",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S06",
+      "title": "Nand to Tetris项目",
+      "url": "https://www.nand2tetris.org/course",
+      "language": "en",
+      "kind": "实验项目",
+      "candidate_topics": "逻辑门、计算机硬件、汇编器、编译器",
+      "limitations": "使用Hack教学架构；不能直接当作x86或本校数字电路实验",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S07",
+      "title": "LearnCpp作者教程",
+      "url": "https://www.learncpp.com/",
+      "language": "en",
+      "kind": "教程",
+      "candidate_topics": "C++类、继承、模板、资源管理",
+      "limitations": "作者教程，转载许可待核对，优先外链",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S08",
+      "title": "Harvard CS61系统课程",
+      "url": "https://cs61.seas.harvard.edu/site/2026/",
+      "language": "en",
+      "kind": "课程与实验",
+      "candidate_topics": "机器表示、汇编、内存、并发",
+      "limitations": "学期资源可能调整",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S09",
+      "title": "Harvard CS61汇编练习",
+      "url": "https://cs61.seas.harvard.edu/site/2026/AsmEx/",
+      "language": "en",
+      "kind": "练习题",
+      "candidate_topics": "汇编阅读与分析",
+      "limitations": "需逐题确认指令集及语法，不混用RISC-V和x86",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S10",
+      "title": "CMU数据库课程作业",
+      "url": "https://15445.courses.cs.cmu.edu/spring2026/assignments.html",
+      "language": "en",
+      "kind": "作业索引",
+      "candidate_topics": "数据库系统",
+      "limitations": "数据库内核项目偏进阶；ER建模与设计需补齐",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S11",
+      "title": "Berkeley CS186数据库",
+      "url": "https://cs186berkeley.net/",
+      "language": "en",
+      "kind": "讲义与练习索引",
+      "candidate_topics": "SQL、关系数据库",
+      "limitations": "部分链接在Google Drive或教学平台，索引公开不等于所有附件可访问",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S12",
+      "title": "Berkeley CS61C组成与架构",
+      "url": "https://cs61c.org/fa26/",
+      "language": "en",
+      "kind": "课程与实验索引",
+      "candidate_topics": "机器结构、体系结构基础",
+      "limitations": "部分作业在需登录平台；高级体系结构覆盖不足",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S13",
+      "title": "xv6教学操作系统教材",
+      "url": "https://pdos.csail.mit.edu/6.1810/2024/xv6/book-riscv-rev4.pdf",
+      "language": "en",
+      "kind": "教材与章节练习",
+      "candidate_topics": "进程、页表、陷阱、同步、文件系统",
+      "limitations": "RISC-V教学系统，不等同所有操作系统内容",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S14",
+      "title": "Kurose与Ross网络实验",
+      "url": "https://gaia.cs.umass.edu/kurose_ross/wireshark.php",
+      "language": "en",
+      "kind": "网络实验",
+      "candidate_topics": "协议分析",
+      "limitations": "需安装Wireshark，附属文件许可需逐项核对",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S15",
+      "title": "Kurose与Ross网络交互题",
+      "url": "https://gaia.cs.umass.edu/kurose_ross/interactive/",
+      "language": "en",
+      "kind": "交互练习",
+      "candidate_topics": "网络协议与计算",
+      "limitations": "外部交互不能直接当作系统已具备自动评分",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S16",
+      "title": "Stanford CS143编译原理",
+      "url": "https://web.stanford.edu/class/cs143/",
+      "language": "en",
+      "kind": "讲义与试题索引",
+      "candidate_topics": "编译阶段、分析与实现",
+      "limitations": "公开作业及部分答案索引；考试与编程提交另有平台",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S17",
+      "title": "MIT 6.045J计算理论",
+      "url": "https://ocw.mit.edu/courses/6-045j-automata-computability-and-complexity-spring-2011/",
+      "language": "en",
+      "kind": "讲义与作业",
+      "candidate_topics": "自动机、可计算性、复杂性",
+      "limitations": "与算法分析课程共同覆盖复合课程",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S18",
+      "title": "MIT 6.046J算法设计",
+      "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/",
+      "language": "en",
+      "kind": "讲义与课程",
+      "candidate_topics": "算法设计与分析",
+      "limitations": "不单独代表北理工完整教学大纲",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S19",
+      "title": "MIT 6.046J作业",
+      "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/pages/assignments/",
+      "language": "en",
+      "kind": "练习题",
+      "candidate_topics": "算法证明与设计",
+      "limitations": "未逐题转换成单选题",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S20",
+      "title": "Sommerville软件工程作者资源",
+      "url": "https://software-engineering-book.com/",
+      "language": "en",
+      "kind": "课件与案例",
+      "candidate_topics": "软件工程方法",
+      "limitations": "作者配套材料不表示整本教材可复制",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S21",
+      "title": "MIT Missing Semester",
+      "url": "https://missing.csail.mit.edu/",
+      "language": "en",
+      "kind": "工具课程",
+      "candidate_topics": "开发工具与工程实践",
+      "limitations": "工具实践补充，不能替代完整程序设计方法课程",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S22",
+      "title": "MIT系统工程课程",
+      "url": "https://ocw.mit.edu/courses/6-033-computer-system-engineering-spring-2018/",
+      "language": "en",
+      "kind": "设计作业与案例",
+      "candidate_topics": "系统设计、工程分析",
+      "limitations": "综合训练的参考任务，不是本校评分量规",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S23",
+      "title": "北理工2024—2025毕业设计工作通知",
+      "url": "https://jwb.bit.edu.cn/tzgg/1642213a6d004d81b8c40ab0c1e4cfce.htm",
+      "language": "zh",
+      "kind": "管理通知",
+      "candidate_topics": "毕业设计流程",
+      "limitations": "仅该年度通知；具体专业要求、模板、评分仍需最新校内资料",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S24",
+      "title": "Berkeley CS188 AI存档",
+      "url": "https://inst.eecs.berkeley.edu/~cs188/archive/fa24/",
+      "language": "en",
+      "kind": "课程与项目",
+      "candidate_topics": "搜索、推理、人工智能",
+      "limitations": "部分作业需平台；不认定与人工智能与计算科学A完全相同",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S25",
+      "title": "Stanford CS231n",
+      "url": "https://cs231n.stanford.edu/",
+      "language": "en",
+      "kind": "课程与作业索引",
+      "candidate_topics": "深度学习与计算机视觉",
+      "limitations": "经典模式识别部分需补充",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S26",
+      "title": "动手学深度学习",
+      "url": "https://d2l.ai/",
+      "language": "en/zh",
+      "kind": "开放在线教材",
+      "candidate_topics": "神经网络、优化、注意力",
+      "limitations": "中文入口由官网提供；仅核对目录，练习未逐题审核",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S27",
+      "title": "Spinning Up强化学习",
+      "url": "https://spinningup.openai.com/en/latest/",
+      "language": "en",
+      "kind": "算法教程与实现",
+      "candidate_topics": "策略与价值方法",
+      "limitations": "依赖版本可能较旧，不直接承诺代码可运行",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S28",
+      "title": "Stanford CS224N",
+      "url": "https://web.stanford.edu/class/cs224n/",
+      "language": "en",
+      "kind": "课程与作业索引",
+      "candidate_topics": "自然语言处理",
+      "limitations": "深度学习导向，基础语言学部分需补充",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S29",
+      "title": "Berkeley CS161安全教材",
+      "url": "https://textbook.cs161.org/",
+      "language": "en",
+      "kind": "在线教材",
+      "candidate_topics": "密码、Web与网络安全",
+      "limitations": "用于课程概念；不能等同安全测试已获授权",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S30",
+      "title": "Boneh与Shoup密码学教材",
+      "url": "https://crypto.stanford.edu/~dabo/cryptobook/",
+      "language": "en",
+      "kind": "教材",
+      "candidate_topics": "对称密码、公钥、协议",
+      "limitations": "研究生难度，需筛选本科适用内容",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S31",
+      "title": "MIT分布式系统历年考试",
+      "url": "https://pdos.csail.mit.edu/6.824/quizzes.html",
+      "language": "en",
+      "kind": "试题与答案索引",
+      "candidate_topics": "分布式系统",
+      "limitations": "历年题公开，不能作为未公开重测题直接复用",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S32",
+      "title": "Apache Spark官方文档",
+      "url": "https://spark.apache.org/docs/latest/",
+      "language": "en",
+      "kind": "工具文档",
+      "candidate_topics": "批处理、流处理、分布式数据",
+      "limitations": "动态版本入口；云服务模型与虚拟化仍需补齐",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S33",
+      "title": "Berkeley CS184图形学存档",
+      "url": "https://cs184.eecs.berkeley.edu/",
+      "language": "en",
+      "kind": "课程存档入口",
+      "candidate_topics": "计算机图形学",
+      "limitations": "需进一步选定学期和具体作业附件",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S34",
+      "title": "FFmpeg官方文档",
+      "url": "https://ffmpeg.org/documentation.html",
+      "language": "en",
+      "kind": "工具文档",
+      "candidate_topics": "音视频处理",
+      "limitations": "仅实践补充，不能代替多媒体编码理论",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S35",
+      "title": "Stanford CS147人机交互",
+      "url": "https://hci.stanford.edu/courses/cs147/2026/au/",
+      "language": "en",
+      "kind": "设计课程与项目",
+      "candidate_topics": "用户研究、原型、评价",
+      "limitations": "需结合教师标准设计本地评价量规",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S36",
+      "title": "Lee与Seshia嵌入式系统",
+      "url": "https://ptolemy.berkeley.edu/books/leeseshia/",
+      "language": "en",
+      "kind": "教材与课程入口",
+      "candidate_topics": "嵌入式与信息物理系统",
+      "limitations": "偏建模分析，设备驱动及目标板实验另补",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S37",
+      "title": "Stanford CS149并行计算",
+      "url": "https://gfxcourses.stanford.edu/cs149/fall25/",
+      "language": "en",
+      "kind": "课程与阅读",
+      "candidate_topics": "并行硬件与编程",
+      "limitations": "部分功能需登录，不保证每个项目附件可取",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S38",
+      "title": "Chipyard官方文档",
+      "url": "https://chipyard.readthedocs.io/en/stable/",
+      "language": "en",
+      "kind": "工具与设计文档",
+      "candidate_topics": "SoC集成、仿真与生成器",
+      "limitations": "进阶工具，RTL入门及评分题还需补充",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S39",
+      "title": "Software Foundations作者教材",
+      "url": "https://softwarefoundations.cis.upenn.edu/",
+      "language": "en",
+      "kind": "教材与形式化练习",
+      "candidate_topics": "逻辑、程序证明、语义",
+      "limitations": "练习使用Rocq工具，不直接映射为客观题",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    },
+    {
+      "id": "S40",
+      "title": "Tim Roughgarden算法博弈论",
+      "url": "https://timroughgarden.org/f13/f13.html",
+      "language": "en",
+      "kind": "讲义与练习",
+      "candidate_topics": "拍卖、机制、均衡",
+      "limitations": "需核实数学先修与本科难度",
+      "verification": "page_or_index_read",
+      "checked_on": "2026-11-14",
+      "imported": false,
+      "redistribution": "link_only_pending_asset_review",
+      "question_items_extracted": 0,
+      "answer_reviewed": false,
+      "cloud_processing_allowed": false
+    }
+  ],
+  "course_mappings": [
+    {
+      "course_id": "C01",
+      "course_name": "程序设计基础（C语言）",
+      "source_ids": [
+        "S01",
+        "S02"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "视频和测验可能需报名登录，不据此覆盖完整C语言课程",
+        "运行检查工具和提交可能需环境及账号；没有本地题目转换"
+      ]
+    },
+    {
+      "course_id": "C02",
+      "course_name": "人工智能与计算科学A",
+      "source_ids": [
+        "S24",
+        "S02"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "部分作业需平台；不认定与人工智能与计算科学A完全相同",
+        "运行检查工具和提交可能需环境及账号；没有本地题目转换"
+      ]
+    },
+    {
+      "course_id": "C03",
+      "course_name": "数据结构",
+      "source_ids": [
+        "S03",
+        "S04"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "课程目录与题库可互相定位",
+        "仅核对索引，未逐题审核答案或难度"
+      ]
+    },
+    {
+      "course_id": "C04",
+      "course_name": "离散数学",
+      "source_ids": [
+        "S05"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "组合数学的专门深度内容仍需补充"
+      ]
+    },
+    {
+      "course_id": "C05",
+      "course_name": "数字逻辑",
+      "source_ids": [
+        "S06"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "使用Hack教学架构；不能直接当作x86或本校数字电路实验"
+      ]
+    },
+    {
+      "course_id": "C06",
+      "course_name": "面向对象程序设计（C++）",
+      "source_ids": [
+        "S07"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "作者教程，转载许可待核对，优先外链"
+      ]
+    },
+    {
+      "course_id": "C07",
+      "course_name": "汇编语言程序设计",
+      "source_ids": [
+        "S08",
+        "S09"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "学期资源可能调整",
+        "需逐题确认指令集及语法，不混用RISC-V和x86"
+      ]
+    },
+    {
+      "course_id": "C08",
+      "course_name": "数据库原理与设计",
+      "source_ids": [
+        "S11",
+        "S10"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "部分链接在Google Drive或教学平台，索引公开不等于所有附件可访问",
+        "数据库内核项目偏进阶；ER建模与设计需补齐"
+      ]
+    },
+    {
+      "course_id": "C09",
+      "course_name": "计算机组成原理",
+      "source_ids": [
+        "S12",
+        "S06"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "部分作业在需登录平台；高级体系结构覆盖不足",
+        "使用Hack教学架构；不能直接当作x86或本校数字电路实验"
+      ]
+    },
+    {
+      "course_id": "C10",
+      "course_name": "操作系统",
+      "source_ids": [
+        "S13"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "RISC-V教学系统，不等同所有操作系统内容"
+      ]
+    },
+    {
+      "course_id": "C11",
+      "course_name": "计算机网络",
+      "source_ids": [
+        "S14",
+        "S15"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "需安装Wireshark，附属文件许可需逐项核对",
+        "外部交互不能直接当作系统已具备自动评分"
+      ]
+    },
+    {
+      "course_id": "C12",
+      "course_name": "编译原理",
+      "source_ids": [
+        "S16",
+        "S06"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "公开作业及部分答案索引；考试与编程提交另有平台",
+        "使用Hack教学架构；不能直接当作x86或本校数字电路实验"
+      ]
+    },
+    {
+      "course_id": "C13",
+      "course_name": "计算机体系结构",
+      "source_ids": [
+        "S12",
+        "S37"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "部分作业在需登录平台；高级体系结构覆盖不足",
+        "部分功能需登录，不保证每个项目附件可取"
+      ]
+    },
+    {
+      "course_id": "C14",
+      "course_name": "计算理论与算法分析设计",
+      "source_ids": [
+        "S17",
+        "S18",
+        "S19"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "与算法分析课程共同覆盖复合课程",
+        "不单独代表北理工完整教学大纲",
+        "未逐题转换成单选题"
+      ]
+    },
+    {
+      "course_id": "C15",
+      "course_name": "软件工程基础",
+      "source_ids": [
+        "S20"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "作者配套材料不表示整本教材可复制"
+      ]
+    },
+    {
+      "course_id": "C16",
+      "course_name": "程序设计方法与实践",
+      "source_ids": [
+        "S21",
+        "S08"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "工具实践补充，不能替代完整程序设计方法课程",
+        "学期资源可能调整"
+      ]
+    },
+    {
+      "course_id": "C17",
+      "course_name": "卓越工程综合训练",
+      "source_ids": [
+        "S22",
+        "S20"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "综合训练的参考任务，不是本校评分量规",
+        "作者配套材料不表示整本教材可复制"
+      ]
+    },
+    {
+      "course_id": "C18",
+      "course_name": "本科毕业设计",
+      "source_ids": [
+        "S23"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "仅该年度通知；具体专业要求、模板、评分仍需最新校内资料"
+      ]
+    },
+    {
+      "course_id": "C19",
+      "course_name": "人工智能基础",
+      "source_ids": [
+        "S24"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "部分作业需平台；不认定与人工智能与计算科学A完全相同"
+      ]
+    },
+    {
+      "course_id": "C20",
+      "course_name": "模式识别与计算机视觉",
+      "source_ids": [
+        "S25"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "经典模式识别部分需补充"
+      ]
+    },
+    {
+      "course_id": "C21",
+      "course_name": "深度学习",
+      "source_ids": [
+        "S26",
+        "S25"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "中文入口由官网提供；仅核对目录，练习未逐题审核",
+        "经典模式识别部分需补充"
+      ]
+    },
+    {
+      "course_id": "C22",
+      "course_name": "强化学习",
+      "source_ids": [
+        "S27"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "依赖版本可能较旧，不直接承诺代码可运行"
+      ]
+    },
+    {
+      "course_id": "C23",
+      "course_name": "自然语言处理",
+      "source_ids": [
+        "S28"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "深度学习导向，基础语言学部分需补充"
+      ]
+    },
+    {
+      "course_id": "C24",
+      "course_name": "网络信息安全",
+      "source_ids": [
+        "S29"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "用于课程概念；不能等同安全测试已获授权"
+      ]
+    },
+    {
+      "course_id": "C25",
+      "course_name": "密码学",
+      "source_ids": [
+        "S30",
+        "S29"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "研究生难度，需筛选本科适用内容",
+        "用于课程概念；不能等同安全测试已获授权"
+      ]
+    },
+    {
+      "course_id": "C26",
+      "course_name": "分布式系统",
+      "source_ids": [
+        "S31",
+        "S22"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "历年题公开，不能作为未公开重测题直接复用",
+        "综合训练的参考任务，不是本校评分量规"
+      ]
+    },
+    {
+      "course_id": "C27",
+      "course_name": "云计算与大数据",
+      "source_ids": [
+        "S32",
+        "S31"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "动态版本入口；云服务模型与虚拟化仍需补齐",
+        "历年题公开，不能作为未公开重测题直接复用"
+      ]
+    },
+    {
+      "course_id": "C28",
+      "course_name": "计算机图形学",
+      "source_ids": [
+        "S33"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "需进一步选定学期和具体作业附件"
+      ]
+    },
+    {
+      "course_id": "C29",
+      "course_name": "多媒体技术",
+      "source_ids": [
+        "S34"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "仅实践补充，不能代替多媒体编码理论"
+      ]
+    },
+    {
+      "course_id": "C30",
+      "course_name": "人机交互",
+      "source_ids": [
+        "S35"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "需结合教师标准设计本地评价量规"
+      ]
+    },
+    {
+      "course_id": "C31",
+      "course_name": "嵌入式计算系统",
+      "source_ids": [
+        "S36"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "偏建模分析，设备驱动及目标板实验另补"
+      ]
+    },
+    {
+      "course_id": "C32",
+      "course_name": "并行计算与高性能计算",
+      "source_ids": [
+        "S37"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "部分功能需登录，不保证每个项目附件可取"
+      ]
+    },
+    {
+      "course_id": "C33",
+      "course_name": "SoC设计",
+      "source_ids": [
+        "S38",
+        "S06"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "进阶工具，RTL入门及评分题还需补充",
+        "使用Hack教学架构；不能直接当作x86或本校数字电路实验"
+      ]
+    },
+    {
+      "course_id": "C34",
+      "course_name": "形式化方法",
+      "source_ids": [
+        "S39"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "练习使用Rocq工具，不直接映射为客观题"
+      ]
+    },
+    {
+      "course_id": "C35",
+      "course_name": "组合数学",
+      "source_ids": [
+        "S05"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "组合数学的专门深度内容仍需补充"
+      ]
+    },
+    {
+      "course_id": "C36",
+      "course_name": "算法博弈论",
+      "source_ids": [
+        "S40"
+      ],
+      "coverage": "partial_candidate",
+      "skill_level_verified": false,
+      "question_bank_ready": false,
+      "gaps": [
+        "需核实数学先修与本科难度"
+      ]
+    }
+  ],
+  "counts": {
+    "courses": 36,
+    "source_entries": 40,
+    "verified_skill_mappings": 0,
+    "extracted_questions": 0
+  },
+  "license_references": [
+    {
+      "url": "https://ocw.mit.edu/pages/privacy-and-terms-of-use/",
+      "note": "MIT OCW内容通常按CC BY-NC-SA 4.0，第三方材料及另行标注内容需逐件检查。"
+    },
+    {
+      "url": "https://cs50.harvard.edu/x/license/",
+      "note": "CS50页面标注CC BY-NC-SA 4.0；代码及第三方资源按各自许可核对。"
+    }
+  ],
+  "failed_candidates": [
+    "https://www.cs.cmu.edu/~15213/",
+    "https://cryptobook.us/",
+    "https://pdos.csail.mit.edu/6.824/2024/",
+    "https://pdos.csail.mit.edu/6.5840/2024/",
+    "https://web.stanford.edu/class/cs149/",
+    "https://web.stanford.edu/class/cs147/",
+    "https://chisel-bootcamp.readthedocs.io/en/latest/"
+  ],
+  "failed_note": "抓取失败或目录内容不足，不等同网站永久失效；上述链接不作为已确认教学材料。",
+  "database_import": {
+    "applied": true,
+    "migration": "0019",
+    "courses": 36,
+    "candidate_skills": 377,
+    "chinese_reading_cards": 40,
+    "course_source_links": 54,
+    "external_fulltext_translated": false,
+    "questions_imported": 0
+  }
+}

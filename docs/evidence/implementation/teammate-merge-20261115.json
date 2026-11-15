@@ -1,0 +1,34 @@
+{
+  "source_package": "知行_2026-11-15/知行_队友代码更新包_2026-11-15",
+  "baseline_commit": "0d541a2",
+  "unchanged_files": 104,
+  "incoming_changed_or_new_files": 46,
+  "manual_conflicts_resolved": [
+    "frontend/src/main.tsx",
+    "backend/app/main.py",
+    "backend/app/cli.py"
+  ],
+  "migration_remap": {
+    "teammate_0019": "0022",
+    "teammate_0020": "0023"
+  },
+  "migration_head": "0023",
+  "business_rows_unchanged": true,
+  "runtime_data_default": "backend/data",
+  "backup": "backend/data/backups/before-teammate-merge-20261115",
+  "code_backup": "backend/data/merge-backups/teammate-20261115",
+  "excluded_oneoff_scripts": [
+    "apply_stage3_data.py",
+    "apply_unified_update.py",
+    "publish_stage3_seeds.py",
+    "seed_stage3.py"
+  ],
+  "frontend_build_passed": true,
+  "three_role_browser_passed": true,
+  "learning_workflow_browser_passed": true,
+  "live_provider_calls": 0,
+  "backend_regression": {
+    "passed": 229,
+    "failed": 0
+  }
+}

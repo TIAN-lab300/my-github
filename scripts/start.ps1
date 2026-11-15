@@ -1,7 +1,11 @@
+param([int]$Port = 8000, [switch]$Check)
 $ErrorActionPreference = 'Stop'
-Set-Location (Split-Path $PSScriptRoot -Parent)
-if (!(Test-Path -LiteralPath '.venv/Scripts/python.exe')) { throw 'Install Python dependencies as described in README first.' }
-$env:PYTHONPATH = Join-Path (Get-Location) 'backend'
-& .venv/Scripts/python.exe -m alembic -c backend/alembic.ini upgrade head
-if ($LASTEXITCODE -ne 0) { throw 'Database migration failed.' }
-& .venv/Scripts/python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+$projectRoot = Split-Path $PSScriptRoot -Parent
+$pythonPath = Join-Path $projectRoot '.venv\Scripts\python.exe'
+if (!(Test-Path -LiteralPath $pythonPath)) { throw 'Missing .venv. See RUNNING.md.' }
+$env:PYTHONUTF8 = '1'
+$arguments = @((Join-Path $PSScriptRoot 'run.py'), '--port', $Port)
+if ($Check) { $arguments += '--check' }
+& $pythonPath @arguments
+if ($LASTEXITCODE -ne 0) { throw "Startup failed: $LASTEXITCODE" }
+

@@ -116,7 +116,7 @@ def test_batch5(sf,clients,monkeypatch,tmp_path):
             tid=task(clients,cid)
             with transaction() as db:run(db,"UPDATE tasks SET due_at='2000-01-01T00:00:00+00:00' WHERE id=:id",id=tid)
         candidate=planning(student,gid,True);triggers=student.get(P+'/paths/'+candidate).json()['validation']['triggers']
-        assert '掌握薄弱' in triggers and '连续至少两个任务到期未完成' in triggers
+        assert '掌握薄弱' in triggers and '全账户有至少两项教师任务逾期未完成' in triggers
     elif sf=='SF-REPLAN-02':
         cid,rid,gid,pid=active_path(clients)
         candidate=planning(student,gid,True)
@@ -222,7 +222,7 @@ def test_batch5(sf,clients,monkeypatch,tmp_path):
         with pytest.raises(SystemExit):restore(destination,rejected)
         assert not rejected.exists()
 
-def test_local_failure_falls_back_to_remaining_work_global_schedule(clients):
+def test_remaining_work_fits_without_unnecessary_global_fallback(clients):
     student=clients['student']
     cid,_=classroom(clients);resource(clients,cid)
     settings=student.get(P+'/learners/me/budget').json()
@@ -240,8 +240,8 @@ def test_local_failure_falls_back_to_remaining_work_global_schedule(clients):
     student.patch(P+'/learners/me/budget',json={**settings,'daily_minutes':25})
     candidate=planning(student,gid,True)
     state=student.get(P+'/paths/'+candidate).json()
-    assert state['validation']['mode']=='global'
-    assert '局部排期不可行，改为全局重排' in state['validation']['triggers']
+    assert state['validation']['mode']=='local'
+    assert '局部排期不可行，改为全局重排' not in state['validation']['triggers']
     assert state['tasks'][0]['minutes']==15
 
 def test_cancel_after_build_prevents_final_commit(clients,monkeypatch):
@@ -277,3 +277,4 @@ def test_membership_change_invalidates_pending_preview(clients):
     response=student.post(P+'/paths/'+candidate+'/accept')
     assert response.status_code==409 and response.json()['code']=='STALE_PREVIEW'
     assert student.get(P+'/paths/'+pid).json()['status']=='active'
+

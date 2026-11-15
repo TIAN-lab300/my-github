@@ -83,7 +83,7 @@ def diagnose(state):
             current=mastery(db,u['id'])
             if any(current.get(skill,{}).get('probability',.2)<.45 for skill in skills):triggers.append('掌握薄弱')
             overdue=rows(db,"SELECT a.id FROM assignments a JOIN tasks t ON t.id=a.task_id WHERE a.student_id=:u AND a.status NOT IN ('completed','cancelled') AND t.status='published' AND t.due_at<:time ORDER BY t.due_at",u=u['id'],time=now())
-            if len(overdue)>=2:triggers.append('连续至少两个任务到期未完成')
+            if len(overdue)>=2:triggers.append('全账户有至少两项教师任务逾期未完成')
             old=json.loads(previous['validation']) if previous else {}
             before=old.get('budget_snapshot',budget)
             change=max(abs(budget[k]-before[k])/max(before[k],1) for k in ('daily_minutes','weekly_minutes'))
@@ -109,6 +109,14 @@ def build(state):
     from app.api.resources import visible
     from app.services.topic_bank import keywords
     tokens=keywords(state['graph'])
+    semantic_vectors={}
+    if state.get('cloud_mode'):
+        try:
+            from app.services.vector_index import embed
+            target_skills=json.loads(state['goal']['skills'])
+            semantic_vectors=dict(zip(target_skills,embed([skill+' '+next((node.get('name',skill) for node in state['graph'] if node['id']==skill),skill) for skill in target_skills])))
+        except Exception:
+            semantic_vectors={}
     with transaction() as db:
         g=state['goal'];u=state['actor'];m=mastery(db,u['id'])
         target=set(json.loads(g['skills']))
@@ -120,12 +128,28 @@ def build(state):
             version=one(db,"SELECT * FROM resource_versions WHERE id=:id AND parse_status='ready' AND index_status='indexed'",id=resource['current_version'])
             if not version:continue
             supported=[skill for skill in target if any(t.lower() in version['body'].lower() for t in tokens[skill])]
+            semantic_locations={}
+            if semantic_vectors:
+                from app.services.vector_index import cosine
+                indexed=rows(db,'SELECT ordinal,body,embedding FROM vector_chunks WHERE version_id=:v ORDER BY ordinal',v=version['id'])
+                for skill in target-set(supported):
+                    if skill not in semantic_vectors:continue
+                    matches=[(cosine(semantic_vectors[skill],json.loads(chunk['embedding'])),chunk) for chunk in indexed]
+                    if matches:
+                        score,chunk=max(matches,key=lambda candidate:candidate[0])
+                        if score>=.55:
+                            supported.append(skill)
+                            semantic_locations[skill]=(chunk['ordinal']*700,chunk['body'])
             if supported:
                 locations=[];fragments=[]
                 for skill in supported:
                     matches=[match for token in tokens[skill] if (match:=re.search(re.escape(token),version['body'],re.IGNORECASE))]
-                    start=max(0,min(match.start() for match in matches)-80)
-                    end=min(len(version['body']),start+300)
+                    if matches:
+                        start=max(0,min(match.start() for match in matches)-80)
+                        end=min(len(version['body']),start+300)
+                    else:
+                        start,chunk=semantic_locations[skill]
+                        end=min(len(version['body']),start+len(chunk))
                     locations.append({'skill':skill,'start':start,'end':end})
                     fragments.append(version['body'][start:end])
                 sources.append({'resource_id':resource['id'],'version_id':version['id'],'title':resource['title'],
@@ -149,7 +173,15 @@ def build(state):
             if skill in completed:
                 item.update(id=uid(),kind='remediation',source_item_id=completed[skill]['id'])
                 remediations.append(item)
-            else:tasks.append(item)
+            else:
+                previous_item=old.get(skill)
+                if previous_item:
+                    partial=one(db,'SELECT proportion FROM checkins WHERE path_id=:p AND item_id=:i',p=previous['id'],i=previous_item['id'])
+                    import math
+                    item['original_minutes']=previous_item['minutes']
+                    item['minutes']=max(1,math.ceil(previous_item['minutes']*(1-(partial['proportion'] if partial else 0))))
+                    item['remaining_minutes']=item['minutes']
+                tasks.append(item)
             execution.append(item)
         minutes=sum(item['minutes'] for item in execution)
         try:
@@ -158,13 +190,6 @@ def build(state):
             if state['mode']!='local' or not hasattr(exc,'status_code') or exc.status_code!=409:raise
             state['mode']='global'
             state['triggers'].append('局部排期不可行，改为全局重排')
-            import math
-            for item in execution:
-                previous_item=old.get(item['skill_id'])
-                if not previous_item:continue
-                partial=one(db,'SELECT proportion FROM checkins WHERE path_id=:p AND item_id=:i',p=previous['id'],i=previous_item['id'])
-                if partial and 0<partial['proportion']<1:
-                    item['minutes']=max(1,math.ceil(item['minutes']*(1-partial['proportion'])))
             minutes=sum(item['minutes'] for item in execution)
             schedule=allocate(db,u['id'],minutes,g['due_date'],g['id'],g['weekly_minutes']) if minutes else []
         pending=[{'item':item,'remaining':item['minutes']} for item in execution]
@@ -250,3 +275,4 @@ def execute(run_id):
                        created_at=now(),input_fingerprint=checkpoint.get('fingerprint','{}'),
                        output_summary=dump({'error':message,'rules':exc.detail.get('rules',[]) if hasattr(exc,'detail') and isinstance(exc.detail,dict) else []}),attempt_no=record['retry_count'])
             run(db,"UPDATE agent_runs SET status='failed',error=:e,finished_at=:t WHERE id=:id AND status NOT IN ('cancelled','succeeded')",e=message,t=now(),id=run_id)
+

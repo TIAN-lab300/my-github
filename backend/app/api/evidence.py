@@ -79,6 +79,7 @@ def provider_status(user=Depends(current_user)):
 
 @router.post('/admin/search/evaluate')
 def evaluate_search(user=Depends(current_user)):
+    role(user,'admin')
     error=None
     try:results=search_web('Python 官方文档 函数')
     except Exception as exception:
@@ -152,3 +153,4 @@ def import_link(id:str,body:dict,user=Depends(current_user)):
     except Exception:
         (DATA/'files'/storage).unlink(missing_ok=True);raise
     return {'id':id,'version_id':version_id,'status':'draft','message':'授权正文已导入，请审核后发布'}
+
