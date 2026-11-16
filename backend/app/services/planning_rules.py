@@ -15,7 +15,11 @@ def completed_history(db,previous):
             preserved.append({'path_id':previous['id'],'item':item,'checkin':fact})
     return preserved
 
-def graph_snapshot(db):
+def graph_snapshot(db,goal_id=None):
+    if goal_id:
+        from app.services.engineering_goals import graph_for
+        scoped=graph_for(db,goal_id)
+        if scoped:return scoped
     saved=one(db,'SELECT * FROM graph_versions WHERE active=1')
     if not saved:return [dict(n) for n in SKILLS],'curated-v1'
     nodes={n['id']:{**{key:value for key,value in n.items() if not key.endswith('_questions')},'name':n.get('name',n['id']),'prerequisites':[]} for n in json.loads(saved['nodes'])}

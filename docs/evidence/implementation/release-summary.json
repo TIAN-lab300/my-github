@@ -1,0 +1,115 @@
+{
+  "version": "diagnosis-entry-2026.11.16",
+  "schema_revision": "0028",
+  "description": "独立工程草稿保存与恢复、统一诊断作答区、保存确认自动开卷、交卷后生成路径与候选确认。",
+  "design_document": "docx/2026-11-02-zhixing-followup-preimplementation-technical-design.md",
+  "verification_note": "全量260项测试通过；随后最终未审核草稿指纹隐私修正及课程衔接专项14项通过。浏览器工程链路及管理员完整题审核通过；真实云端尚未配置，不声称已联网验证。",
+  "regression_tests": 260,
+  "regression_seconds": 372.41,
+  "frontend_build": "passed",
+  "original_bank": {
+    "release": "original-foundations-2026-11-16-v1",
+    "content_hash": "060fccb44ce13ea4f813c1f415e1ddfe63af38559a10b3b75cd874cd5ce7471b",
+    "published_questions": 1071,
+    "covered_courses": 34,
+    "covered_skills": 357,
+    "phase_counts": {
+      "diagnostic": 357,
+      "practice": 357,
+      "retest": 357
+    },
+    "project_courses": 2,
+    "project_rubrics": 20,
+    "existing_data_preserved": true,
+    "review": "technical_self_review_not_teacher_approval",
+    "type": "binary_single_choice",
+    "per_skill_per_phase": 1
+  },
+  "browser_acceptance": {
+    "c_language_diagnostic_practice_retest": true,
+    "scores_and_skill_evaluation": true,
+    "retest_exhaustion": true,
+    "project_rubrics": 20,
+    "page_errors": []
+  },
+  "engineering_goals": {
+    "private_scope": true,
+    "catalog_identity_mapping": true,
+    "generated_questions_require_review": true,
+    "original_lessons": 22,
+    "personal_material_mapping_private": true,
+    "server_bkt_deduplication": true,
+    "daily_schedule": true,
+    "automatic_replan": "opt-in background worker, candidates only",
+    "cloud_live_verified": false,
+    "cloud_contract_test": "passed with explicit provider double",
+    "verification_document": "docs/curriculum/engineering-goal-workflow.md"
+  },
+  "engineering_browser_acceptance": {
+    "goalInput": true,
+    "explicitLocalTemplate": true,
+    "scopeConfirmed": true,
+    "courseRecommendations": true,
+    "diagnosticQuestions": 11,
+    "serverScored": true,
+    "fourStagePlan": true,
+    "dailySchedule": true,
+    "candidateExplicitlyAccepted": true,
+    "autoReplanOptIn": true,
+    "manualTimingEdit": true,
+    "diagnosisReusedWithoutRescoring": true,
+    "adminReviewsFullDraftBeforePublishing": true,
+    "pageErrors": [],
+    "liveModelVerified": false,
+    "productionWrites": false
+  },
+  "goal_diagnosis_flow": {
+    "targeted_tests": 42,
+    "targeted_seconds": 69.19,
+    "frontend_build": "passed",
+    "browser_acceptance": {
+      "rawDraftSavedWithoutModel": true,
+      "draftRestoredAfterReload": true,
+      "saveOpenedDiagnosis": true,
+      "questionsInDiagnosisWorkspace": true,
+      "answerDraftRestoredAfterReload": true,
+      "generateActionAfterGrading": true,
+      "progressAndCandidateVisible": true,
+      "pathAccepted": true,
+      "pageErrors": [],
+      "productionWrites": false
+    },
+    "schema_migration_required": false,
+    "archived_retry_rejected": true,
+    "live_model_verified": false
+  },
+  "legacy_goal_save": {
+    "button_label_readable": true,
+    "silent_disable_removed": true,
+    "incomplete_fields_explained": true,
+    "complete_goal_persisted": true,
+    "class_optional": true,
+    "frontend_build": "passed",
+    "production_test_writes": false
+  },
+  "diagnosis_entry": {
+    "confirmed_draft_goals_eligible": true,
+    "raw_drafts_resume_in_empty_state": true,
+    "manual_catalog_without_model": true,
+    "original_flow_regression_tests": 33,
+    "browser": {
+      "emptyStateExplainsDraft": true,
+      "noInactiveStartButton": true,
+      "resumeActualDraft": true,
+      "manualScopeWithoutModel": true,
+      "confirmedGoalOpensQuestion": true,
+      "generatedDailyPath": true,
+      "singleGoalAutoSelected": true,
+      "pageErrors": [],
+      "productionWrites": false
+    },
+    "original_save_flow_browser": "passed",
+    "frontend_build": "passed",
+    "schema_change": false
+  }
+}

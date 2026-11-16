@@ -66,7 +66,7 @@ def task_edit(id:str,body:dict,user=Depends(current_user)):
 @router.get('/admin/graphs')
 def graphs(user=Depends(current_user)):
     role(user,'admin')
-    with transaction() as db: return rows(db,'SELECT * FROM graph_versions ORDER BY created_at DESC LIMIT 50')
+    with transaction() as db: return rows(db,'SELECT * FROM graph_versions WHERE NOT EXISTS(SELECT 1 FROM project_goal_contexts p WHERE p.graph_version=graph_versions.id) ORDER BY created_at DESC LIMIT 50')
 
 @router.post('/admin/graphs',status_code=201)
 def graph_create(body:dict,user=Depends(current_user)):
@@ -104,6 +104,7 @@ def graph_activate(id:str,user=Depends(current_user)):
     with transaction() as db:
         graph=one(db,'SELECT * FROM graph_versions WHERE id=:id',id=id)
         if not graph:fail(404,'图谱不存在')
+        if one(db,'SELECT goal_id FROM project_goal_contexts WHERE graph_version=:i',i=id):fail(409,'工程目标私有图谱不能激活为全局图谱')
         from app.services.topic_bank import validate_banks
         validate_banks(json.loads(graph['nodes']))
         run(db,'UPDATE graph_versions SET active=0 WHERE active=1')

@@ -9,7 +9,7 @@ export async function api<T = any>(path: string, method = 'GET', body?: unknown)
         if (response.status === 401)
             window.dispatchEvent(new Event('session-expired'));
         const detail = data.message || data.detail;
-        throw new ApiError(response.status, typeof detail === 'string' ? detail : Array.isArray(detail) ? detail.map((x: any) => x.msg).join('；') : '操作失败');
+        throw new ApiError(response.status, typeof detail === 'string' ? detail : Array.isArray(detail) ? detail.map((x: any) => x.msg).join('；') : typeof detail?.message === 'string' ? detail.message : '操作失败');
     }
     return data;
 }

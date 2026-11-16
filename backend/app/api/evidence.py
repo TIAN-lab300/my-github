@@ -77,6 +77,10 @@ def provider_status(user=Depends(current_user)):
     role(user,'admin')
     return search_status()
 
+@router.get('/retrieval/search/status')
+def retrieval_search_status(user=Depends(current_user)):
+    return search_status()
+
 @router.post('/admin/search/evaluate')
 def evaluate_search(user=Depends(current_user)):
     role(user,'admin')
@@ -107,12 +111,14 @@ def supplement(body:dict,user=Depends(current_user)):
     fresh=body.get('requires_current') is True
     if mode=='upload_only' or (not check['search_eligible'] and not (fresh and not check['gaps'])):
         return {**check,'results':[],'web_search_executed':False,'rounds':0}
-    results=[];seen=set();error=None;rounds=0
+    results=[];seen=set();error=None;rounds=0;completed=False
     try:
         for number in range(2):
             rounds+=1
             search_query=query if number==0 else query+' 教程 官方文档'
-            for result in search_web(search_query):
+            found=search_web(search_query)
+            completed=True
+            for result in found:
                 if result['url'] in seen:continue
                 seen.add(result['url']);result['retrieved_at']=now()
                 results.append(result)
@@ -124,7 +130,8 @@ def supplement(body:dict,user=Depends(current_user)):
         search_id=uid()
         insert(db,'search_runs',id=search_id,actor_id=user['id'],query=query,status=status,rounds=rounds,results=dump(results),error=error,created_at=now())
     return {**check,'status':'draft','search_id':search_id,'results':results,'error':error,
-            'web_search_attempted':True,'web_search_executed':not error or search_status()['configured'],'rounds':rounds,'message':'推荐网址待教师审核并导入正文，当前证据不足时保留草稿'}
+            'web_search_attempted':True,'web_search_executed':completed,'rounds':rounds,
+            'message':('已找到待核实网址；学生可收藏到个人资料，教师可审核并授权导入正文。' if results else '本次未取得可用网址。可使用下方外部搜索入口，找到网址后手动收藏；尚未增加可引用正文。')}
 
 
 @router.post('/resources/{id}/import-link',status_code=201)

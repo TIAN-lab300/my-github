@@ -245,12 +245,14 @@ def dto(db,r,body=False):
     return result
 
 @router.get('/resources')
-def listing(q:str='',kind:str='',page:int=1,class_id:str='',status:str='',parse_status:str='',tag:str='',user=Depends(current_user)):
+def listing(q:str='',kind:str='',page:int=1,class_id:str='',status:str='',parse_status:str='',tag:str='',scope:str='',user=Depends(current_user)):
+    if scope not in ('','all','private','class','school'):fail(422,'资料范围不合法')
     if page<1: fail(422,'页码必须为正数')
     if status and status not in ('draft','published','withdrawn'): fail(422,'发布状态不合法')
     if parse_status and parse_status not in ('queued','running','ready','failed','not_applicable','review_required','cancelled'): fail(422,'解析状态不合法')
     with transaction() as db:
         result=[r for r in visible(db,user) if q.lower() in (r['title']+' '+r['tags']).lower() and (not kind or r['kind']==kind)]
+        result=[r for r in result if scope in ('','all') or r['scope']==scope]
         result=[dto(db,r) for r in result if (not class_id or r['class_id']==class_id) and (not status or r['status']==status) and (not tag or tag.lower() in r['tags'].lower())]
         result=[r for r in result if not parse_status or r['parse_status']==parse_status]
         return result[(page-1)*50:page*50]
@@ -329,17 +331,21 @@ async def upload(files:list[UploadFile]=File(...),title:str=Form(''),description
 
 @router.post('/resources/links',status_code=201)
 def link(body:dict,user=Depends(current_user)):
-    role(user,'teacher')
-    for field,limit in [('url',2048),('title',200),('description',3000),('class_id',100)]:
+    role(user,'teacher','student')
+    fields=[('url',2048),('title',200),('description',3000)]
+    if user['role']=='teacher':fields.append(('class_id',100))
+    elif body.get('class_id'):fail(422,'个人收藏不能指定班级')
+    for field,limit in fields:
         if not isinstance(body.get(field),str) or not body[field].strip() or len(body[field])>limit:fail(422,'请填写有效的网址、标题、说明和班级')
     if 'tags' in body and (not isinstance(body['tags'],str) or len(body['tags'])>500):fail(422,'标签不合法')
     url=body['url']; parsed=urlsplit(url)
     if parsed.scheme not in ('http','https') or not parsed.hostname or parsed.username or parsed.password: fail(422,'请输入有效HTTP/HTTPS网址')
     if not str(body.get('title','')).strip() or not str(body.get('description','')).strip(): fail(422,'请填写标题与推荐理由')
     with transaction() as db:
-        class_access(db,user,body.get('class_id'),True)
+        personal=user['role']=='student'
+        if not personal:class_access(db,user,body.get('class_id'),True)
         rid=uid();vid=uid()
-        insert(db,'resources',id=rid,owner_id=user['id'],class_id=body['class_id'],scope='class',title=body['title'][:200],description=body['description'][:3000],tags=str(body.get('tags',''))[:500],source_license='教师登记，内容待审核',cloud_allowed=0,kind='link',current_version=vid,created_at=now())
+        insert(db,'resources',id=rid,owner_id=user['id'],class_id=None if personal else body['class_id'],scope='private' if personal else 'class',title=body['title'][:200],description=body['description'][:3000],tags=str(body.get('tags',''))[:500],source_license='学生个人收藏；外链正文未导入' if personal else '教师登记，内容待审核',cloud_allowed=0,kind='link',current_version=vid,created_at=now())
         insert(db,'resource_versions',id=vid,resource_id=rid,filename=url,bytes=0,hash=hashlib.sha256(url.encode()).hexdigest(),body='',parse_status='not_applicable',index_status='not_applicable',created_at=now())
     return {'id':rid}
 
@@ -423,12 +429,16 @@ def study(id:str,body:StudyInput,user=Depends(current_user)):
 
 @router.post('/retrieval/search')
 def search(body:dict,user=Depends(current_user)):
+    scope=body.get('scope','all')
+    if scope not in ('all','private','class','school'):fail(422,'资料范围不合法')
     query=str(body.get('query','')).strip()[:200]
     if not query: fail(422,'请输入检索词')
     tokens=re.findall(r'[a-zA-Z0-9_]+|[\u4e00-\u9fff]',query)
     expression=' OR '.join('"'+t+'"' for t in tokens)
     with transaction() as db:
-        allowed={r['id']:r for r in visible(db,user)}
+        allowed={r['id']:r for r in visible(db,user) if scope=='all' or r['scope']==scope}
+        from app.services.curriculum_search import search_courses
+        course_results=search_courses(db,query) if scope in ('all','school') else []
         # Restrict FTS candidates to authorized IDs before ranking (not after top-k).
         hits=[]; dense=[]; metadata=[]
         for rid,r in allowed.items():
@@ -467,7 +477,11 @@ def search(body:dict,user=Depends(current_user)):
         except Exception:
             vector_available=False
     with transaction() as db:
-        current_allowed={resource['id']:resource for resource in visible(db,user)}
+        current_allowed={resource['id']:resource for resource in visible(db,user) if scope=='all' or resource['scope']==scope}
         hits=[hit for hit in hits if (resource:=current_allowed.get(hit['resource_id'])) and resource['current_version']==hit['resource_version_id'] and (resource['status']=='published' or resource['scope']=='private')]
     metadata=[hit for hit in metadata if (resource:=current_allowed.get(hit['resource_id'])) and resource['current_version']==hit['resource_version_id'] and (resource['status']=='published' or resource['scope']=='private')]
-    return {'results':hits[:20],'metadata_results':metadata[:20],'coverage_status':'body_hits' if hits else 'metadata_only' if metadata else 'empty','coverage':'有正文命中，覆盖仍需校验' if hits else '仅资料信息命中，正文证据不足' if metadata else '未找到授权正文，请补充材料','vector_available':vector_available,'web_search_executed':False}
+    return {'results':hits[:20],'metadata_results':metadata[:20],'course_results':course_results,'scope':scope,
+        'scope_hint':'当前仅搜索本人上传或收藏的资料；查找学校课程请切换到学校共享或全部范围。' if scope=='private' else '',
+        'coverage_status':'body_hits' if hits else 'metadata_only' if metadata or course_results else 'empty',
+        'coverage':'有正文命中，覆盖仍需校验' if hits else '找到课程或资料入口，尚无可引用正文' if metadata or course_results else '当前范围没有匹配结果',
+        'vector_available':vector_available,'web_search_executed':False}

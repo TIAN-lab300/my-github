@@ -179,6 +179,8 @@ def retry(id:str,background:BackgroundTasks,user=Depends(current_user)):
     with transaction() as db:
         r=one(db,'SELECT * FROM agent_runs WHERE id=:id AND actor_id=:u',id=id,u=user['id'])
         if not r or r['status'] not in ('failed','interrupted'): fail(409,'该运行不可重试')
+        g=goal_access(db,user,r['goal_id'])
+        if g['status']=='archived':fail(409,'目标已归档，不能重试旧规划；请新建或选择活动目标')
         run(db,"UPDATE agent_runs SET status='queued',error=NULL,retry_count=retry_count+1 WHERE id=:id",id=id)
     background.add_task(execute,id)
     return {'run_id':id}

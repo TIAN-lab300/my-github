@@ -37,7 +37,9 @@ def observations(db,attempt,questions,answers,student,class_id=None):
             correct=set(value.split(','))==set(expected.split(','))
         else: correct=value==expected
         scores.append(int(correct))
-        insert(db,'observations',id=uid(),attempt_id=attempt,student_id=student,class_id=class_id,skill=q['skill'],correct=int(correct),sequence=index)
+        from app.services.engineering_goals import add_evidence
+        if not add_evidence(db,student,q,attempt,correct,index):
+            insert(db,'observations',id=uid(),attempt_id=attempt,student_id=student,class_id=class_id,skill=q['skill'],correct=int(correct),sequence=index)
         feedback.append({'id':q['id'],'prompt':q['prompt'],'answer':expected,'explanation':q.get('explanation',''),'correct':correct,'skill':q['skill'],'rule_version':'assessment-v1','recommendation':'进入后续学习并按计划复习' if correct else '复习本知识点资料并完成补强测验'})
     return feedback,(sum(scores)/len(scores) if scores else None)
 
@@ -59,8 +61,10 @@ def fingerprint(db,student,goal_id):
     memberships=rows(db,'SELECT class_id,status FROM memberships WHERE user_id=:u ORDER BY class_id',u=student)
     from app.services.course_planning import fingerprint_data
     course_data=fingerprint_data(db,goal_id)
+    from app.services.engineering_goals import fingerprint_data as project_data
+    project=project_data(db,goal_id)
     return dump({'goal':goal['version'],'watermark':user['watermark'],'budget':budget['version'],
-                 'graph':graph['id'] if graph else 'curated-v1','resources':resources,'memberships':memberships,'course':course_data,
+                 'graph':project['graph'] if project else graph['id'] if graph else 'curated-v1','resources':resources,'memberships':memberships,'course':course_data,'project':project,
                  'identity':{'status':user['status'],'auth_version':user['auth_version'],'role':user['role']}})
 
 def allocate(db,student,minutes,due_date,exclude_goal=None,goal_limit=None):

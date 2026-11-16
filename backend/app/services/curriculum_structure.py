@@ -71,6 +71,8 @@ def import_structure(source=SOURCE):
         for r in payload['external_requirements']:insert(db,'curriculum_external_requirements',version_id=version,**r)
         run(db,'UPDATE curriculum_relation_versions SET active=0 WHERE active=1')
         run(db,'UPDATE curriculum_relation_versions SET active=1 WHERE id=:i',i=version)
+        from app.services.curriculum_search import rebuild
+        rebuild(db)
         audit(db,admin['id'],'curriculum_structure_imported',version,dump({'courses':len(courses),'skills':len(skills)}))
     return {'version':version,'courses':len(courses),'chapters':sum(len(c['chapters']) for c in courses),'skills':len(skills),
         **{key:len(payload[key]) for key in ('course_edges','skill_edges','chapter_edges','external_requirements')}}

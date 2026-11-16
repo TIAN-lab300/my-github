@@ -45,6 +45,8 @@ def validate_versions(db,questions):
 
 def sync_assessment(db,assessment_id):
     """Only explicitly bound courses; each displayed item contributes at most once."""
+    from app.services.engineering_goals import sync_course_evidence
+    sync_course_evidence(db,assessment_id)
     a=one(db,"SELECT * FROM learning_assessments WHERE id=:i AND status='submitted'",i=assessment_id)
     if not a:return None
     old=one(db,'SELECT attempt_id FROM course_evidence_attempts WHERE assessment_id=:i',i=assessment_id)
@@ -106,5 +108,5 @@ def fingerprint_data(db,goal_id):
     b=binding(db,goal_id,False)
     if not b:return None
     return {'binding':b,'curriculum_relations':one(db,'SELECT id,payload_hash FROM curriculum_relation_versions WHERE active=1'),'questions':rows(db,'''SELECT id,status,version FROM learning_question_versions
-        WHERE course_id=:c ORDER BY id''',c=b['course_id']),
-        'materials':rows(db,'SELECT * FROM learning_material_links WHERE course_id=:c ORDER BY id',c=b['course_id'])}
+        WHERE course_id=:c AND status='published' ORDER BY id''',c=b['course_id']),
+        'materials':rows(db,"SELECT m.* FROM learning_material_links m JOIN resources r ON r.id=m.resource_id WHERE m.course_id=:c AND (r.scope='school' OR (r.scope='private' AND r.owner_id=(SELECT student_id FROM goals WHERE id=:g))) ORDER BY m.id",c=b['course_id'],g=goal_id)}

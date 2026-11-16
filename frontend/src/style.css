@@ -33,3 +33,7 @@ fieldset{min-width:0}
 .login-password-actions .password-visibility{display:grid;justify-items:start;gap:6px;line-height:1.6;cursor:pointer}
 .login .login-change-password{width:auto;margin:0;padding:0;border:0;background:transparent;color:var(--green);line-height:1.6}
 .login-password-actions .password-visibility > input[type=checkbox]{margin:0;width:18px;height:18px;padding:0;justify-self:start}
+
+.record-editor-dialog{width:min(900px,calc(100vw - 32px));max-height:90vh;overflow:auto;padding:0;border:0;border-radius:12px}.record-editor-dialog::backdrop{background:rgb(0 0 0 / 40%)}.record-editor-dialog > .card{margin:0}
+
+.goal-save-button{min-height:44px;min-width:112px;white-space:nowrap}.goal-save-button:disabled{opacity:1;background:#d7e4dc;color:#243c32;border-color:#9db5a6;cursor:wait}

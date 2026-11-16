@@ -26,6 +26,8 @@ def chapter(id:str,body:Chapter,user=Depends(current_user)):
         if len(set(body.skill_ids))!=len(body.skill_ids):fail(422,'知识点不能重复')
         ident=uid();insert(db,'learning_chapters',id=ident,course_id=id,title=body.title,position=body.position)
         for sid in body.skill_ids:insert(db,'learning_skill_chapters',skill_id=sid,chapter_id=ident,course_id=id)
+        from app.services.curriculum_search import rebuild
+        rebuild(db)
         audit(db,user['id'],'learning_chapter_created',ident)
     return {'id':ident}
 
@@ -118,11 +120,17 @@ def learning_course(id:str,user=Depends(current_user)):
     with transaction() as db:
         c=course(db,id);c['skills']=rows(db,'SELECT id,name,status FROM curriculum_catalog_skills WHERE course_id=:c ORDER BY id',c=id)
         c['chapters']=rows(db,'SELECT * FROM learning_chapters WHERE course_id=:c ORDER BY position',c=id)
+        c['project_rubrics']=[json.loads(r['payload']) for r in rows(db,'SELECT payload FROM learning_project_rubrics WHERE course_id=:c ORDER BY skill_id',c=id)]
+        c['bank_releases']=rows(db,'''SELECT DISTINCT r.id,r.provenance,r.review_kind FROM learning_bank_releases r
+            JOIN learning_bank_release_items i ON i.release_id=r.id
+            JOIN learning_question_versions v ON v.id=i.question_version_id WHERE v.course_id=:c''',c=id)
         for s in c['skills']:
             s['materials']=[]
             for link in rows(db,'SELECT m.*,r.title FROM learning_material_links m JOIN resources r ON r.id=m.resource_id JOIN resource_versions v ON v.id=m.resource_version_id WHERE m.skill_id=:s AND r.scope=\'school\' AND r.status=\'published\' AND r.current_version=v.id AND v.parse_status=\'ready\'',s=s['id']):s['materials'].append(link)
             s['question_counts']={p:one(db,"SELECT COUNT(DISTINCT question_id) n FROM learning_question_versions WHERE skill_id=:s AND phase=:p AND status='published'",s=s['id'],p=p)['n'] for p in ('diagnostic','practice','retest')}
-        if user['role']=='admin':c['question_drafts']=rows(db,"SELECT id,skill_id,prompt,status,phase FROM learning_question_versions WHERE course_id=:c ORDER BY created_at DESC",c=id)
+        if user['role']=='admin':
+            c['question_drafts']=rows(db,"SELECT id,skill_id,prompt,status,phase,options,answer,explanation,source FROM learning_question_versions WHERE course_id=:c ORDER BY created_at DESC",c=id)
+            for q in c['question_drafts']:q['options']=json.loads(q['options'])
     return c
 
 class Study(BaseModel):
@@ -150,31 +158,42 @@ class Paper(BaseModel):
     phase:Literal['diagnostic','practice','retest']='practice'
     per_skill:int=Field(default=2,ge=1,le=5)
 
+def available_questions(db,user,course_id,skill_id,phase):
+    candidates=rows(db,"SELECT v.* FROM learning_question_versions v WHERE course_id=:c AND skill_id=:s AND phase=:p AND status='published' AND NOT EXISTS (SELECT 1 FROM learning_question_versions newer WHERE newer.question_id=v.question_id AND newer.status='published' AND newer.version>v.version) ORDER BY question_id",c=course_id,s=skill_id,p=phase)
+    if phase=='retest':
+        exposed={r['question_id'] for r in rows(db,'SELECT v.question_id FROM learning_assessment_items i JOIN learning_assessments a ON a.id=i.assessment_id JOIN learning_question_versions v ON v.id=i.question_version_id WHERE a.student_id=:u',u=user['id'])}
+        candidates=[q for q in candidates if q['question_id'] not in exposed]
+    linked=one(db,"SELECT b.goal_id FROM course_goal_bindings b JOIN goals g ON g.id=b.goal_id WHERE b.course_id=:c AND g.student_id=:u AND g.status!='archived'",c=course_id,u=user['id'])
+    if linked:
+        from app.services.assessment_sessions import recover_history,question_keys
+        recover_history(db,user['id'])
+        seen={r['identity'] for r in rows(db,'SELECT identity FROM question_exposures WHERE student_id=:u',u=user['id'])}
+        candidates=[q for q in candidates if not any(k in seen for k in question_keys(q))]
+    return candidates
+
+@router.get('/learning/courses/{id}/assessment-readiness')
+def assessment_readiness(id:str,phase:Literal['diagnostic','practice','retest']='practice',user=Depends(current_user)):
+    role(user,'student')
+    with transaction() as db:
+        c=course(db,id)
+        skills=rows(db,'SELECT id,name FROM curriculum_catalog_skills WHERE course_id=:c ORDER BY id',c=id)
+        for s in skills:
+            s['available_count']=len(available_questions(db,user,id,s['id'],phase)) if c['assessment_mode']!='project_rubric' else 0
+    return {'phase':phase,'project_mode':c['assessment_mode']=='project_rubric','skills':skills}
+
 @router.post('/learning/assessments',status_code=201)
 def create_paper(body:Paper,user=Depends(current_user)):
     role(user,'student')
     if len(set(body.skill_ids))!=len(body.skill_ids):fail(422,'知识点不能重复')
     with transaction() as db:
         if course(db,body.course_id)['assessment_mode']=='project_rubric':fail(409,'该课程以项目成果及教师量规评价，不能生成替代验收的选择题试卷')
-        linked=one(db,'''SELECT b.goal_id FROM course_goal_bindings b JOIN goals g ON g.id=b.goal_id
-            WHERE b.course_id=:c AND g.student_id=:u AND g.status!='archived' ''',c=body.course_id,u=user['id'])
-        seen=set()
-        if linked:
-            from app.services.assessment_sessions import recover_history,question_keys
-            recover_history(db,user['id'])
-            seen={r['identity'] for r in rows(db,'SELECT identity FROM question_exposures WHERE student_id=:u',u=user['id'])}
         chosen=[];missing=[]
         for sid in body.skill_ids:
-            skill(db,body.course_id,sid)
-            candidates=rows(db,"SELECT v.* FROM learning_question_versions v WHERE course_id=:c AND skill_id=:s AND phase=:p AND status='published' AND NOT EXISTS (SELECT 1 FROM learning_question_versions newer WHERE newer.question_id=v.question_id AND newer.status='published' AND newer.version>v.version) ORDER BY question_id",c=body.course_id,s=sid,p=body.phase)
-            if body.phase=='retest':
-                # Previous display counts as exposure, even without a submitted answer.
-                exposed={r['question_id'] for r in rows(db,'SELECT v.question_id FROM learning_assessment_items i JOIN learning_assessments a ON a.id=i.assessment_id JOIN learning_question_versions v ON v.id=i.question_version_id WHERE a.student_id=:u',u=user['id'])}
-                candidates=[q for q in candidates if q['question_id'] not in exposed]
-            if linked:candidates=[q for q in candidates if not any(k in seen for k in question_keys(q))]
-            if len(candidates)<body.per_skill:missing.append(sid)
+            s=skill(db,body.course_id,sid)
+            candidates=available_questions(db,user,body.course_id,sid,body.phase)
+            if len(candidates)<body.per_skill:missing.append(f"{s['name']}（可用{len(candidates)}题，需要{body.per_skill}题）")
             chosen+=candidates[:body.per_skill]
-        if missing:fail(409,'题库覆盖不足或重测题已公开：'+', '.join(missing),'QUESTION_COVERAGE_GAP')
+        if missing:fail(409,'无法组卷：'+ '；'.join(missing)+'。请减少题数、选择其他知识点，或请管理员补齐并发布对应用途题目；重测排除已见题。','QUESTION_COVERAGE_GAP')
         ident=uid();insert(db,'learning_assessments',id=ident,student_id=user['id'],course_id=body.course_id,phase=body.phase,created_at=now())
         for position,q in enumerate(chosen):insert(db,'learning_assessment_items',id=uid(),assessment_id=ident,question_version_id=q['id'],skill_id=q['skill_id'],position=position,snapshot=dump(q))
     return {'id':ident}

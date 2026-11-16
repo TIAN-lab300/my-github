@@ -121,6 +121,9 @@ def begin_session(db, path_id, item_id, user, repeat=False):
             candidates = json.loads(frozen['questions'])
     if cb:
         candidates=bank(db,cb,'retest' if previous else 'practice',{task['skill_id']})
+    from app.services.engineering_goals import context as project_context,bank as project_bank
+    pc=project_context(db,path['goal_id'])
+    if pc:candidates=[q for q in project_bank(db,pc['graph_version'],'retest' if previous else 'practice') if q['skill']==task['skill_id']]
     previous_question = json.loads(previous['questions'])[0] if previous else None
     selected = None
     for question in candidates:

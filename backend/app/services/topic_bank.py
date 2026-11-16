@@ -12,6 +12,10 @@ PRACTICE={
 
 
 def question_bank(db,phase,graph_id=None):
+    if graph_id:
+        from app.services.engineering_goals import bank
+        scoped=bank(db,graph_id,phase)
+        if scoped is not None:return scoped,graph_id
     graph=one(db,'SELECT * FROM graph_versions WHERE id=:id',id=graph_id) if graph_id else one(db,'SELECT * FROM graph_versions WHERE active=1')
     fallback=QUESTIONS if phase=='diagnostic' else RETEST if phase=='retest' else [question for bank in PRACTICE.values() for question in bank]
     if not graph:return fallback,'curated-v1'

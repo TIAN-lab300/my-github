@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse,FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from app.core.db import transaction,run,uid
-from app.api import learning_catalog,curriculum_catalog,phone,auth,classes,resources,tasks,goals,profiles,models,management,evidence,question_bank
+from app.api import engineering_goals,learning_catalog,curriculum_catalog,phone,auth,classes,resources,tasks,goals,profiles,models,management,evidence,question_bank
 
 @asynccontextmanager
 async def lifespan(app):
@@ -27,7 +27,8 @@ async def lifespan(app):
     from app.services.profile_worker import drain_once as profile_once
     from app.services.parse_worker import drain_once as parse_once
     from app.services.vector_index import drain_once as vector_once
-    workers=[asyncio.create_task(consume(profile_once)),asyncio.create_task(consume(parse_once)),asyncio.create_task(consume(vector_once))]
+    from app.services.engineering_goals import auto_replan_once
+    workers=[asyncio.create_task(consume(profile_once)),asyncio.create_task(consume(parse_once)),asyncio.create_task(consume(vector_once)),asyncio.create_task(consume(auto_replan_once))]
     try: yield
     finally:
         stop.set()
@@ -116,3 +117,4 @@ app.include_router(phone.router,prefix="/api/v1")
 app.include_router(curriculum_catalog.router,prefix="/api/v1")
 
 app.include_router(learning_catalog.router,prefix="/api/v1")
+app.include_router(engineering_goals.router,prefix="/api/v1")

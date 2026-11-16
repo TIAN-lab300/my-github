@@ -47,3 +47,17 @@ playwright-report/
 /知行_2026-11-15/
 /知行_2026-11-15.zip
 /runtime-data/
+
+# Generated acceptance artifacts (keep test source and authored documentation)
+/docs/evidence/implementation/**/*.png
+/docs/evidence/implementation/**/*.jpg
+/docs/evidence/implementation/**/*.webp
+/docs/evidence/implementation/**/*.xml
+/docs/evidence/implementation/**/*-browser.json
+/docs/evidence/implementation/form-layout/
+/docs/evidence/implementation/remaining-browser/
+
+# Local test suites and browser verification scripts
+/backend/tests/
+/scripts/verify_*.mjs
+/scripts/verify_*.py

@@ -68,11 +68,13 @@ def diagnose(state):
         if not g or g['status']=='archived' or u['status']!='active': fail(409,'目标不可用')
         if g['class_id'] and class_access(db,u,g['class_id'])['status']!='active':fail(409,'关联班级已归档')
         skills=json.loads(g['skills'])
-        available_graph,_=graph_snapshot(db)
+        from app.services.engineering_goals import validate_scope
+        validate_scope(db,g['id'])
+        available_graph,_=graph_snapshot(db,g['id'])
         if not skills or not set(skills)<=set(s['id'] for s in available_graph): fail(409,'新主题缺少已验证图谱、题库和来源；当前只支持本地函数/递归主题','COVERAGE_GAP')
         diagnosis=one(db,'SELECT * FROM diagnoses WHERE goal_id=:g AND goal_version=:v AND attempt_id IS NOT NULL ORDER BY created_at DESC LIMIT 1',g=g['id'],v=g['version'])
         if not diagnosis:fail(409,'请先提交诊断')
-        graph,version=graph_snapshot(db)
+        graph,version=graph_snapshot(db,g['id'])
         from app.services.course_planning import binding,closure,validate_versions
         course_binding=binding(db,g['id'])
         if course_binding:
@@ -136,8 +138,13 @@ def build(state):
         g=state['goal'];u=state['actor'];m=mastery(db,u['id'])
         from app.services.course_planning import binding
         cb=binding(db,g['id'])
+        from app.services.engineering_goals import context as project_context,PREFIX
+        pc=project_context(db,g['id'])
         course_links=rows(db,'SELECT * FROM learning_material_links WHERE course_id=:c',c=cb['course_id']) if cb else []
         course_mapping={m['skill_id']:m['graph_skill_id'] for m in json.loads(cb['mappings'])} if cb else {}
+        if pc:
+            course_links=[link for sid in json.loads(pc['skill_ids']) for link in rows(db,'SELECT * FROM learning_material_links WHERE skill_id=:s',s=sid)]
+            course_mapping={sid:PREFIX+sid for sid in json.loads(pc['skill_ids'])}
         target=set(json.loads(g['skills']))
         for node in reversed(state['graph']):
             if node['id'] in target:target.update(node['prerequisites'])
@@ -146,8 +153,12 @@ def build(state):
             if resource['status']!='published' and resource['scope']!='private':continue
             version=one(db,"SELECT * FROM resource_versions WHERE id=:id AND parse_status='ready' AND index_status='indexed'",id=resource['current_version'])
             if not version:continue
+            if not cb and not pc and one(db,'SELECT id FROM learning_material_links WHERE resource_version_id=:v',v=version['id']):
+                # A generic legacy topic must not silently borrow a similarly named
+                # C/C++ course lesson. Course content requires an explicit identity map.
+                continue
             supported=[skill for skill in target if any(t.lower() in version['body'].lower() for t in tokens[skill])]
-            if cb:
+            if cb or pc:
                 linked={course_mapping.get(link['skill_id']) for link in course_links if link['resource_version_id']==version['id']}
                 supported=[skill for skill in supported if skill in linked]
             semantic_locations={}
@@ -155,7 +166,7 @@ def build(state):
                 from app.services.vector_index import cosine
                 indexed=rows(db,'SELECT ordinal,body,embedding FROM vector_chunks WHERE version_id=:v ORDER BY ordinal',v=version['id'])
                 for skill in target-set(supported):
-                    if cb and skill not in linked:continue
+                    if (cb or pc) and skill not in linked:continue
                     if skill not in semantic_vectors:continue
                     matches=[(cosine(semantic_vectors[skill],json.loads(chunk['embedding'])),chunk) for chunk in indexed]
                     if matches:
@@ -180,7 +191,9 @@ def build(state):
                     'excerpt':' … '.join(fragments),'locations':locations,
                     'supported_skills':supported,'cloud_allowed':bool(resource['cloud_allowed'])})
         gaps=target-{skill for source in sources for skill in source['supported_skills']}
-        if gaps:fail(409,'授权正文覆盖不足：'+','.join(sorted(gaps))+'；请补充资料','EVIDENCE_GAP')
+        if gaps:
+            names={n['id']:n['name'] for n in state['graph']}
+            fail(409,'授权正文覆盖不足：'+ '、'.join(names.get(s,s) for s in sorted(gaps))+'；请到课程知识库关联已发布正文或上传个人资料；仅有网址不算正文','EVIDENCE_GAP')
         previous=state.get('previous')
         old={t['skill_id']:t for t in json.loads(previous['tasks'])} if previous else {}
         preserved=completed_history(db,previous)
@@ -252,6 +265,8 @@ def save(state):
         validation.update(is_valid=True,schedule=state['schedule'],method='cloud-four-agent-v1' if state.get('cloud_mode') else 'local-deterministic-v2',cloud_called=bool(state.get('cloud_mode')),cloud_outputs=state.get('cloud_outputs',{}),model_config_id=r['model_config_id'],
                           previous=state['previous']['id'] if state.get('previous') else None,goal_snapshot=state['goal'])
         validation['learner_evidence']=state.get('learner_evidence',{})
+        from app.services.engineering_goals import context as project_context,event_key
+        if project_context(db,state['goal']['id']):validation['project_event_key']=event_key(db,state['goal']['id'])
         insert(db,'paths',id=pid,goal_id=state['goal']['id'],student_id=state['actor']['id'],status='pending_acceptance',
                content_status='verified',tasks=dump(state['tasks']),sources=dump(state['sources']),validation=dump(validation),
                fingerprint=state['fingerprint'],reason='依据诊断、图谱和全局预算生成，范围 '+state['mode'],created_at=now())

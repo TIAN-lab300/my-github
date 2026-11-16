@@ -64,5 +64,7 @@ def import_catalog():
         for c in courses:
             for source_id in c.get('public_source_candidates',[]):
                 run(db,'INSERT OR IGNORE INTO curriculum_catalog_sources(course_id,source_id) VALUES(:c,:s)',c='public-'+c['id'],s=source_id)
+        from app.services.curriculum_search import rebuild
+        rebuild(db)
         if created:audit(db,admin['id'],'public_catalog_imported','public-curriculum',dump({'sources':created,'courses':len(courses),'skills':sum(len(c['skills']) for c in courses)}))
     return {'courses':len(courses),'skills':sum(len(c['skills']) for c in courses),'created_sources':created,'skipped_sources':skipped,'questions_imported':0}
