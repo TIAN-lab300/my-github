@@ -1,0 +1,5029 @@
+{
+  "version": "curriculum-relations-v1",
+  "official_verified": false,
+  "basis": "项目教学建议；用户授权设置；课程范围来自现有36门目录，不是北京理工大学官方选课约束",
+  "references": [
+    {
+      "id": "algorithm-prereq",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/syllabus/",
+      "use": "编程与离散数学是算法课程的基础，具体课程映射为本项目设计"
+    },
+    {
+      "id": "deep-learning-prereq",
+      "url": "https://cs231n.stanford.edu/",
+      "use": "深度学习所需编程、微积分、线性代数和概率基础；不据此推断本校课程规定"
+    },
+    {
+      "id": "network-lab-prereq",
+      "url": "https://cs144.github.io/logistics.pdf",
+      "use": "网络实验的系统与C++能力参考；本项目区分理论与实验要求"
+    }
+  ],
+  "courses": [
+    {
+      "id": "public-C01",
+      "name": "程序设计基础（C语言）",
+      "chapters": [
+        {
+          "id": "public-C01-CH01",
+          "title": "程序与控制基础",
+          "position": 1,
+          "skill_ids": [
+            "public-C01-K001",
+            "public-C01-K002",
+            "public-C01-K003",
+            "public-C01-K004",
+            "public-C01-K005"
+          ]
+        },
+        {
+          "id": "public-C01-CH02",
+          "title": "数组、函数与递归",
+          "position": 2,
+          "skill_ids": [
+            "public-C01-K006",
+            "public-C01-K007",
+            "public-C01-K008"
+          ]
+        },
+        {
+          "id": "public-C01-CH03",
+          "title": "指针与复合数据",
+          "position": 3,
+          "skill_ids": [
+            "public-C01-K009",
+            "public-C01-K010",
+            "public-C01-K011"
+          ]
+        },
+        {
+          "id": "public-C01-CH04",
+          "title": "文件与持久化",
+          "position": 4,
+          "skill_ids": [
+            "public-C01-K012"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S01",
+        "S02"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C02",
+      "name": "人工智能与计算科学A",
+      "chapters": [
+        {
+          "id": "public-C02-CH01",
+          "title": "计算与建模",
+          "position": 1,
+          "skill_ids": [
+            "public-C02-K001",
+            "public-C02-K002",
+            "public-C02-K003"
+          ]
+        },
+        {
+          "id": "public-C02-CH02",
+          "title": "智能问题求解",
+          "position": 2,
+          "skill_ids": [
+            "public-C02-K004",
+            "public-C02-K005"
+          ]
+        },
+        {
+          "id": "public-C02-CH03",
+          "title": "机器学习与评价",
+          "position": 3,
+          "skill_ids": [
+            "public-C02-K006",
+            "public-C02-K007",
+            "public-C02-K008",
+            "public-C02-K009"
+          ]
+        },
+        {
+          "id": "public-C02-CH04",
+          "title": "应用与伦理",
+          "position": 4,
+          "skill_ids": [
+            "public-C02-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S24",
+        "S02"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C03",
+      "name": "数据结构",
+      "chapters": [
+        {
+          "id": "public-C03-CH01",
+          "title": "复杂度与线性结构",
+          "position": 1,
+          "skill_ids": [
+            "public-C03-K001",
+            "public-C03-K002",
+            "public-C03-K003",
+            "public-C03-K004"
+          ]
+        },
+        {
+          "id": "public-C03-CH02",
+          "title": "字符串与树",
+          "position": 2,
+          "skill_ids": [
+            "public-C03-K005",
+            "public-C03-K006",
+            "public-C03-K007",
+            "public-C03-K008"
+          ]
+        },
+        {
+          "id": "public-C03-CH03",
+          "title": "图及图算法",
+          "position": 3,
+          "skill_ids": [
+            "public-C03-K009",
+            "public-C03-K010",
+            "public-C03-K011"
+          ]
+        },
+        {
+          "id": "public-C03-CH04",
+          "title": "查找与排序",
+          "position": 4,
+          "skill_ids": [
+            "public-C03-K012",
+            "public-C03-K013"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S03",
+        "S04"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C04",
+      "name": "离散数学",
+      "chapters": [
+        {
+          "id": "public-C04-CH01",
+          "title": "逻辑与证明",
+          "position": 1,
+          "skill_ids": [
+            "public-C04-K001",
+            "public-C04-K002",
+            "public-C04-K003",
+            "public-C04-K008"
+          ]
+        },
+        {
+          "id": "public-C04-CH02",
+          "title": "集合、关系与函数",
+          "position": 2,
+          "skill_ids": [
+            "public-C04-K004",
+            "public-C04-K005",
+            "public-C04-K006",
+            "public-C04-K007"
+          ]
+        },
+        {
+          "id": "public-C04-CH03",
+          "title": "计数与递推",
+          "position": 3,
+          "skill_ids": [
+            "public-C04-K009",
+            "public-C04-K010"
+          ]
+        },
+        {
+          "id": "public-C04-CH04",
+          "title": "图论与代数结构",
+          "position": 4,
+          "skill_ids": [
+            "public-C04-K011",
+            "public-C04-K012",
+            "public-C04-K013"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S05"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C05",
+      "name": "数字逻辑",
+      "chapters": [
+        {
+          "id": "public-C05-CH01",
+          "title": "编码与布尔基础",
+          "position": 1,
+          "skill_ids": [
+            "public-C05-K001",
+            "public-C05-K002",
+            "public-C05-K003",
+            "public-C05-K004"
+          ]
+        },
+        {
+          "id": "public-C05-CH02",
+          "title": "组合逻辑",
+          "position": 2,
+          "skill_ids": [
+            "public-C05-K005",
+            "public-C05-K006",
+            "public-C05-K007",
+            "public-C05-K008"
+          ]
+        },
+        {
+          "id": "public-C05-CH03",
+          "title": "时序逻辑",
+          "position": 3,
+          "skill_ids": [
+            "public-C05-K009",
+            "public-C05-K010",
+            "public-C05-K011"
+          ]
+        },
+        {
+          "id": "public-C05-CH04",
+          "title": "有限状态机",
+          "position": 4,
+          "skill_ids": [
+            "public-C05-K012"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S06"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C06",
+      "name": "面向对象程序设计（C++）",
+      "chapters": [
+        {
+          "id": "public-C06-CH01",
+          "title": "C++与对象基础",
+          "position": 1,
+          "skill_ids": [
+            "public-C06-K001",
+            "public-C06-K002",
+            "public-C06-K003",
+            "public-C06-K004",
+            "public-C06-K005"
+          ]
+        },
+        {
+          "id": "public-C06-CH02",
+          "title": "运算符、继承与多态",
+          "position": 2,
+          "skill_ids": [
+            "public-C06-K006",
+            "public-C06-K007",
+            "public-C06-K008"
+          ]
+        },
+        {
+          "id": "public-C06-CH03",
+          "title": "泛型与标准库",
+          "position": 3,
+          "skill_ids": [
+            "public-C06-K009",
+            "public-C06-K011"
+          ]
+        },
+        {
+          "id": "public-C06-CH04",
+          "title": "异常与资源管理",
+          "position": 4,
+          "skill_ids": [
+            "public-C06-K010",
+            "public-C06-K012"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S07"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C07",
+      "name": "汇编语言程序设计",
+      "chapters": [
+        {
+          "id": "public-C07-CH01",
+          "title": "机器表示与寻址",
+          "position": 1,
+          "skill_ids": [
+            "public-C07-K001",
+            "public-C07-K002",
+            "public-C07-K003"
+          ]
+        },
+        {
+          "id": "public-C07-CH02",
+          "title": "数据与控制指令",
+          "position": 2,
+          "skill_ids": [
+            "public-C07-K004",
+            "public-C07-K005",
+            "public-C07-K006",
+            "public-C07-K007"
+          ]
+        },
+        {
+          "id": "public-C07-CH03",
+          "title": "过程调用与数据操作",
+          "position": 3,
+          "skill_ids": [
+            "public-C07-K008",
+            "public-C07-K009",
+            "public-C07-K010"
+          ]
+        },
+        {
+          "id": "public-C07-CH04",
+          "title": "语言对应与调试",
+          "position": 4,
+          "skill_ids": [
+            "public-C07-K011",
+            "public-C07-K012"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S08",
+        "S09"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C08",
+      "name": "数据库原理与设计",
+      "chapters": [
+        {
+          "id": "public-C08-CH01",
+          "title": "关系基础与建模",
+          "position": 1,
+          "skill_ids": [
+            "public-C08-K001",
+            "public-C08-K002",
+            "public-C08-K003",
+            "public-C08-K007",
+            "public-C08-K008"
+          ]
+        },
+        {
+          "id": "public-C08-CH02",
+          "title": "SQL与完整性",
+          "position": 2,
+          "skill_ids": [
+            "public-C08-K004",
+            "public-C08-K005",
+            "public-C08-K006"
+          ]
+        },
+        {
+          "id": "public-C08-CH03",
+          "title": "规范化与性能",
+          "position": 3,
+          "skill_ids": [
+            "public-C08-K009",
+            "public-C08-K010"
+          ]
+        },
+        {
+          "id": "public-C08-CH04",
+          "title": "事务、安全与恢复",
+          "position": 4,
+          "skill_ids": [
+            "public-C08-K011",
+            "public-C08-K012",
+            "public-C08-K013"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S11",
+        "S10"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C09",
+      "name": "计算机组成原理",
+      "chapters": [
+        {
+          "id": "public-C09-CH01",
+          "title": "数据、指令与运算",
+          "position": 1,
+          "skill_ids": [
+            "public-C09-K001",
+            "public-C09-K002",
+            "public-C09-K003"
+          ]
+        },
+        {
+          "id": "public-C09-CH02",
+          "title": "控制器与流水线",
+          "position": 2,
+          "skill_ids": [
+            "public-C09-K004",
+            "public-C09-K005"
+          ]
+        },
+        {
+          "id": "public-C09-CH03",
+          "title": "存储层次",
+          "position": 3,
+          "skill_ids": [
+            "public-C09-K006",
+            "public-C09-K007",
+            "public-C09-K008"
+          ]
+        },
+        {
+          "id": "public-C09-CH04",
+          "title": "总线与输入输出",
+          "position": 4,
+          "skill_ids": [
+            "public-C09-K009",
+            "public-C09-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S12",
+        "S06"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C10",
+      "name": "操作系统",
+      "chapters": [
+        {
+          "id": "public-C10-CH01",
+          "title": "接口、进程与调度",
+          "position": 1,
+          "skill_ids": [
+            "public-C10-K001",
+            "public-C10-K002",
+            "public-C10-K003"
+          ]
+        },
+        {
+          "id": "public-C10-CH02",
+          "title": "并发与死锁",
+          "position": 2,
+          "skill_ids": [
+            "public-C10-K004",
+            "public-C10-K005"
+          ]
+        },
+        {
+          "id": "public-C10-CH03",
+          "title": "内存与虚拟内存",
+          "position": 3,
+          "skill_ids": [
+            "public-C10-K006",
+            "public-C10-K007"
+          ]
+        },
+        {
+          "id": "public-C10-CH04",
+          "title": "文件、设备与保护",
+          "position": 4,
+          "skill_ids": [
+            "public-C10-K008",
+            "public-C10-K009",
+            "public-C10-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S13"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C11",
+      "name": "计算机网络",
+      "chapters": [
+        {
+          "id": "public-C11-CH01",
+          "title": "分层与链路",
+          "position": 1,
+          "skill_ids": [
+            "public-C11-K001",
+            "public-C11-K002",
+            "public-C11-K003",
+            "public-C11-K004"
+          ]
+        },
+        {
+          "id": "public-C11-CH02",
+          "title": "网络层与路由",
+          "position": 2,
+          "skill_ids": [
+            "public-C11-K005",
+            "public-C11-K006"
+          ]
+        },
+        {
+          "id": "public-C11-CH03",
+          "title": "传输与拥塞控制",
+          "position": 3,
+          "skill_ids": [
+            "public-C11-K007",
+            "public-C11-K008"
+          ]
+        },
+        {
+          "id": "public-C11-CH04",
+          "title": "应用与编程",
+          "position": 4,
+          "skill_ids": [
+            "public-C11-K009",
+            "public-C11-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S14",
+        "S15"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C12",
+      "name": "编译原理",
+      "chapters": [
+        {
+          "id": "public-C12-CH01",
+          "title": "词法与语言基础",
+          "position": 1,
+          "skill_ids": [
+            "public-C12-K001",
+            "public-C12-K002",
+            "public-C12-K003"
+          ]
+        },
+        {
+          "id": "public-C12-CH02",
+          "title": "语法分析",
+          "position": 2,
+          "skill_ids": [
+            "public-C12-K004",
+            "public-C12-K005",
+            "public-C12-K006"
+          ]
+        },
+        {
+          "id": "public-C12-CH03",
+          "title": "语义与中间表示",
+          "position": 3,
+          "skill_ids": [
+            "public-C12-K007",
+            "public-C12-K008",
+            "public-C12-K009"
+          ]
+        },
+        {
+          "id": "public-C12-CH04",
+          "title": "优化与代码生成",
+          "position": 4,
+          "skill_ids": [
+            "public-C12-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S16",
+        "S06"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C13",
+      "name": "计算机体系结构",
+      "chapters": [
+        {
+          "id": "public-C13-CH01",
+          "title": "指令与性能",
+          "position": 1,
+          "skill_ids": [
+            "public-C13-K001",
+            "public-C13-K002"
+          ]
+        },
+        {
+          "id": "public-C13-CH02",
+          "title": "流水线与指令级并行",
+          "position": 2,
+          "skill_ids": [
+            "public-C13-K003",
+            "public-C13-K004",
+            "public-C13-K005",
+            "public-C13-K006"
+          ]
+        },
+        {
+          "id": "public-C13-CH03",
+          "title": "一致性与多核",
+          "position": 3,
+          "skill_ids": [
+            "public-C13-K007",
+            "public-C13-K008",
+            "public-C13-K009"
+          ]
+        },
+        {
+          "id": "public-C13-CH04",
+          "title": "体系结构权衡",
+          "position": 4,
+          "skill_ids": [
+            "public-C13-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S12",
+        "S37"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C14",
+      "name": "计算理论与算法分析设计",
+      "chapters": [
+        {
+          "id": "public-C14-CH01",
+          "title": "复杂度与分治",
+          "position": 1,
+          "skill_ids": [
+            "public-C14-K001",
+            "public-C14-K002",
+            "public-C14-K003"
+          ]
+        },
+        {
+          "id": "public-C14-CH02",
+          "title": "贪心、动态规划与图算法",
+          "position": 2,
+          "skill_ids": [
+            "public-C14-K004",
+            "public-C14-K005",
+            "public-C14-K006"
+          ]
+        },
+        {
+          "id": "public-C14-CH03",
+          "title": "形式语言与可计算性",
+          "position": 3,
+          "skill_ids": [
+            "public-C14-K007",
+            "public-C14-K008"
+          ]
+        },
+        {
+          "id": "public-C14-CH04",
+          "title": "复杂性与归约",
+          "position": 4,
+          "skill_ids": [
+            "public-C14-K009",
+            "public-C14-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S17",
+        "S18",
+        "S19"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C15",
+      "name": "软件工程基础",
+      "chapters": [
+        {
+          "id": "public-C15-CH01",
+          "title": "过程、需求与建模",
+          "position": 1,
+          "skill_ids": [
+            "public-C15-K001",
+            "public-C15-K002",
+            "public-C15-K003"
+          ]
+        },
+        {
+          "id": "public-C15-CH02",
+          "title": "设计与架构",
+          "position": 2,
+          "skill_ids": [
+            "public-C15-K004",
+            "public-C15-K005"
+          ]
+        },
+        {
+          "id": "public-C15-CH03",
+          "title": "版本、测试与质量",
+          "position": 3,
+          "skill_ids": [
+            "public-C15-K006",
+            "public-C15-K007",
+            "public-C15-K008"
+          ]
+        },
+        {
+          "id": "public-C15-CH04",
+          "title": "项目与演化",
+          "position": 4,
+          "skill_ids": [
+            "public-C15-K009",
+            "public-C15-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S20"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C16",
+      "name": "程序设计方法与实践",
+      "chapters": [
+        {
+          "id": "public-C16-CH01",
+          "title": "问题、契约与抽象",
+          "position": 1,
+          "skill_ids": [
+            "public-C16-K001",
+            "public-C16-K002",
+            "public-C16-K003"
+          ]
+        },
+        {
+          "id": "public-C16-CH02",
+          "title": "模块、测试与调试",
+          "position": 2,
+          "skill_ids": [
+            "public-C16-K004",
+            "public-C16-K005",
+            "public-C16-K006"
+          ]
+        },
+        {
+          "id": "public-C16-CH03",
+          "title": "重构与性能",
+          "position": 3,
+          "skill_ids": [
+            "public-C16-K007",
+            "public-C16-K008"
+          ]
+        },
+        {
+          "id": "public-C16-CH04",
+          "title": "协作与交付",
+          "position": 4,
+          "skill_ids": [
+            "public-C16-K009",
+            "public-C16-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S21",
+        "S08"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C17",
+      "name": "卓越工程综合训练",
+      "chapters": [
+        {
+          "id": "public-C17-CH01",
+          "title": "问题、约束与选型",
+          "position": 1,
+          "skill_ids": [
+            "public-C17-K001",
+            "public-C17-K002",
+            "public-C17-K003"
+          ]
+        },
+        {
+          "id": "public-C17-CH02",
+          "title": "团队与系统设计",
+          "position": 2,
+          "skill_ids": [
+            "public-C17-K004",
+            "public-C17-K005"
+          ]
+        },
+        {
+          "id": "public-C17-CH03",
+          "title": "实现与质量证据",
+          "position": 3,
+          "skill_ids": [
+            "public-C17-K006",
+            "public-C17-K007"
+          ]
+        },
+        {
+          "id": "public-C17-CH04",
+          "title": "部署、合规与复盘",
+          "position": 4,
+          "skill_ids": [
+            "public-C17-K008",
+            "public-C17-K009",
+            "public-C17-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S22",
+        "S20"
+      ],
+      "assessment_mode": "project_rubric"
+    },
+    {
+      "id": "public-C18",
+      "name": "本科毕业设计",
+      "chapters": [
+        {
+          "id": "public-C18-CH01",
+          "title": "选题、文献与规范",
+          "position": 1,
+          "skill_ids": [
+            "public-C18-K001",
+            "public-C18-K002",
+            "public-C18-K008"
+          ]
+        },
+        {
+          "id": "public-C18-CH02",
+          "title": "方法、方案与实验",
+          "position": 2,
+          "skill_ids": [
+            "public-C18-K003",
+            "public-C18-K004",
+            "public-C18-K005"
+          ]
+        },
+        {
+          "id": "public-C18-CH03",
+          "title": "数据分析与复现",
+          "position": 3,
+          "skill_ids": [
+            "public-C18-K006",
+            "public-C18-K007"
+          ]
+        },
+        {
+          "id": "public-C18-CH04",
+          "title": "论文、答辩与归档",
+          "position": 4,
+          "skill_ids": [
+            "public-C18-K009",
+            "public-C18-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S23"
+      ],
+      "assessment_mode": "project_rubric"
+    },
+    {
+      "id": "public-C19",
+      "name": "人工智能基础",
+      "chapters": [
+        {
+          "id": "public-C19-CH01",
+          "title": "智能体与搜索",
+          "position": 1,
+          "skill_ids": [
+            "public-C19-K001",
+            "public-C19-K002",
+            "public-C19-K003",
+            "public-C19-K004",
+            "public-C19-K005"
+          ]
+        },
+        {
+          "id": "public-C19-CH02",
+          "title": "知识与推理",
+          "position": 2,
+          "skill_ids": [
+            "public-C19-K006",
+            "public-C19-K007",
+            "public-C19-K008"
+          ]
+        },
+        {
+          "id": "public-C19-CH03",
+          "title": "学习基础",
+          "position": 3,
+          "skill_ids": [
+            "public-C19-K009"
+          ]
+        },
+        {
+          "id": "public-C19-CH04",
+          "title": "伦理与责任",
+          "position": 4,
+          "skill_ids": [
+            "public-C19-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S24"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C20",
+      "name": "模式识别与计算机视觉",
+      "chapters": [
+        {
+          "id": "public-C20-CH01",
+          "title": "表示、分类与决策",
+          "position": 1,
+          "skill_ids": [
+            "public-C20-K001",
+            "public-C20-K002",
+            "public-C20-K003",
+            "public-C20-K004"
+          ]
+        },
+        {
+          "id": "public-C20-CH02",
+          "title": "图像与局部特征",
+          "position": 2,
+          "skill_ids": [
+            "public-C20-K005",
+            "public-C20-K006"
+          ]
+        },
+        {
+          "id": "public-C20-CH03",
+          "title": "分割、识别与跟踪",
+          "position": 3,
+          "skill_ids": [
+            "public-C20-K007",
+            "public-C20-K008",
+            "public-C20-K009"
+          ]
+        },
+        {
+          "id": "public-C20-CH04",
+          "title": "系统评测",
+          "position": 4,
+          "skill_ids": [
+            "public-C20-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S25"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C21",
+      "name": "深度学习",
+      "chapters": [
+        {
+          "id": "public-C21-CH01",
+          "title": "张量与神经网络",
+          "position": 1,
+          "skill_ids": [
+            "public-C21-K001",
+            "public-C21-K002",
+            "public-C21-K003"
+          ]
+        },
+        {
+          "id": "public-C21-CH02",
+          "title": "优化与正则化",
+          "position": 2,
+          "skill_ids": [
+            "public-C21-K004",
+            "public-C21-K005"
+          ]
+        },
+        {
+          "id": "public-C21-CH03",
+          "title": "网络结构",
+          "position": 3,
+          "skill_ids": [
+            "public-C21-K006",
+            "public-C21-K007",
+            "public-C21-K008"
+          ]
+        },
+        {
+          "id": "public-C21-CH04",
+          "title": "迁移与训练实践",
+          "position": 4,
+          "skill_ids": [
+            "public-C21-K009",
+            "public-C21-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S26",
+        "S25"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C22",
+      "name": "强化学习",
+      "chapters": [
+        {
+          "id": "public-C22-CH01",
+          "title": "MDP与价值",
+          "position": 1,
+          "skill_ids": [
+            "public-C22-K001",
+            "public-C22-K002",
+            "public-C22-K003"
+          ]
+        },
+        {
+          "id": "public-C22-CH02",
+          "title": "规划与价值学习",
+          "position": 2,
+          "skill_ids": [
+            "public-C22-K004",
+            "public-C22-K005",
+            "public-C22-K006",
+            "public-C22-K007"
+          ]
+        },
+        {
+          "id": "public-C22-CH03",
+          "title": "策略优化",
+          "position": 3,
+          "skill_ids": [
+            "public-C22-K008",
+            "public-C22-K009"
+          ]
+        },
+        {
+          "id": "public-C22-CH04",
+          "title": "探索与评测",
+          "position": 4,
+          "skill_ids": [
+            "public-C22-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S27"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C23",
+      "name": "自然语言处理",
+      "chapters": [
+        {
+          "id": "public-C23-CH01",
+          "title": "文本与语言表示",
+          "position": 1,
+          "skill_ids": [
+            "public-C23-K001",
+            "public-C23-K002",
+            "public-C23-K003"
+          ]
+        },
+        {
+          "id": "public-C23-CH02",
+          "title": "分类、标注与句法",
+          "position": 2,
+          "skill_ids": [
+            "public-C23-K004",
+            "public-C23-K005",
+            "public-C23-K006"
+          ]
+        },
+        {
+          "id": "public-C23-CH03",
+          "title": "注意力与预训练",
+          "position": 3,
+          "skill_ids": [
+            "public-C23-K007",
+            "public-C23-K008"
+          ]
+        },
+        {
+          "id": "public-C23-CH04",
+          "title": "生成与负责任评测",
+          "position": 4,
+          "skill_ids": [
+            "public-C23-K009",
+            "public-C23-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S28"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C24",
+      "name": "网络信息安全",
+      "chapters": [
+        {
+          "id": "public-C24-CH01",
+          "title": "威胁、身份与权限",
+          "position": 1,
+          "skill_ids": [
+            "public-C24-K001",
+            "public-C24-K002",
+            "public-C24-K003"
+          ]
+        },
+        {
+          "id": "public-C24-CH02",
+          "title": "协议与Web安全",
+          "position": 2,
+          "skill_ids": [
+            "public-C24-K004",
+            "public-C24-K005"
+          ]
+        },
+        {
+          "id": "public-C24-CH03",
+          "title": "攻防检测与响应",
+          "position": 3,
+          "skill_ids": [
+            "public-C24-K006",
+            "public-C24-K007",
+            "public-C24-K008"
+          ]
+        },
+        {
+          "id": "public-C24-CH04",
+          "title": "授权边界与隐私",
+          "position": 4,
+          "skill_ids": [
+            "public-C24-K009",
+            "public-C24-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S29"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C25",
+      "name": "密码学",
+      "chapters": [
+        {
+          "id": "public-C25-CH01",
+          "title": "安全模型与数论",
+          "position": 1,
+          "skill_ids": [
+            "public-C25-K001",
+            "public-C25-K002"
+          ]
+        },
+        {
+          "id": "public-C25-CH02",
+          "title": "对称加密与认证",
+          "position": 2,
+          "skill_ids": [
+            "public-C25-K003",
+            "public-C25-K004",
+            "public-C25-K006"
+          ]
+        },
+        {
+          "id": "public-C25-CH03",
+          "title": "公钥、签名与密钥",
+          "position": 3,
+          "skill_ids": [
+            "public-C25-K005",
+            "public-C25-K007",
+            "public-C25-K008",
+            "public-C25-K009"
+          ]
+        },
+        {
+          "id": "public-C25-CH04",
+          "title": "协议分析",
+          "position": 4,
+          "skill_ids": [
+            "public-C25-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S30",
+        "S29"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C26",
+      "name": "分布式系统",
+      "chapters": [
+        {
+          "id": "public-C26-CH01",
+          "title": "系统模型与时间",
+          "position": 1,
+          "skill_ids": [
+            "public-C26-K001",
+            "public-C26-K002"
+          ]
+        },
+        {
+          "id": "public-C26-CH02",
+          "title": "一致性、复制与共识",
+          "position": 2,
+          "skill_ids": [
+            "public-C26-K003",
+            "public-C26-K004",
+            "public-C26-K005"
+          ]
+        },
+        {
+          "id": "public-C26-CH03",
+          "title": "事务与恢复",
+          "position": 3,
+          "skill_ids": [
+            "public-C26-K006",
+            "public-C26-K007"
+          ]
+        },
+        {
+          "id": "public-C26-CH04",
+          "title": "分区、存储与观测",
+          "position": 4,
+          "skill_ids": [
+            "public-C26-K008",
+            "public-C26-K009",
+            "public-C26-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S31",
+        "S22"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C27",
+      "name": "云计算与大数据",
+      "chapters": [
+        {
+          "id": "public-C27-CH01",
+          "title": "虚拟化与云平台",
+          "position": 1,
+          "skill_ids": [
+            "public-C27-K001",
+            "public-C27-K002",
+            "public-C27-K003",
+            "public-C27-K004"
+          ]
+        },
+        {
+          "id": "public-C27-CH02",
+          "title": "分布式存储与批处理",
+          "position": 2,
+          "skill_ids": [
+            "public-C27-K005",
+            "public-C27-K006"
+          ]
+        },
+        {
+          "id": "public-C27-CH03",
+          "title": "流处理与数据分析",
+          "position": 3,
+          "skill_ids": [
+            "public-C27-K007",
+            "public-C27-K008"
+          ]
+        },
+        {
+          "id": "public-C27-CH04",
+          "title": "安全、成本与可靠性",
+          "position": 4,
+          "skill_ids": [
+            "public-C27-K009",
+            "public-C27-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S32",
+        "S31"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C28",
+      "name": "计算机图形学",
+      "chapters": [
+        {
+          "id": "public-C28-CH01",
+          "title": "几何、变换与投影",
+          "position": 1,
+          "skill_ids": [
+            "public-C28-K001",
+            "public-C28-K002",
+            "public-C28-K003"
+          ]
+        },
+        {
+          "id": "public-C28-CH02",
+          "title": "裁剪、光栅与纹理",
+          "position": 2,
+          "skill_ids": [
+            "public-C28-K004",
+            "public-C28-K005",
+            "public-C28-K006"
+          ]
+        },
+        {
+          "id": "public-C28-CH03",
+          "title": "光照与几何建模",
+          "position": 3,
+          "skill_ids": [
+            "public-C28-K007",
+            "public-C28-K008"
+          ]
+        },
+        {
+          "id": "public-C28-CH04",
+          "title": "光追与渲染",
+          "position": 4,
+          "skill_ids": [
+            "public-C28-K009",
+            "public-C28-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S33"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C29",
+      "name": "多媒体技术",
+      "chapters": [
+        {
+          "id": "public-C29-CH01",
+          "title": "媒体表示",
+          "position": 1,
+          "skill_ids": [
+            "public-C29-K001",
+            "public-C29-K002",
+            "public-C29-K003"
+          ]
+        },
+        {
+          "id": "public-C29-CH02",
+          "title": "压缩与视频编码",
+          "position": 2,
+          "skill_ids": [
+            "public-C29-K004",
+            "public-C29-K005"
+          ]
+        },
+        {
+          "id": "public-C29-CH03",
+          "title": "同步、传输与检索",
+          "position": 3,
+          "skill_ids": [
+            "public-C29-K006",
+            "public-C29-K007",
+            "public-C29-K008"
+          ]
+        },
+        {
+          "id": "public-C29-CH04",
+          "title": "交互与质量",
+          "position": 4,
+          "skill_ids": [
+            "public-C29-K009",
+            "public-C29-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S34"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C30",
+      "name": "人机交互",
+      "chapters": [
+        {
+          "id": "public-C30-CH01",
+          "title": "用户、研究与任务",
+          "position": 1,
+          "skill_ids": [
+            "public-C30-K001",
+            "public-C30-K002",
+            "public-C30-K003"
+          ]
+        },
+        {
+          "id": "public-C30-CH02",
+          "title": "交互、信息架构与原型",
+          "position": 2,
+          "skill_ids": [
+            "public-C30-K004",
+            "public-C30-K005",
+            "public-C30-K006"
+          ]
+        },
+        {
+          "id": "public-C30-CH03",
+          "title": "评测与无障碍",
+          "position": 3,
+          "skill_ids": [
+            "public-C30-K007",
+            "public-C30-K008",
+            "public-C30-K009"
+          ]
+        },
+        {
+          "id": "public-C30-CH04",
+          "title": "隐私与伦理",
+          "position": 4,
+          "skill_ids": [
+            "public-C30-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S35"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C31",
+      "name": "嵌入式计算系统",
+      "chapters": [
+        {
+          "id": "public-C31-CH01",
+          "title": "处理器与外设",
+          "position": 1,
+          "skill_ids": [
+            "public-C31-K001",
+            "public-C31-K002",
+            "public-C31-K003",
+            "public-C31-K004",
+            "public-C31-K005"
+          ]
+        },
+        {
+          "id": "public-C31-CH02",
+          "title": "嵌入式软件与实时性",
+          "position": 2,
+          "skill_ids": [
+            "public-C31-K006",
+            "public-C31-K007"
+          ]
+        },
+        {
+          "id": "public-C31-CH03",
+          "title": "驱动与软硬联调",
+          "position": 3,
+          "skill_ids": [
+            "public-C31-K008",
+            "public-C31-K009"
+          ]
+        },
+        {
+          "id": "public-C31-CH04",
+          "title": "功耗与可靠性",
+          "position": 4,
+          "skill_ids": [
+            "public-C31-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S36"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C32",
+      "name": "并行计算与高性能计算",
+      "chapters": [
+        {
+          "id": "public-C32-CH01",
+          "title": "并行模型与分解",
+          "position": 1,
+          "skill_ids": [
+            "public-C32-K001",
+            "public-C32-K002"
+          ]
+        },
+        {
+          "id": "public-C32-CH02",
+          "title": "共享、消息与GPU",
+          "position": 2,
+          "skill_ids": [
+            "public-C32-K003",
+            "public-C32-K004",
+            "public-C32-K005"
+          ]
+        },
+        {
+          "id": "public-C32-CH03",
+          "title": "同步、均衡与访存",
+          "position": 3,
+          "skill_ids": [
+            "public-C32-K006",
+            "public-C32-K007",
+            "public-C32-K008"
+          ]
+        },
+        {
+          "id": "public-C32-CH04",
+          "title": "算法与性能评测",
+          "position": 4,
+          "skill_ids": [
+            "public-C32-K009",
+            "public-C32-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S37"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C33",
+      "name": "SoC设计",
+      "chapters": [
+        {
+          "id": "public-C33-CH01",
+          "title": "规格与协同设计",
+          "position": 1,
+          "skill_ids": [
+            "public-C33-K001",
+            "public-C33-K002"
+          ]
+        },
+        {
+          "id": "public-C33-CH02",
+          "title": "硬件描述与IP",
+          "position": 2,
+          "skill_ids": [
+            "public-C33-K003",
+            "public-C33-K004"
+          ]
+        },
+        {
+          "id": "public-C33-CH03",
+          "title": "互连、存储与时钟",
+          "position": 3,
+          "skill_ids": [
+            "public-C33-K005",
+            "public-C33-K006",
+            "public-C33-K007"
+          ]
+        },
+        {
+          "id": "public-C33-CH04",
+          "title": "验证、综合与权衡",
+          "position": 4,
+          "skill_ids": [
+            "public-C33-K008",
+            "public-C33-K009",
+            "public-C33-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S38",
+        "S06"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C34",
+      "name": "形式化方法",
+      "chapters": [
+        {
+          "id": "public-C34-CH01",
+          "title": "规格、逻辑与转移系统",
+          "position": 1,
+          "skill_ids": [
+            "public-C34-K001",
+            "public-C34-K002",
+            "public-C34-K003"
+          ]
+        },
+        {
+          "id": "public-C34-CH02",
+          "title": "不变量与模型检查",
+          "position": 2,
+          "skill_ids": [
+            "public-C34-K004",
+            "public-C34-K005"
+          ]
+        },
+        {
+          "id": "public-C34-CH03",
+          "title": "程序逻辑与证明",
+          "position": 3,
+          "skill_ids": [
+            "public-C34-K006",
+            "public-C34-K007"
+          ]
+        },
+        {
+          "id": "public-C34-CH04",
+          "title": "抽象、验证与状态空间",
+          "position": 4,
+          "skill_ids": [
+            "public-C34-K008",
+            "public-C34-K009",
+            "public-C34-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S39"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C35",
+      "name": "组合数学",
+      "chapters": [
+        {
+          "id": "public-C35-CH01",
+          "title": "计数与组合原理",
+          "position": 1,
+          "skill_ids": [
+            "public-C35-K001",
+            "public-C35-K002",
+            "public-C35-K003",
+            "public-C35-K004"
+          ]
+        },
+        {
+          "id": "public-C35-CH02",
+          "title": "生成函数与递推",
+          "position": 2,
+          "skill_ids": [
+            "public-C35-K005",
+            "public-C35-K006"
+          ]
+        },
+        {
+          "id": "public-C35-CH03",
+          "title": "恒等式与图计数",
+          "position": 3,
+          "skill_ids": [
+            "public-C35-K007",
+            "public-C35-K008"
+          ]
+        },
+        {
+          "id": "public-C35-CH04",
+          "title": "存在性与组合证明",
+          "position": 4,
+          "skill_ids": [
+            "public-C35-K009",
+            "public-C35-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S05"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    },
+    {
+      "id": "public-C36",
+      "name": "算法博弈论",
+      "chapters": [
+        {
+          "id": "public-C36-CH01",
+          "title": "博弈与均衡",
+          "position": 1,
+          "skill_ids": [
+            "public-C36-K001",
+            "public-C36-K002",
+            "public-C36-K003",
+            "public-C36-K004"
+          ]
+        },
+        {
+          "id": "public-C36-CH02",
+          "title": "拍卖与机制",
+          "position": 2,
+          "skill_ids": [
+            "public-C36-K005",
+            "public-C36-K006",
+            "public-C36-K007"
+          ]
+        },
+        {
+          "id": "public-C36-CH03",
+          "title": "效率与算法",
+          "position": 3,
+          "skill_ids": [
+            "public-C36-K008",
+            "public-C36-K009"
+          ]
+        },
+        {
+          "id": "public-C36-CH04",
+          "title": "学习与博弈",
+          "position": 4,
+          "skill_ids": [
+            "public-C36-K010"
+          ]
+        }
+      ],
+      "source_ids": [
+        "S40"
+      ],
+      "assessment_mode": "knowledge_and_practice"
+    }
+  ],
+  "course_edges": [
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C02",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C03",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C04",
+      "after_id": "public-C03",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C06",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C07",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C05",
+      "after_id": "public-C07",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C08",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C03",
+      "after_id": "public-C08",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C04",
+      "after_id": "public-C08",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C05",
+      "after_id": "public-C09",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C07",
+      "after_id": "public-C09",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C10",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C03",
+      "after_id": "public-C10",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C09",
+      "after_id": "public-C10",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C11",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C10",
+      "after_id": "public-C11",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C03",
+      "after_id": "public-C12",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C04",
+      "after_id": "public-C12",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C07",
+      "after_id": "public-C12",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C09",
+      "after_id": "public-C13",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C10",
+      "after_id": "public-C13",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C03",
+      "after_id": "public-C14",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C04",
+      "after_id": "public-C14",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C15",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C06",
+      "after_id": "public-C15",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C16",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C03",
+      "after_id": "public-C16",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C06",
+      "after_id": "public-C16",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C15",
+      "after_id": "public-C16",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C15",
+      "after_id": "public-C17",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C16",
+      "after_id": "public-C17",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C16",
+      "after_id": "public-C18",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C15",
+      "after_id": "public-C18",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C17",
+      "after_id": "public-C18",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C19",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C02",
+      "after_id": "public-C19",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C04",
+      "after_id": "public-C19",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C20",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C19",
+      "after_id": "public-C20",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C21",
+      "after_id": "public-C20",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C21",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C19",
+      "after_id": "public-C21",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C19",
+      "after_id": "public-C22",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C21",
+      "after_id": "public-C22",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C21",
+      "after_id": "public-C23",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C19",
+      "after_id": "public-C23",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C11",
+      "after_id": "public-C24",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C10",
+      "after_id": "public-C24",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C25",
+      "after_id": "public-C24",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C04",
+      "after_id": "public-C25",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C25",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C10",
+      "after_id": "public-C26",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C11",
+      "after_id": "public-C26",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C26",
+      "after_id": "public-C27",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C08",
+      "after_id": "public-C27",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C28",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C03",
+      "after_id": "public-C28",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C29",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C11",
+      "after_id": "public-C29",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C15",
+      "after_id": "public-C30",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C31",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C09",
+      "after_id": "public-C31",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C07",
+      "after_id": "public-C31",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C10",
+      "after_id": "public-C31",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C01",
+      "after_id": "public-C32",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C03",
+      "after_id": "public-C32",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C10",
+      "after_id": "public-C32",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C13",
+      "after_id": "public-C32",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C05",
+      "after_id": "public-C33",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C09",
+      "after_id": "public-C33",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C07",
+      "after_id": "public-C33",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C31",
+      "after_id": "public-C33",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C04",
+      "after_id": "public-C34",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C15",
+      "after_id": "public-C34",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C04",
+      "after_id": "public-C35",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C14",
+      "after_id": "public-C36",
+      "kind": "required",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    },
+    {
+      "before_id": "public-C35",
+      "after_id": "public-C36",
+      "kind": "recommended",
+      "reason": "项目建议先具备前课相关能力；可用等效知识点测评替代，不等同学校选课限制"
+    }
+  ],
+  "skill_edges": [
+    {
+      "before_id": "public-C01-K001",
+      "after_id": "public-C01-K002",
+      "kind": "required",
+      "reason": "“程序编译与运行”为学习“基本数据类型与表达式”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K002",
+      "after_id": "public-C01-K003",
+      "kind": "required",
+      "reason": "“基本数据类型与表达式”为学习“输入输出”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K002",
+      "after_id": "public-C01-K004",
+      "kind": "required",
+      "reason": "“基本数据类型与表达式”为学习“分支结构”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K004",
+      "after_id": "public-C01-K005",
+      "kind": "required",
+      "reason": "“分支结构”为学习“循环结构”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K002",
+      "after_id": "public-C01-K006",
+      "kind": "required",
+      "reason": "“基本数据类型与表达式”为学习“数组与字符串”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K005",
+      "after_id": "public-C01-K006",
+      "kind": "required",
+      "reason": "“循环结构”为学习“数组与字符串”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K002",
+      "after_id": "public-C01-K007",
+      "kind": "required",
+      "reason": "“基本数据类型与表达式”为学习“函数与参数传递”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K007",
+      "after_id": "public-C01-K008",
+      "kind": "required",
+      "reason": "“函数与参数传递”为学习“递归基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K006",
+      "after_id": "public-C01-K009",
+      "kind": "required",
+      "reason": "“数组与字符串”为学习“指针与内存”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K009",
+      "after_id": "public-C01-K010",
+      "kind": "required",
+      "reason": "“指针与内存”为学习“结构体与联合体”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K009",
+      "after_id": "public-C01-K011",
+      "kind": "required",
+      "reason": "“指针与内存”为学习“动态内存分配”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C01-K007",
+      "after_id": "public-C01-K012",
+      "kind": "required",
+      "reason": "“函数与参数传递”为学习“文件读写”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C02-K001",
+      "after_id": "public-C02-K002",
+      "kind": "required",
+      "reason": "“计算与信息表示”为学习“算法与计算思维”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C02-K002",
+      "after_id": "public-C02-K003",
+      "kind": "required",
+      "reason": "“算法与计算思维”为学习“问题建模”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C02-K003",
+      "after_id": "public-C02-K004",
+      "kind": "required",
+      "reason": "“问题建模”为学习“搜索策略”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C02-K003",
+      "after_id": "public-C02-K005",
+      "kind": "required",
+      "reason": "“问题建模”为学习“知识表示与推理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C02-K006",
+      "after_id": "public-C02-K007",
+      "kind": "required",
+      "reason": "“机器学习基本流程”为学习“训练集与测试集”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C02-K006",
+      "after_id": "public-C02-K008",
+      "kind": "required",
+      "reason": "“机器学习基本流程”为学习“分类与回归”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C02-K007",
+      "after_id": "public-C02-K009",
+      "kind": "required",
+      "reason": "“训练集与测试集”为学习“模型评价基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C02-K008",
+      "after_id": "public-C02-K009",
+      "kind": "required",
+      "reason": "“分类与回归”为学习“模型评价基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C03-K002",
+      "after_id": "public-C03-K003",
+      "kind": "required",
+      "reason": "“顺序表与链表”为学习“栈”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C03-K002",
+      "after_id": "public-C03-K004",
+      "kind": "required",
+      "reason": "“顺序表与链表”为学习“队列”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C03-K002",
+      "after_id": "public-C03-K005",
+      "kind": "required",
+      "reason": "“顺序表与链表”为学习“字符串与模式匹配”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C03-K006",
+      "after_id": "public-C03-K007",
+      "kind": "required",
+      "reason": "“树与二叉树”为学习“二叉搜索树”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C03-K006",
+      "after_id": "public-C03-K008",
+      "kind": "required",
+      "reason": "“树与二叉树”为学习“堆与优先队列”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C03-K009",
+      "after_id": "public-C03-K010",
+      "kind": "required",
+      "reason": "“图的表示”为学习“图遍历”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C03-K010",
+      "after_id": "public-C03-K011",
+      "kind": "required",
+      "reason": "“图遍历”为学习“最短路径与最小生成树”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C03-K002",
+      "after_id": "public-C03-K012",
+      "kind": "required",
+      "reason": "“顺序表与链表”为学习“查找与哈希”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C03-K001",
+      "after_id": "public-C03-K011",
+      "kind": "required",
+      "reason": "“算法复杂度”为学习“最短路径与最小生成树”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C03-K001",
+      "after_id": "public-C03-K013",
+      "kind": "required",
+      "reason": "“算法复杂度”为学习“内部排序”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C04-K001",
+      "after_id": "public-C04-K002",
+      "kind": "required",
+      "reason": "“命题逻辑”为学习“谓词逻辑”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C04-K001",
+      "after_id": "public-C04-K003",
+      "kind": "required",
+      "reason": "“命题逻辑”为学习“逻辑推理与证明”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C04-K002",
+      "after_id": "public-C04-K003",
+      "kind": "required",
+      "reason": "“谓词逻辑”为学习“逻辑推理与证明”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C04-K004",
+      "after_id": "public-C04-K005",
+      "kind": "required",
+      "reason": "“集合运算”为学习“二元关系”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C04-K005",
+      "after_id": "public-C04-K006",
+      "kind": "required",
+      "reason": "“二元关系”为学习“等价关系与偏序”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C04-K004",
+      "after_id": "public-C04-K007",
+      "kind": "required",
+      "reason": "“集合运算”为学习“函数与映射”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C04-K003",
+      "after_id": "public-C04-K008",
+      "kind": "required",
+      "reason": "“逻辑推理与证明”为学习“数学归纳法”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C04-K009",
+      "after_id": "public-C04-K010",
+      "kind": "required",
+      "reason": "“计数原理”为学习“递推关系”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C04-K011",
+      "after_id": "public-C04-K012",
+      "kind": "required",
+      "reason": "“图论基础”为学习“树与连通性”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C05-K001",
+      "after_id": "public-C05-K002",
+      "kind": "required",
+      "reason": "“数制与编码”为学习“布尔代数”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C05-K002",
+      "after_id": "public-C05-K003",
+      "kind": "required",
+      "reason": "“布尔代数”为学习“逻辑门与真值表”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C05-K003",
+      "after_id": "public-C05-K004",
+      "kind": "required",
+      "reason": "“逻辑门与真值表”为学习“逻辑表达式化简”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C05-K004",
+      "after_id": "public-C05-K005",
+      "kind": "required",
+      "reason": "“逻辑表达式化简”为学习“组合逻辑设计”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C05-K005",
+      "after_id": "public-C05-K006",
+      "kind": "required",
+      "reason": "“组合逻辑设计”为学习“编码器与译码器”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C05-K005",
+      "after_id": "public-C05-K007",
+      "kind": "required",
+      "reason": "“组合逻辑设计”为学习“多路选择器”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C05-K005",
+      "after_id": "public-C05-K008",
+      "kind": "required",
+      "reason": "“组合逻辑设计”为学习“加法器与比较器”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C05-K009",
+      "after_id": "public-C05-K010",
+      "kind": "required",
+      "reason": "“锁存器与触发器”为学习“时序逻辑分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C05-K010",
+      "after_id": "public-C05-K011",
+      "kind": "required",
+      "reason": "“时序逻辑分析”为学习“寄存器与计数器”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C05-K010",
+      "after_id": "public-C05-K012",
+      "kind": "required",
+      "reason": "“时序逻辑分析”为学习“有限状态机”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K001",
+      "after_id": "public-C06-K002",
+      "kind": "required",
+      "reason": "“C++类型与引用”为学习“函数重载”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K001",
+      "after_id": "public-C06-K003",
+      "kind": "required",
+      "reason": "“C++类型与引用”为学习“类与对象”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K003",
+      "after_id": "public-C06-K004",
+      "kind": "required",
+      "reason": "“类与对象”为学习“构造析构与对象生命周期”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K003",
+      "after_id": "public-C06-K005",
+      "kind": "required",
+      "reason": "“类与对象”为学习“封装与访问控制”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K003",
+      "after_id": "public-C06-K006",
+      "kind": "required",
+      "reason": "“类与对象”为学习“运算符重载”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K003",
+      "after_id": "public-C06-K007",
+      "kind": "required",
+      "reason": "“类与对象”为学习“继承”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K007",
+      "after_id": "public-C06-K008",
+      "kind": "required",
+      "reason": "“继承”为学习“虚函数与多态”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K001",
+      "after_id": "public-C06-K009",
+      "kind": "required",
+      "reason": "“C++类型与引用”为学习“模板基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K009",
+      "after_id": "public-C06-K011",
+      "kind": "required",
+      "reason": "“模板基础”为学习“标准容器与迭代器”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K004",
+      "after_id": "public-C06-K012",
+      "kind": "required",
+      "reason": "“构造析构与对象生命周期”为学习“资源管理与RAII”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C06-K010",
+      "after_id": "public-C06-K012",
+      "kind": "required",
+      "reason": "“异常处理”为学习“资源管理与RAII”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K001",
+      "after_id": "public-C07-K003",
+      "kind": "required",
+      "reason": "“指令集与寄存器”为学习“寻址方式”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K002",
+      "after_id": "public-C07-K003",
+      "kind": "required",
+      "reason": "“数据表示与字节序”为学习“寻址方式”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K003",
+      "after_id": "public-C07-K004",
+      "kind": "required",
+      "reason": "“寻址方式”为学习“数据传送指令”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K004",
+      "after_id": "public-C07-K005",
+      "kind": "required",
+      "reason": "“数据传送指令”为学习“算术与逻辑指令”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K005",
+      "after_id": "public-C07-K006",
+      "kind": "required",
+      "reason": "“算术与逻辑指令”为学习“条件码与分支”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K006",
+      "after_id": "public-C07-K007",
+      "kind": "required",
+      "reason": "“条件码与分支”为学习“循环实现”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K004",
+      "after_id": "public-C07-K008",
+      "kind": "required",
+      "reason": "“数据传送指令”为学习“栈与过程调用”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K008",
+      "after_id": "public-C07-K009",
+      "kind": "required",
+      "reason": "“栈与过程调用”为学习“参数传递与调用约定”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K003",
+      "after_id": "public-C07-K010",
+      "kind": "required",
+      "reason": "“寻址方式”为学习“数组及字符串访问”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K007",
+      "after_id": "public-C07-K011",
+      "kind": "required",
+      "reason": "“循环实现”为学习“汇编与高级语言对应”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K009",
+      "after_id": "public-C07-K011",
+      "kind": "required",
+      "reason": "“参数传递与调用约定”为学习“汇编与高级语言对应”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C07-K001",
+      "after_id": "public-C07-K012",
+      "kind": "required",
+      "reason": "“指令集与寄存器”为学习“调试与反汇编”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K001",
+      "after_id": "public-C08-K002",
+      "kind": "required",
+      "reason": "“数据库系统基本概念”为学习“关系模型”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K002",
+      "after_id": "public-C08-K003",
+      "kind": "required",
+      "reason": "“关系模型”为学习“关系代数”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K002",
+      "after_id": "public-C08-K004",
+      "kind": "required",
+      "reason": "“关系模型”为学习“SQL查询与连接”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K004",
+      "after_id": "public-C08-K005",
+      "kind": "required",
+      "reason": "“SQL查询与连接”为学习“聚合与子查询”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K004",
+      "after_id": "public-C08-K006",
+      "kind": "required",
+      "reason": "“SQL查询与连接”为学习“数据更新与完整性约束”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K007",
+      "after_id": "public-C08-K008",
+      "kind": "required",
+      "reason": "“ER建模”为学习“关系模式转换”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K002",
+      "after_id": "public-C08-K008",
+      "kind": "required",
+      "reason": "“关系模型”为学习“关系模式转换”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K002",
+      "after_id": "public-C08-K009",
+      "kind": "required",
+      "reason": "“关系模型”为学习“函数依赖与规范化”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K003",
+      "after_id": "public-C08-K010",
+      "kind": "required",
+      "reason": "“关系代数”为学习“索引与查询优化基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K011",
+      "after_id": "public-C08-K012",
+      "kind": "required",
+      "reason": "“事务与ACID”为学习“并发控制基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C08-K011",
+      "after_id": "public-C08-K013",
+      "kind": "required",
+      "reason": "“事务与ACID”为学习“备份恢复与权限”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C09-K001",
+      "after_id": "public-C09-K002",
+      "kind": "required",
+      "reason": "“数据表示与运算”为学习“指令系统”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C09-K001",
+      "after_id": "public-C09-K003",
+      "kind": "required",
+      "reason": "“数据表示与运算”为学习“运算器”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C09-K002",
+      "after_id": "public-C09-K004",
+      "kind": "required",
+      "reason": "“指令系统”为学习“控制器”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C09-K003",
+      "after_id": "public-C09-K004",
+      "kind": "required",
+      "reason": "“运算器”为学习“控制器”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C09-K004",
+      "after_id": "public-C09-K005",
+      "kind": "required",
+      "reason": "“控制器”为学习“流水线基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C09-K006",
+      "after_id": "public-C09-K007",
+      "kind": "required",
+      "reason": "“存储层次”为学习“Cache”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C09-K006",
+      "after_id": "public-C09-K008",
+      "kind": "required",
+      "reason": "“存储层次”为学习“主存与地址译码”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C09-K009",
+      "after_id": "public-C09-K010",
+      "kind": "required",
+      "reason": "“总线”为学习“输入输出与中断”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C10-K001",
+      "after_id": "public-C10-K002",
+      "kind": "required",
+      "reason": "“系统调用”为学习“进程与线程”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C10-K002",
+      "after_id": "public-C10-K003",
+      "kind": "required",
+      "reason": "“进程与线程”为学习“进程调度”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C10-K002",
+      "after_id": "public-C10-K004",
+      "kind": "required",
+      "reason": "“进程与线程”为学习“同步与互斥”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C10-K004",
+      "after_id": "public-C10-K005",
+      "kind": "required",
+      "reason": "“同步与互斥”为学习“死锁”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C10-K006",
+      "after_id": "public-C10-K007",
+      "kind": "required",
+      "reason": "“内存管理”为学习“虚拟内存”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C10-K001",
+      "after_id": "public-C10-K008",
+      "kind": "required",
+      "reason": "“系统调用”为学习“文件系统”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C10-K001",
+      "after_id": "public-C10-K009",
+      "kind": "required",
+      "reason": "“系统调用”为学习“设备管理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C10-K001",
+      "after_id": "public-C10-K010",
+      "kind": "required",
+      "reason": "“系统调用”为学习“保护与访问控制”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C11-K001",
+      "after_id": "public-C11-K002",
+      "kind": "required",
+      "reason": "“网络分层”为学习“物理层与传输介质”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C11-K002",
+      "after_id": "public-C11-K003",
+      "kind": "required",
+      "reason": "“物理层与传输介质”为学习“数据链路与差错检测”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C11-K003",
+      "after_id": "public-C11-K004",
+      "kind": "required",
+      "reason": "“数据链路与差错检测”为学习“以太网”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C11-K001",
+      "after_id": "public-C11-K005",
+      "kind": "required",
+      "reason": "“网络分层”为学习“IP与子网”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C11-K005",
+      "after_id": "public-C11-K006",
+      "kind": "required",
+      "reason": "“IP与子网”为学习“路由”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C11-K005",
+      "after_id": "public-C11-K007",
+      "kind": "required",
+      "reason": "“IP与子网”为学习“UDP与TCP”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C11-K007",
+      "after_id": "public-C11-K008",
+      "kind": "required",
+      "reason": "“UDP与TCP”为学习“可靠传输与拥塞控制”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C11-K007",
+      "after_id": "public-C11-K009",
+      "kind": "required",
+      "reason": "“UDP与TCP”为学习“DNS与HTTP”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C11-K007",
+      "after_id": "public-C11-K010",
+      "kind": "required",
+      "reason": "“UDP与TCP”为学习“网络诊断”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C12-K003",
+      "after_id": "public-C12-K002",
+      "kind": "required",
+      "reason": "“正则表达式与自动机”为学习“词法分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C12-K004",
+      "after_id": "public-C12-K005",
+      "kind": "required",
+      "reason": "“上下文无关文法”为学习“自顶向下分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C12-K004",
+      "after_id": "public-C12-K006",
+      "kind": "required",
+      "reason": "“上下文无关文法”为学习“自底向上分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C12-K005",
+      "after_id": "public-C12-K007",
+      "kind": "required",
+      "reason": "“自顶向下分析”为学习“语法制导翻译”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C12-K006",
+      "after_id": "public-C12-K007",
+      "kind": "required",
+      "reason": "“自底向上分析”为学习“语法制导翻译”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C12-K007",
+      "after_id": "public-C12-K008",
+      "kind": "required",
+      "reason": "“语法制导翻译”为学习“语义分析与类型检查”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C12-K008",
+      "after_id": "public-C12-K009",
+      "kind": "required",
+      "reason": "“语义分析与类型检查”为学习“中间代码”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C12-K009",
+      "after_id": "public-C12-K010",
+      "kind": "required",
+      "reason": "“中间代码”为学习“代码优化与目标代码生成”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C13-K001",
+      "after_id": "public-C13-K003",
+      "kind": "required",
+      "reason": "“指令集设计”为学习“流水线冒险”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C13-K003",
+      "after_id": "public-C13-K004",
+      "kind": "required",
+      "reason": "“流水线冒险”为学习“指令级并行”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C13-K003",
+      "after_id": "public-C13-K005",
+      "kind": "required",
+      "reason": "“流水线冒险”为学习“分支预测”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C13-K004",
+      "after_id": "public-C13-K006",
+      "kind": "required",
+      "reason": "“指令级并行”为学习“多发射与乱序执行”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C13-K007",
+      "after_id": "public-C13-K008",
+      "kind": "required",
+      "reason": "“存储一致性”为学习“缓存一致性”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C13-K007",
+      "after_id": "public-C13-K009",
+      "kind": "required",
+      "reason": "“存储一致性”为学习“多核与并行体系”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C13-K002",
+      "after_id": "public-C13-K010",
+      "kind": "required",
+      "reason": "“性能度量”为学习“体系结构权衡”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C14-K001",
+      "after_id": "public-C14-K002",
+      "kind": "required",
+      "reason": "“渐近分析”为学习“递归与递推”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C14-K002",
+      "after_id": "public-C14-K003",
+      "kind": "required",
+      "reason": "“递归与递推”为学习“分治”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C14-K001",
+      "after_id": "public-C14-K004",
+      "kind": "required",
+      "reason": "“渐近分析”为学习“贪心”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C14-K001",
+      "after_id": "public-C14-K005",
+      "kind": "required",
+      "reason": "“渐近分析”为学习“动态规划”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C14-K001",
+      "after_id": "public-C14-K006",
+      "kind": "required",
+      "reason": "“渐近分析”为学习“图算法分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C14-K007",
+      "after_id": "public-C14-K008",
+      "kind": "required",
+      "reason": "“自动机与形式语言”为学习“图灵机与可计算性”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C14-K008",
+      "after_id": "public-C14-K009",
+      "kind": "required",
+      "reason": "“图灵机与可计算性”为学习“复杂性类别”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C14-K009",
+      "after_id": "public-C14-K010",
+      "kind": "required",
+      "reason": "“复杂性类别”为学习“归约与NP完全性”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C15-K001",
+      "after_id": "public-C15-K002",
+      "kind": "required",
+      "reason": "“软件生命周期”为学习“需求获取与规格”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C15-K002",
+      "after_id": "public-C15-K003",
+      "kind": "required",
+      "reason": "“需求获取与规格”为学习“用例与领域建模”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C15-K003",
+      "after_id": "public-C15-K004",
+      "kind": "required",
+      "reason": "“用例与领域建模”为学习“软件设计原则”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C15-K004",
+      "after_id": "public-C15-K005",
+      "kind": "required",
+      "reason": "“软件设计原则”为学习“体系结构设计”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C15-K002",
+      "after_id": "public-C15-K007",
+      "kind": "required",
+      "reason": "“需求获取与规格”为学习“测试设计”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C15-K007",
+      "after_id": "public-C15-K008",
+      "kind": "required",
+      "reason": "“测试设计”为学习“质量保证”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C15-K001",
+      "after_id": "public-C15-K009",
+      "kind": "required",
+      "reason": "“软件生命周期”为学习“项目估算与风险”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C15-K006",
+      "after_id": "public-C15-K010",
+      "kind": "required",
+      "reason": "“版本与配置管理”为学习“维护与演化”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C15-K008",
+      "after_id": "public-C15-K010",
+      "kind": "required",
+      "reason": "“质量保证”为学习“维护与演化”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K001",
+      "after_id": "public-C16-K002",
+      "kind": "required",
+      "reason": "“问题分解与抽象”为学习“程序契约与不变量”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K001",
+      "after_id": "public-C16-K003",
+      "kind": "required",
+      "reason": "“问题分解与抽象”为学习“代码风格”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K003",
+      "after_id": "public-C16-K004",
+      "kind": "required",
+      "reason": "“代码风格”为学习“模块化设计”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K002",
+      "after_id": "public-C16-K005",
+      "kind": "required",
+      "reason": "“程序契约与不变量”为学习“单元测试”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K005",
+      "after_id": "public-C16-K006",
+      "kind": "required",
+      "reason": "“单元测试”为学习“调试与定位”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K004",
+      "after_id": "public-C16-K007",
+      "kind": "required",
+      "reason": "“模块化设计”为学习“重构”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K005",
+      "after_id": "public-C16-K007",
+      "kind": "required",
+      "reason": "“单元测试”为学习“重构”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K004",
+      "after_id": "public-C16-K008",
+      "kind": "required",
+      "reason": "“模块化设计”为学习“性能分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K004",
+      "after_id": "public-C16-K009",
+      "kind": "required",
+      "reason": "“模块化设计”为学习“协作开发”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K005",
+      "after_id": "public-C16-K010",
+      "kind": "required",
+      "reason": "“单元测试”为学习“工程交付”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C16-K009",
+      "after_id": "public-C16-K010",
+      "kind": "required",
+      "reason": "“协作开发”为学习“工程交付”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C17-K001",
+      "after_id": "public-C17-K002",
+      "kind": "required",
+      "reason": "“工程问题定义”为学习“需求与约束分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C17-K002",
+      "after_id": "public-C17-K003",
+      "kind": "required",
+      "reason": "“需求与约束分析”为学习“技术选型”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C17-K002",
+      "after_id": "public-C17-K004",
+      "kind": "required",
+      "reason": "“需求与约束分析”为学习“团队分工与计划”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C17-K003",
+      "after_id": "public-C17-K005",
+      "kind": "required",
+      "reason": "“技术选型”为学习“系统设计”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C17-K005",
+      "after_id": "public-C17-K006",
+      "kind": "required",
+      "reason": "“系统设计”为学习“集成实现”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C17-K006",
+      "after_id": "public-C17-K007",
+      "kind": "required",
+      "reason": "“集成实现”为学习“测试与质量证据”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C17-K007",
+      "after_id": "public-C17-K008",
+      "kind": "required",
+      "reason": "“测试与质量证据”为学习“部署与运行”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C17-K007",
+      "after_id": "public-C17-K010",
+      "kind": "required",
+      "reason": "“测试与质量证据”为学习“项目汇报与复盘”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C17-K009",
+      "after_id": "public-C17-K008",
+      "kind": "required",
+      "reason": "“工程伦理与安全”为学习“部署与运行”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C18-K001",
+      "after_id": "public-C18-K002",
+      "kind": "required",
+      "reason": "“选题与研究问题”为学习“文献检索与综述”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C18-K002",
+      "after_id": "public-C18-K003",
+      "kind": "required",
+      "reason": "“文献检索与综述”为学习“研究或工程方案”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C18-K003",
+      "after_id": "public-C18-K004",
+      "kind": "required",
+      "reason": "“研究或工程方案”为学习“开题论证”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C18-K004",
+      "after_id": "public-C18-K005",
+      "kind": "required",
+      "reason": "“开题论证”为学习“实现与实验设计”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C18-K005",
+      "after_id": "public-C18-K006",
+      "kind": "required",
+      "reason": "“实现与实验设计”为学习“数据与结果分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C18-K005",
+      "after_id": "public-C18-K007",
+      "kind": "required",
+      "reason": "“实现与实验设计”为学习“可复现性”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C18-K006",
+      "after_id": "public-C18-K009",
+      "kind": "required",
+      "reason": "“数据与结果分析”为学习“论文撰写”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C18-K008",
+      "after_id": "public-C18-K009",
+      "kind": "required",
+      "reason": "“学术规范”为学习“论文撰写”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C18-K009",
+      "after_id": "public-C18-K010",
+      "kind": "required",
+      "reason": "“论文撰写”为学习“答辩与成果归档”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C19-K001",
+      "after_id": "public-C19-K002",
+      "kind": "required",
+      "reason": "“智能体”为学习“状态空间搜索”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C19-K002",
+      "after_id": "public-C19-K003",
+      "kind": "required",
+      "reason": "“状态空间搜索”为学习“启发式搜索”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C19-K002",
+      "after_id": "public-C19-K004",
+      "kind": "required",
+      "reason": "“状态空间搜索”为学习“对抗搜索”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C19-K002",
+      "after_id": "public-C19-K005",
+      "kind": "required",
+      "reason": "“状态空间搜索”为学习“约束满足”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C19-K006",
+      "after_id": "public-C19-K007",
+      "kind": "required",
+      "reason": "“知识表示”为学习“逻辑推理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C19-K006",
+      "after_id": "public-C19-K008",
+      "kind": "required",
+      "reason": "“知识表示”为学习“概率推理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C20-K001",
+      "after_id": "public-C20-K002",
+      "kind": "required",
+      "reason": "“特征与表示”为学习“分类与判别”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C20-K002",
+      "after_id": "public-C20-K003",
+      "kind": "required",
+      "reason": "“分类与判别”为学习“统计决策”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C20-K002",
+      "after_id": "public-C20-K004",
+      "kind": "required",
+      "reason": "“分类与判别”为学习“模型评价”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C20-K005",
+      "after_id": "public-C20-K006",
+      "kind": "required",
+      "reason": "“图像滤波”为学习“边缘与局部特征”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C20-K006",
+      "after_id": "public-C20-K007",
+      "kind": "required",
+      "reason": "“边缘与局部特征”为学习“图像分割”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C20-K006",
+      "after_id": "public-C20-K008",
+      "kind": "required",
+      "reason": "“边缘与局部特征”为学习“目标识别”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C20-K008",
+      "after_id": "public-C20-K009",
+      "kind": "required",
+      "reason": "“目标识别”为学习“目标检测”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C20-K004",
+      "after_id": "public-C20-K010",
+      "kind": "required",
+      "reason": "“模型评价”为学习“视觉系统误差分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C21-K001",
+      "after_id": "public-C21-K002",
+      "kind": "required",
+      "reason": "“张量与自动微分”为学习“多层感知机”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C21-K002",
+      "after_id": "public-C21-K003",
+      "kind": "required",
+      "reason": "“多层感知机”为学习“反向传播”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C21-K003",
+      "after_id": "public-C21-K004",
+      "kind": "required",
+      "reason": "“反向传播”为学习“优化算法”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C21-K002",
+      "after_id": "public-C21-K005",
+      "kind": "required",
+      "reason": "“多层感知机”为学习“正则化”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C21-K002",
+      "after_id": "public-C21-K006",
+      "kind": "required",
+      "reason": "“多层感知机”为学习“卷积网络”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C21-K002",
+      "after_id": "public-C21-K007",
+      "kind": "required",
+      "reason": "“多层感知机”为学习“序列模型”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C21-K002",
+      "after_id": "public-C21-K008",
+      "kind": "required",
+      "reason": "“多层感知机”为学习“注意力与Transformer”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C21-K004",
+      "after_id": "public-C21-K009",
+      "kind": "required",
+      "reason": "“优化算法”为学习“迁移学习”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C21-K004",
+      "after_id": "public-C21-K010",
+      "kind": "required",
+      "reason": "“优化算法”为学习“训练与评估”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C21-K005",
+      "after_id": "public-C21-K010",
+      "kind": "required",
+      "reason": "“正则化”为学习“训练与评估”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C22-K001",
+      "after_id": "public-C22-K002",
+      "kind": "required",
+      "reason": "“马尔可夫决策过程”为学习“回报与价值函数”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C22-K002",
+      "after_id": "public-C22-K003",
+      "kind": "required",
+      "reason": "“回报与价值函数”为学习“Bellman方程”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C22-K003",
+      "after_id": "public-C22-K004",
+      "kind": "required",
+      "reason": "“Bellman方程”为学习“动态规划”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C22-K002",
+      "after_id": "public-C22-K005",
+      "kind": "required",
+      "reason": "“回报与价值函数”为学习“蒙特卡洛方法”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C22-K003",
+      "after_id": "public-C22-K006",
+      "kind": "required",
+      "reason": "“Bellman方程”为学习“时序差分”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C22-K006",
+      "after_id": "public-C22-K007",
+      "kind": "required",
+      "reason": "“时序差分”为学习“Q学习”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C22-K002",
+      "after_id": "public-C22-K008",
+      "kind": "required",
+      "reason": "“回报与价值函数”为学习“策略梯度”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C22-K006",
+      "after_id": "public-C22-K009",
+      "kind": "required",
+      "reason": "“时序差分”为学习“Actor-Critic”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C22-K008",
+      "after_id": "public-C22-K009",
+      "kind": "required",
+      "reason": "“策略梯度”为学习“Actor-Critic”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C22-K002",
+      "after_id": "public-C22-K010",
+      "kind": "required",
+      "reason": "“回报与价值函数”为学习“探索与离线评价”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C23-K001",
+      "after_id": "public-C23-K002",
+      "kind": "required",
+      "reason": "“分词与规范化”为学习“语言模型”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C23-K001",
+      "after_id": "public-C23-K003",
+      "kind": "required",
+      "reason": "“分词与规范化”为学习“词向量”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C23-K003",
+      "after_id": "public-C23-K004",
+      "kind": "required",
+      "reason": "“词向量”为学习“文本分类”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C23-K003",
+      "after_id": "public-C23-K005",
+      "kind": "required",
+      "reason": "“词向量”为学习“序列标注”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C23-K001",
+      "after_id": "public-C23-K006",
+      "kind": "required",
+      "reason": "“分词与规范化”为学习“句法分析基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C23-K003",
+      "after_id": "public-C23-K007",
+      "kind": "required",
+      "reason": "“词向量”为学习“注意力模型”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C23-K007",
+      "after_id": "public-C23-K008",
+      "kind": "required",
+      "reason": "“注意力模型”为学习“预训练与微调”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C23-K008",
+      "after_id": "public-C23-K009",
+      "kind": "required",
+      "reason": "“预训练与微调”为学习“生成与解码”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C23-K009",
+      "after_id": "public-C23-K010",
+      "kind": "required",
+      "reason": "“生成与解码”为学习“任务评价与偏差”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C24-K001",
+      "after_id": "public-C24-K002",
+      "kind": "required",
+      "reason": "“安全目标与威胁建模”为学习“身份认证”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C24-K001",
+      "after_id": "public-C24-K003",
+      "kind": "required",
+      "reason": "“安全目标与威胁建模”为学习“访问控制”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C24-K001",
+      "after_id": "public-C24-K004",
+      "kind": "required",
+      "reason": "“安全目标与威胁建模”为学习“协议安全”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C24-K004",
+      "after_id": "public-C24-K005",
+      "kind": "required",
+      "reason": "“协议安全”为学习“Web安全”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C24-K001",
+      "after_id": "public-C24-K006",
+      "kind": "required",
+      "reason": "“安全目标与威胁建模”为学习“网络防护”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C24-K006",
+      "after_id": "public-C24-K007",
+      "kind": "required",
+      "reason": "“网络防护”为学习“入侵检测”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C24-K007",
+      "after_id": "public-C24-K008",
+      "kind": "required",
+      "reason": "“入侵检测”为学习“日志与事件响应”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C24-K001",
+      "after_id": "public-C24-K009",
+      "kind": "required",
+      "reason": "“安全目标与威胁建模”为学习“安全测试授权边界”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C24-K001",
+      "after_id": "public-C24-K010",
+      "kind": "required",
+      "reason": "“安全目标与威胁建模”为学习“隐私保护”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K001",
+      "after_id": "public-C25-K003",
+      "kind": "required",
+      "reason": "“安全定义与攻击模型”为学习“对称密码”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K003",
+      "after_id": "public-C25-K004",
+      "kind": "required",
+      "reason": "“对称密码”为学习“分组工作模式”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K002",
+      "after_id": "public-C25-K005",
+      "kind": "required",
+      "reason": "“数论基础”为学习“公钥密码”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K001",
+      "after_id": "public-C25-K006",
+      "kind": "required",
+      "reason": "“安全定义与攻击模型”为学习“哈希与MAC”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K005",
+      "after_id": "public-C25-K007",
+      "kind": "required",
+      "reason": "“公钥密码”为学习“数字签名”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K005",
+      "after_id": "public-C25-K008",
+      "kind": "required",
+      "reason": "“公钥密码”为学习“密钥交换”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K003",
+      "after_id": "public-C25-K009",
+      "kind": "required",
+      "reason": "“对称密码”为学习“密钥管理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K005",
+      "after_id": "public-C25-K009",
+      "kind": "required",
+      "reason": "“公钥密码”为学习“密钥管理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K001",
+      "after_id": "public-C25-K010",
+      "kind": "required",
+      "reason": "“安全定义与攻击模型”为学习“协议安全分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K006",
+      "after_id": "public-C25-K010",
+      "kind": "required",
+      "reason": "“哈希与MAC”为学习“协议安全分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C25-K008",
+      "after_id": "public-C25-K010",
+      "kind": "required",
+      "reason": "“密钥交换”为学习“协议安全分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C26-K001",
+      "after_id": "public-C26-K002",
+      "kind": "required",
+      "reason": "“通信与故障模型”为学习“逻辑时钟”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C26-K001",
+      "after_id": "public-C26-K003",
+      "kind": "required",
+      "reason": "“通信与故障模型”为学习“一致性模型”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C26-K003",
+      "after_id": "public-C26-K004",
+      "kind": "required",
+      "reason": "“一致性模型”为学习“复制”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C26-K004",
+      "after_id": "public-C26-K005",
+      "kind": "required",
+      "reason": "“复制”为学习“共识基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C26-K003",
+      "after_id": "public-C26-K006",
+      "kind": "required",
+      "reason": "“一致性模型”为学习“分布式事务”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C26-K004",
+      "after_id": "public-C26-K007",
+      "kind": "required",
+      "reason": "“复制”为学习“故障恢复”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C26-K003",
+      "after_id": "public-C26-K008",
+      "kind": "required",
+      "reason": "“一致性模型”为学习“分区与容错”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C26-K004",
+      "after_id": "public-C26-K009",
+      "kind": "required",
+      "reason": "“复制”为学习“分布式存储”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C26-K001",
+      "after_id": "public-C26-K010",
+      "kind": "required",
+      "reason": "“通信与故障模型”为学习“系统可观测性”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C27-K001",
+      "after_id": "public-C27-K002",
+      "kind": "required",
+      "reason": "“虚拟化”为学习“容器”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C27-K002",
+      "after_id": "public-C27-K003",
+      "kind": "required",
+      "reason": "“容器”为学习“资源调度”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C27-K001",
+      "after_id": "public-C27-K004",
+      "kind": "required",
+      "reason": "“虚拟化”为学习“云服务模型”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C27-K005",
+      "after_id": "public-C27-K006",
+      "kind": "required",
+      "reason": "“分布式文件系统”为学习“批处理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C27-K006",
+      "after_id": "public-C27-K007",
+      "kind": "required",
+      "reason": "“批处理”为学习“流处理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C27-K006",
+      "after_id": "public-C27-K008",
+      "kind": "required",
+      "reason": "“批处理”为学习“数据分区”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C27-K004",
+      "after_id": "public-C27-K009",
+      "kind": "required",
+      "reason": "“云服务模型”为学习“数据治理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C27-K003",
+      "after_id": "public-C27-K010",
+      "kind": "required",
+      "reason": "“资源调度”为学习“成本与可靠性”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C28-K001",
+      "after_id": "public-C28-K002",
+      "kind": "required",
+      "reason": "“几何表示”为学习“坐标变换”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C28-K002",
+      "after_id": "public-C28-K003",
+      "kind": "required",
+      "reason": "“坐标变换”为学习“投影”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C28-K003",
+      "after_id": "public-C28-K004",
+      "kind": "required",
+      "reason": "“投影”为学习“裁剪”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C28-K003",
+      "after_id": "public-C28-K005",
+      "kind": "required",
+      "reason": "“投影”为学习“光栅化”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C28-K005",
+      "after_id": "public-C28-K006",
+      "kind": "required",
+      "reason": "“光栅化”为学习“纹理映射”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C28-K001",
+      "after_id": "public-C28-K007",
+      "kind": "required",
+      "reason": "“几何表示”为学习“光照与着色”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C28-K001",
+      "after_id": "public-C28-K008",
+      "kind": "required",
+      "reason": "“几何表示”为学习“曲线与曲面”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C28-K007",
+      "after_id": "public-C28-K009",
+      "kind": "required",
+      "reason": "“光照与着色”为学习“光线追踪基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C28-K009",
+      "after_id": "public-C28-K010",
+      "kind": "required",
+      "reason": "“光线追踪基础”为学习“渲染评价”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K001",
+      "after_id": "public-C29-K002",
+      "kind": "required",
+      "reason": "“媒体采样与量化”为学习“音频表示”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K001",
+      "after_id": "public-C29-K003",
+      "kind": "required",
+      "reason": "“媒体采样与量化”为学习“图像表示”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K002",
+      "after_id": "public-C29-K004",
+      "kind": "required",
+      "reason": "“音频表示”为学习“压缩编码基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K003",
+      "after_id": "public-C29-K004",
+      "kind": "required",
+      "reason": "“图像表示”为学习“压缩编码基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K004",
+      "after_id": "public-C29-K005",
+      "kind": "required",
+      "reason": "“压缩编码基础”为学习“视频编码”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K002",
+      "after_id": "public-C29-K006",
+      "kind": "required",
+      "reason": "“音频表示”为学习“媒体同步”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K005",
+      "after_id": "public-C29-K006",
+      "kind": "required",
+      "reason": "“视频编码”为学习“媒体同步”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K006",
+      "after_id": "public-C29-K007",
+      "kind": "required",
+      "reason": "“媒体同步”为学习“流媒体传输”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K003",
+      "after_id": "public-C29-K008",
+      "kind": "required",
+      "reason": "“图像表示”为学习“媒体检索”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K001",
+      "after_id": "public-C29-K009",
+      "kind": "required",
+      "reason": "“媒体采样与量化”为学习“交互媒体”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C29-K001",
+      "after_id": "public-C29-K010",
+      "kind": "required",
+      "reason": "“媒体采样与量化”为学习“媒体质量评价”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C30-K001",
+      "after_id": "public-C30-K002",
+      "kind": "required",
+      "reason": "“以用户为中心设计”为学习“用户研究”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C30-K002",
+      "after_id": "public-C30-K003",
+      "kind": "required",
+      "reason": "“用户研究”为学习“任务分析”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C30-K003",
+      "after_id": "public-C30-K004",
+      "kind": "required",
+      "reason": "“任务分析”为学习“交互模型”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C30-K003",
+      "after_id": "public-C30-K005",
+      "kind": "required",
+      "reason": "“任务分析”为学习“信息架构”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C30-K004",
+      "after_id": "public-C30-K006",
+      "kind": "required",
+      "reason": "“交互模型”为学习“原型设计”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C30-K005",
+      "after_id": "public-C30-K006",
+      "kind": "required",
+      "reason": "“信息架构”为学习“原型设计”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C30-K006",
+      "after_id": "public-C30-K007",
+      "kind": "required",
+      "reason": "“原型设计”为学习“可用性测试”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C30-K006",
+      "after_id": "public-C30-K008",
+      "kind": "required",
+      "reason": "“原型设计”为学习“无障碍设计”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C30-K007",
+      "after_id": "public-C30-K009",
+      "kind": "required",
+      "reason": "“可用性测试”为学习“交互评价”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C30-K001",
+      "after_id": "public-C30-K010",
+      "kind": "required",
+      "reason": "“以用户为中心设计”为学习“隐私与设计伦理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C31-K001",
+      "after_id": "public-C31-K002",
+      "kind": "required",
+      "reason": "“处理器与外设”为学习“存储映射”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C31-K001",
+      "after_id": "public-C31-K003",
+      "kind": "required",
+      "reason": "“处理器与外设”为学习“中断”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C31-K001",
+      "after_id": "public-C31-K004",
+      "kind": "required",
+      "reason": "“处理器与外设”为学习“定时器”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C31-K001",
+      "after_id": "public-C31-K005",
+      "kind": "required",
+      "reason": "“处理器与外设”为学习“通信接口”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C31-K002",
+      "after_id": "public-C31-K006",
+      "kind": "required",
+      "reason": "“存储映射”为学习“嵌入式软件架构”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C31-K006",
+      "after_id": "public-C31-K007",
+      "kind": "required",
+      "reason": "“嵌入式软件架构”为学习“实时调度”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C31-K003",
+      "after_id": "public-C31-K008",
+      "kind": "required",
+      "reason": "“中断”为学习“驱动基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C31-K005",
+      "after_id": "public-C31-K008",
+      "kind": "required",
+      "reason": "“通信接口”为学习“驱动基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C31-K008",
+      "after_id": "public-C31-K009",
+      "kind": "required",
+      "reason": "“驱动基础”为学习“交叉编译与调试”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C31-K007",
+      "after_id": "public-C31-K010",
+      "kind": "required",
+      "reason": "“实时调度”为学习“功耗与可靠性”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C32-K001",
+      "after_id": "public-C32-K002",
+      "kind": "required",
+      "reason": "“并行性能模型”为学习“任务与数据并行”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C32-K002",
+      "after_id": "public-C32-K003",
+      "kind": "required",
+      "reason": "“任务与数据并行”为学习“共享内存编程”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C32-K002",
+      "after_id": "public-C32-K004",
+      "kind": "required",
+      "reason": "“任务与数据并行”为学习“消息传递”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C32-K002",
+      "after_id": "public-C32-K005",
+      "kind": "required",
+      "reason": "“任务与数据并行”为学习“GPU计算模型”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C32-K003",
+      "after_id": "public-C32-K006",
+      "kind": "required",
+      "reason": "“共享内存编程”为学习“同步与通信”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C32-K002",
+      "after_id": "public-C32-K007",
+      "kind": "required",
+      "reason": "“任务与数据并行”为学习“负载均衡”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C32-K003",
+      "after_id": "public-C32-K008",
+      "kind": "required",
+      "reason": "“共享内存编程”为学习“访存优化”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C32-K002",
+      "after_id": "public-C32-K009",
+      "kind": "required",
+      "reason": "“任务与数据并行”为学习“并行算法”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C32-K009",
+      "after_id": "public-C32-K010",
+      "kind": "required",
+      "reason": "“并行算法”为学习“性能测量”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C33-K001",
+      "after_id": "public-C33-K002",
+      "kind": "required",
+      "reason": "“系统规格”为学习“软硬件划分”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C33-K003",
+      "after_id": "public-C33-K004",
+      "kind": "required",
+      "reason": "“硬件描述语言”为学习“IP集成”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C33-K004",
+      "after_id": "public-C33-K005",
+      "kind": "required",
+      "reason": "“IP集成”为学习“片上互连”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C33-K004",
+      "after_id": "public-C33-K006",
+      "kind": "required",
+      "reason": "“IP集成”为学习“存储与外设子系统”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C33-K003",
+      "after_id": "public-C33-K007",
+      "kind": "required",
+      "reason": "“硬件描述语言”为学习“时钟与复位”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C33-K001",
+      "after_id": "public-C33-K008",
+      "kind": "required",
+      "reason": "“系统规格”为学习“功能验证”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C33-K003",
+      "after_id": "public-C33-K009",
+      "kind": "required",
+      "reason": "“硬件描述语言”为学习“综合与时序”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C33-K007",
+      "after_id": "public-C33-K009",
+      "kind": "required",
+      "reason": "“时钟与复位”为学习“综合与时序”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C33-K008",
+      "after_id": "public-C33-K010",
+      "kind": "required",
+      "reason": "“功能验证”为学习“面积功耗性能权衡”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C33-K009",
+      "after_id": "public-C33-K010",
+      "kind": "required",
+      "reason": "“综合与时序”为学习“面积功耗性能权衡”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C34-K001",
+      "after_id": "public-C34-K002",
+      "kind": "required",
+      "reason": "“形式规格”为学习“命题与时序逻辑”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C34-K002",
+      "after_id": "public-C34-K003",
+      "kind": "required",
+      "reason": "“命题与时序逻辑”为学习“转换系统”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C34-K003",
+      "after_id": "public-C34-K004",
+      "kind": "required",
+      "reason": "“转换系统”为学习“不变量”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C34-K004",
+      "after_id": "public-C34-K005",
+      "kind": "required",
+      "reason": "“不变量”为学习“模型检测”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C34-K002",
+      "after_id": "public-C34-K006",
+      "kind": "required",
+      "reason": "“命题与时序逻辑”为学习“程序逻辑”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C34-K006",
+      "after_id": "public-C34-K007",
+      "kind": "required",
+      "reason": "“程序逻辑”为学习“定理证明基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C34-K003",
+      "after_id": "public-C34-K008",
+      "kind": "required",
+      "reason": "“转换系统”为学习“精化”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C34-K007",
+      "after_id": "public-C34-K009",
+      "kind": "required",
+      "reason": "“定理证明基础”为学习“工具验证”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C34-K005",
+      "after_id": "public-C34-K010",
+      "kind": "required",
+      "reason": "“模型检测”为学习“状态空间问题”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C35-K001",
+      "after_id": "public-C35-K002",
+      "kind": "required",
+      "reason": "“计数原理”为学习“排列组合”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C35-K001",
+      "after_id": "public-C35-K003",
+      "kind": "required",
+      "reason": "“计数原理”为学习“容斥原理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C35-K001",
+      "after_id": "public-C35-K004",
+      "kind": "required",
+      "reason": "“计数原理”为学习“鸽巢原理”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C35-K001",
+      "after_id": "public-C35-K005",
+      "kind": "required",
+      "reason": "“计数原理”为学习“生成函数”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C35-K001",
+      "after_id": "public-C35-K006",
+      "kind": "required",
+      "reason": "“计数原理”为学习“递推关系”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C35-K005",
+      "after_id": "public-C35-K007",
+      "kind": "required",
+      "reason": "“生成函数”为学习“组合恒等式”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C35-K001",
+      "after_id": "public-C35-K008",
+      "kind": "required",
+      "reason": "“计数原理”为学习“图的计数”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C35-K004",
+      "after_id": "public-C35-K009",
+      "kind": "required",
+      "reason": "“鸽巢原理”为学习“设计与构造基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C35-K001",
+      "after_id": "public-C35-K010",
+      "kind": "required",
+      "reason": "“计数原理”为学习“组合证明”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C36-K001",
+      "after_id": "public-C36-K002",
+      "kind": "required",
+      "reason": "“博弈表示”为学习“占优策略”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C36-K001",
+      "after_id": "public-C36-K003",
+      "kind": "required",
+      "reason": "“博弈表示”为学习“Nash均衡”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C36-K003",
+      "after_id": "public-C36-K004",
+      "kind": "required",
+      "reason": "“Nash均衡”为学习“混合策略”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C36-K001",
+      "after_id": "public-C36-K005",
+      "kind": "required",
+      "reason": "“博弈表示”为学习“拍卖基础”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C36-K005",
+      "after_id": "public-C36-K006",
+      "kind": "required",
+      "reason": "“拍卖基础”为学习“机制设计”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C36-K006",
+      "after_id": "public-C36-K007",
+      "kind": "required",
+      "reason": "“机制设计”为学习“激励相容”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C36-K003",
+      "after_id": "public-C36-K008",
+      "kind": "required",
+      "reason": "“Nash均衡”为学习“无政府价格”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C36-K003",
+      "after_id": "public-C36-K009",
+      "kind": "required",
+      "reason": "“Nash均衡”为学习“均衡计算”提供基础；项目教学依赖，非官方规定"
+    },
+    {
+      "before_id": "public-C36-K003",
+      "after_id": "public-C36-K010",
+      "kind": "required",
+      "reason": "“Nash均衡”为学习“学习与博弈”提供基础；项目教学依赖，非官方规定"
+    }
+  ],
+  "chapter_edges": [
+    {
+      "before_id": "public-C01-CH01",
+      "after_id": "public-C01-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C01-CH02",
+      "after_id": "public-C01-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C01-CH02",
+      "after_id": "public-C01-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C02-CH01",
+      "after_id": "public-C02-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C03-CH01",
+      "after_id": "public-C03-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C03-CH01",
+      "after_id": "public-C03-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C03-CH01",
+      "after_id": "public-C03-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C05-CH01",
+      "after_id": "public-C05-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C05-CH03",
+      "after_id": "public-C05-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C06-CH01",
+      "after_id": "public-C06-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C06-CH01",
+      "after_id": "public-C06-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C06-CH01",
+      "after_id": "public-C06-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C07-CH01",
+      "after_id": "public-C07-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C07-CH02",
+      "after_id": "public-C07-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C07-CH01",
+      "after_id": "public-C07-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C07-CH02",
+      "after_id": "public-C07-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C07-CH03",
+      "after_id": "public-C07-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C07-CH01",
+      "after_id": "public-C07-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C08-CH01",
+      "after_id": "public-C08-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C08-CH01",
+      "after_id": "public-C08-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C09-CH01",
+      "after_id": "public-C09-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C10-CH01",
+      "after_id": "public-C10-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C10-CH01",
+      "after_id": "public-C10-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C11-CH01",
+      "after_id": "public-C11-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C11-CH02",
+      "after_id": "public-C11-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C11-CH03",
+      "after_id": "public-C11-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C12-CH02",
+      "after_id": "public-C12-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C12-CH03",
+      "after_id": "public-C12-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C13-CH01",
+      "after_id": "public-C13-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C13-CH01",
+      "after_id": "public-C13-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C14-CH01",
+      "after_id": "public-C14-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C14-CH03",
+      "after_id": "public-C14-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C15-CH01",
+      "after_id": "public-C15-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C15-CH01",
+      "after_id": "public-C15-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C15-CH01",
+      "after_id": "public-C15-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C15-CH03",
+      "after_id": "public-C15-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C16-CH01",
+      "after_id": "public-C16-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C16-CH02",
+      "after_id": "public-C16-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C16-CH02",
+      "after_id": "public-C16-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C17-CH01",
+      "after_id": "public-C17-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C17-CH02",
+      "after_id": "public-C17-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C17-CH03",
+      "after_id": "public-C17-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C18-CH01",
+      "after_id": "public-C18-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C18-CH02",
+      "after_id": "public-C18-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C18-CH03",
+      "after_id": "public-C18-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C18-CH01",
+      "after_id": "public-C18-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C20-CH02",
+      "after_id": "public-C20-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C20-CH01",
+      "after_id": "public-C20-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C21-CH01",
+      "after_id": "public-C21-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C21-CH01",
+      "after_id": "public-C21-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C21-CH02",
+      "after_id": "public-C21-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C22-CH01",
+      "after_id": "public-C22-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C22-CH01",
+      "after_id": "public-C22-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C22-CH02",
+      "after_id": "public-C22-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C22-CH01",
+      "after_id": "public-C22-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C23-CH01",
+      "after_id": "public-C23-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C23-CH01",
+      "after_id": "public-C23-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C23-CH03",
+      "after_id": "public-C23-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C24-CH01",
+      "after_id": "public-C24-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C24-CH01",
+      "after_id": "public-C24-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C24-CH01",
+      "after_id": "public-C24-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C25-CH01",
+      "after_id": "public-C25-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C25-CH01",
+      "after_id": "public-C25-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C25-CH02",
+      "after_id": "public-C25-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C25-CH01",
+      "after_id": "public-C25-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C25-CH02",
+      "after_id": "public-C25-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C25-CH03",
+      "after_id": "public-C25-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C26-CH01",
+      "after_id": "public-C26-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C26-CH02",
+      "after_id": "public-C26-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C26-CH02",
+      "after_id": "public-C26-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C26-CH01",
+      "after_id": "public-C26-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C27-CH02",
+      "after_id": "public-C27-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C27-CH01",
+      "after_id": "public-C27-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C28-CH01",
+      "after_id": "public-C28-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C28-CH01",
+      "after_id": "public-C28-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C28-CH03",
+      "after_id": "public-C28-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C29-CH01",
+      "after_id": "public-C29-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C29-CH01",
+      "after_id": "public-C29-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C29-CH02",
+      "after_id": "public-C29-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C29-CH01",
+      "after_id": "public-C29-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C30-CH01",
+      "after_id": "public-C30-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C30-CH02",
+      "after_id": "public-C30-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C30-CH01",
+      "after_id": "public-C30-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C31-CH01",
+      "after_id": "public-C31-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C31-CH01",
+      "after_id": "public-C31-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C31-CH02",
+      "after_id": "public-C31-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C32-CH01",
+      "after_id": "public-C32-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C32-CH02",
+      "after_id": "public-C32-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C32-CH01",
+      "after_id": "public-C32-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C32-CH01",
+      "after_id": "public-C32-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C33-CH02",
+      "after_id": "public-C33-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C33-CH01",
+      "after_id": "public-C33-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C33-CH02",
+      "after_id": "public-C33-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C33-CH03",
+      "after_id": "public-C33-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C34-CH01",
+      "after_id": "public-C34-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C34-CH01",
+      "after_id": "public-C34-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C34-CH01",
+      "after_id": "public-C34-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C34-CH03",
+      "after_id": "public-C34-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C34-CH02",
+      "after_id": "public-C34-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C35-CH01",
+      "after_id": "public-C35-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C35-CH02",
+      "after_id": "public-C35-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C35-CH01",
+      "after_id": "public-C35-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C35-CH01",
+      "after_id": "public-C35-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C36-CH01",
+      "after_id": "public-C36-CH02",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C36-CH01",
+      "after_id": "public-C36-CH03",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    },
+    {
+      "before_id": "public-C36-CH01",
+      "after_id": "public-C36-CH04",
+      "kind": "recommended",
+      "reason": "章节间存在知识点依赖；只建议补齐相关知识点，不要求整章全部完成"
+    }
+  ],
+  "external_requirements": [
+    {
+      "course_id": "public-C02",
+      "name": "基础概率与线性代数（涉及机器学习时）",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C20",
+      "name": "线性代数",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C20",
+      "name": "概率与统计",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C20",
+      "name": "微积分",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C20",
+      "name": "Python 与数值计算基础",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C21",
+      "name": "线性代数",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C21",
+      "name": "多元微积分",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C21",
+      "name": "概率与统计",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C21",
+      "name": "Python 与张量计算基础",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C22",
+      "name": "概率与统计",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C22",
+      "name": "线性代数",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C22",
+      "name": "多元微积分",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C22",
+      "name": "Python 编程基础",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C23",
+      "name": "概率与统计",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C23",
+      "name": "Python 编程基础",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C25",
+      "name": "模运算与初等数论",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C28",
+      "name": "线性代数与解析几何",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C29",
+      "name": "采样、信号与基础概率",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C32",
+      "name": "实际使用的 C++ / CUDA / MPI 编程环境",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C33",
+      "name": "硬件描述语言与仿真工具基础",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    },
+    {
+      "course_id": "public-C36",
+      "name": "概率论与基础优化",
+      "kind": "required",
+      "reason": "目录外基础能力，需自行核对；不伪造课程或已掌握记录"
+    }
+  ]
+}

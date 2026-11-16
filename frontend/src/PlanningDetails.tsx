@@ -6,6 +6,7 @@ export function PlanningDetails({path,onChanged,onPractice}:{path:any;onChanged:
  const validation=path.validation;
  return <section><h3>规划依据与规则</h3><p>{validation.cloud_called?'云端四智能体生成':'本地规则规划'}</p>{validation.cloud_outputs?.diagnosis?.summary&&<p>{validation.cloud_outputs.diagnosis.summary}</p>}{validation.cloud_outputs?.replan?.reason&&<p>{validation.cloud_outputs.replan.reason}</p>}
   <p>图谱版本 {validation.graph_version||'历史版本'} · 范围 {({initial:'首次',local:'局部',global:'全局'} as any)[validation.mode]||'历史规划'}</p>
+  {validation.learner_evidence?.skills&&<details><summary>查看本次规划使用的诊断与掌握度</summary><p>题库版本：{validation.learner_evidence.bank_version}。掌握度由有效测验计算，学习时长不直接提高掌握度。</p><table><thead><tr><th>知识点</th><th>本次诊断答对 / 题数</th><th>累计证据数</th><th>当前掌握概率</th><th>状态</th></tr></thead><tbody>{validation.learner_evidence.skills.map((s:any)=><tr key={s.skill_id}><td>{s.name}</td><td>{s.diagnostic_correct} / {s.diagnostic_total}</td><td>{s.evidence_count}</td><td>{Math.round(s.probability*100)}%</td><td>{({unknown:'尚未测评',weak:'需要补强',developing:'学习中',mastered:'已达标'} as any)[s.status]}</td></tr>)}</tbody></table><p>这是生成时保存的依据；后续学习后请生成重规划预览。</p></details>}
   {validation.triggers?.map((s:string)=><p key={s}>{s}</p>)}
   {path.replan_warnings?.map((s:string)=><p className="notice" key={s}>保留原路径的风险提醒 {s}</p>)}
   {validation.rules?.map((rule:any)=><p key={rule.rule_id}>{rule.rule_id} · {rule.passed?'通过':'未通过'} · {rule.reason}</p>)}

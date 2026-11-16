@@ -196,6 +196,9 @@ def submit(id: str, body: Answers, user=Depends(current_user)):
             fail(409, session['invalid_reason'] or '测验已失效')
         p, task = assessment_item(db, user, session['path_id'], session['item_id'])
         questions = json.loads(session['questions'])
+        from app.services.course_planning import validate_versions,binding
+        binding(db,p['goal_id'])
+        validate_versions(db,questions)
         validate_answers(questions, body.answers)
         goal = goal_access(db, user, p['goal_id'])
         aid = uid()

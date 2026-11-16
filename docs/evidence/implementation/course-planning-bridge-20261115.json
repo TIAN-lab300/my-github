@@ -1,0 +1,39 @@
+{
+  "version": "course-planning-bridge-2026.11.15",
+  "schema_before": "0023",
+  "schema_after": "0024",
+  "backup": "D:\\卓越工程\\backend\\data\\backups\\before-course-bridge-20261115-acf8ba28",
+  "existing_counts_preserved": true,
+  "integrity": "ok",
+  "foreign_key_errors": 0,
+  "new_tables": {
+    "course_evidence_attempts": 0,
+    "course_goal_bindings": 0,
+    "curriculum_graph_mappings": 0,
+    "learning_evidence_links": 0
+  },
+  "tests": {
+    "passed": 236,
+    "seconds": 131.87,
+    "report": "docs/evidence/implementation/course-bridge-tests.xml"
+  },
+  "browser": {
+    "adminMappingSaved": true,
+    "courseDiagnosisSubmitted": true,
+    "goalCreated": true,
+    "pathGenerated": true,
+    "evidenceVisible": true,
+    "pathAccepted": true,
+    "coursePathAssessmentVisible": true,
+    "pageErrors": []
+  },
+  "real_model_calls": false,
+  "automatic_content_publication": false,
+  "runtime": {
+    "url": "http://127.0.0.1:8000/",
+    "health": "ok",
+    "schema_revision": "0024",
+    "model": "not_configured",
+    "production_data_preserved": true
+  }
+}

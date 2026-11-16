@@ -1,6 +1,6 @@
 {
-  "version": "merged-learning-cloud-2026.11.15",
-  "source_manifest": "docs/evidence/implementation/teammate-merge-20261115.json",
-  "schema_revision": "0023",
+  "version": "course-embed-2026.11.16",
+  "source_manifest": "docs/evidence/implementation/course-embed-browser.json",
+  "schema_revision": "0025",
   "base_github_commit": "0d541a2bbb681bdbd1acbdc91526c484e39dbe2b"
 }

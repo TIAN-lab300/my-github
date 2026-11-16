@@ -1,0 +1,33 @@
+{
+  "version": "curriculum-relations-v1",
+  "courses": 36,
+  "chapters": 144,
+  "skills": 377,
+  "course_edges": 77,
+  "skill_edges": 335,
+  "chapter_edges": 106,
+  "external_requirements": 21,
+  "schema": "0025",
+  "backup": "D:\\卓越工程\\backend\\data\\backups\\before-curriculum-structure-20261115-c4767ce0",
+  "existing_business_counts_preserved": true,
+  "database_integrity": "ok",
+  "tests": {
+    "passed": 240,
+    "seconds": 129.85,
+    "report": "docs/evidence/implementation/curriculum-structure-tests.xml"
+  },
+  "browser": {
+    "chapterMembershipVisible": true,
+    "skillPrerequisitesVisible": true,
+    "coursePrerequisitesVisible": true,
+    "externalMathVisible": true,
+    "projectBasisLabeled": true,
+    "pageErrors": []
+  },
+  "runtime": {
+    "url": "http://127.0.0.1:8000/",
+    "version": "curriculum-structure-2026.11.15",
+    "health": "ok"
+  },
+  "official_curriculum_verified": false
+}

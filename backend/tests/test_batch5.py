@@ -231,7 +231,7 @@ def test_remaining_work_fits_without_unnecessary_global_fallback(clients):
     created=student.post(P+'/goals',json={'title':'函数','target_skill_ids':['functions'],'weekly_minutes':300,'due_date':today,'class_id':cid})
     gid=created.json()['id']
     d=student.post(P+f'/goals/{gid}/diagnoses').json()
-    answer={q['id']:str((int(q['answer'])+1)%len(q['options'])) for q in QUESTIONS}
+    answer={q['id']:str((int(q['answer'])+1)%len(q['options'])) for q in QUESTIONS if q['id'] in {item['id'] for item in d['questions']}}
     student.post(P+'/diagnoses/'+d['id']+'/submit',json={'answers':answer,'minutes':5})
     pid=planning(student,gid);student.post(P+'/paths/'+pid+'/accept')
     item=student.get(P+'/paths/'+pid).json()['tasks'][0]

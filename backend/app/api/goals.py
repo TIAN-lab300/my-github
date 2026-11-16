@@ -68,8 +68,22 @@ def retest(id:str,user=Depends(current_user)):
         practiced=one(db,'SELECT c.id FROM checkins c JOIN paths p ON p.id=c.path_id WHERE p.goal_id=:g AND c.created_at>:t AND c.proportion>0',g=id,t=history[0]['created_at'])
         if not practiced: fail(409,'请先完成该目标的一次路径补强学习记录')
         graph_id=history[0]['bank_version']
-        bank,bank_version=question_bank(db,'retest',graph_id if graph_id not in ('diagnostic-v1','curated-v1') else None)
-        questions=question_snapshot(bank,bank_version)
+        from app.services.course_planning import binding,bank as course_bank,closure
+        cb=binding(db,id)
+        graph,_=graph_snapshot(db);required=closure(graph,json.loads(g['skills']))
+        if cb:
+            from app.services.curriculum_structure import extend_graph
+            graph=extend_graph(db,cb['course_id'],json.loads(cb['mappings']),graph)
+            required=closure(graph,json.loads(g['skills']))
+        bank,bank_version=(course_bank(db,cb,'retest',required),'course:'+cb['course_id']) if cb else question_bank(db,'retest',graph_id if graph_id not in ('diagnostic-v1','curated-v1') else None)
+        questions=bank if cb else question_snapshot(bank,bank_version)
+        questions=[q for q in questions if q['skill'] in required]
+        if cb:
+            from app.services.assessment_sessions import recover_history,question_keys
+            recover_history(db,user['id'])
+            seen={r['identity'] for r in rows(db,'SELECT identity FROM question_exposures WHERE student_id=:u',u=user['id'])}
+            questions=[q for q in questions if not any(k in seen for k in question_keys(q))]
+        if required-{q['skill'] for q in questions}:fail(409,'重测未覆盖目标及全部先修，请补齐未曝光的新题','RETEST_BANK_EXHAUSTED')
         if not questions: fail(409,'该目标缺少等价题库','RETEST_BANK_EXHAUSTED')
         did=uid();insert(db,'diagnoses',id=did,goal_id=id,student_id=user['id'],questions=dump(questions),goal_version=g['version'],bank_version=bank_version,created_at=now())
         audit(db,user['id'],'diagnostic_retest_created',did)
@@ -104,6 +118,28 @@ def listing(user=Depends(current_user)):
             g['paths']=rows(db,'SELECT id,status,content_status,reason,created_at,fingerprint FROM paths WHERE goal_id=:id ORDER BY created_at DESC',id=g['id'])
             current_budget=one(db,'SELECT version FROM budgets WHERE user_id=:u',u=user['id'])
             g['requires_replan']=any(p['status']=='active' and (json.loads(p['fingerprint'])['goal']!=g['version'] or json.loads(p['fingerprint'])['budget']!=current_budget['version']) for p in g['paths'])
+            # Compare evidence rather than the user watermark: accepting a path
+            # itself advances that watermark and must not request another replan.
+            from app.services.planning_evidence import learner_evidence,evidence_changes
+            from app.services.planning_rules import graph_snapshot
+            g['replan_reasons']=[]
+            diagnostic=one(db,'SELECT * FROM diagnoses WHERE goal_id=:g AND goal_version=:v AND attempt_id IS NOT NULL ORDER BY created_at DESC LIMIT 1',g=g['id'],v=g['version'])
+            if diagnostic:
+                graph,_=graph_snapshot(db)
+                evidence=learner_evidence(db,user['id'],{**g,'skills':dump(g['target_skill_ids'])},graph,diagnostic)
+                for active in g['paths']:
+                    if active['status']=='active':
+                        metadata=one(db,'SELECT validation FROM paths WHERE id=:i',i=active['id'])
+                        g['replan_reasons'].extend(evidence_changes(json.loads(metadata['validation']).get('learner_evidence'),evidence))
+            g['requires_replan']=g['requires_replan'] or bool(g['replan_reasons'])
+            g['requires_diagnosis']=not bool(diagnostic)
+            for active in g['paths']:
+                if active['status']!='active':continue
+                before=json.loads(active['fingerprint']);after=json.loads(fingerprint(db,user['id'],g['id']))
+                for key,label in [('graph','图谱版本变化'),('resources','来源证据变化'),('course','课程题库或资料关联变化'),('memberships','班级权限变化')]:
+                    if before.get(key)!=after.get(key):g['replan_reasons'].append(label)
+            g['replan_reasons']=list(dict.fromkeys(g['replan_reasons']))
+            g['requires_replan']=g['requires_replan'] or bool(g['replan_reasons'])
             g['diagnoses']=rows(db,'SELECT id,attempt_id FROM diagnoses WHERE goal_id=:id ORDER BY created_at DESC',id=g['id'])
         return goals
 
@@ -186,6 +222,10 @@ def create(body:GoalInput,user=Depends(current_user)):
 def edit(id:str,body:dict,user=Depends(current_user)):
     with transaction() as db:
         g=goal_access(db,user,id)
+        from app.services.course_planning import binding
+        cb=binding(db,id)
+        if cb and 'target_skill_ids' in body and set(body['target_skill_ids'])!=set(json.loads(g['skills'])):
+            fail(409,'课程目标的知识点绑定不可直接改写，请完成新的课程初测并创建新目标')
         if body.get('version')!=g['version']: fail(409,'目标版本已变化')
         if g['status']=='archived': fail(409,'归档目标只读')
         if set(body)-{'version','status','title','target_skill_ids','weekly_minutes','due_date','class_id','preference'}: fail(422,'目标包含不支持的字段')
@@ -215,6 +255,14 @@ def diagnose(id:str,user=Depends(current_user)):
         # Do not allow infinite replay of identical disclosed questions as new evidence.
         existing=one(db,'SELECT * FROM diagnoses WHERE goal_id=:id AND goal_version=:v ORDER BY created_at DESC',id=id,v=g['version'])
         if existing: return {'id':existing['id'],'questions':public_questions(json.loads(existing['questions'])),'attempt_id':existing['attempt_id']}
+        from app.services.course_planning import binding,attach_diagnosis,closure
+        cb=binding(db,id)
+        if cb:
+            latest=one(db,"SELECT * FROM learning_assessments WHERE student_id=:u AND course_id=:c AND phase='diagnostic' AND status='submitted' ORDER BY submitted_at DESC,rowid DESC LIMIT 1",u=user['id'],c=cb['course_id'])
+            if not latest:fail(409,'请先在课程知识库完成首次诊断')
+            did=attach_diagnosis(db,g,latest,cb)
+            d=one(db,'SELECT * FROM diagnoses WHERE id=:i',i=did)
+            return {'id':did,'questions':public_questions(json.loads(d['questions'])),'attempt_id':d['attempt_id']}
         bank,bank_version=question_bank(db,'diagnostic')
         questions=question_snapshot(bank,bank_version)
         published = rows(db, "SELECT * FROM bank_versions WHERE status='published' ORDER BY created_at,id")
@@ -227,7 +275,9 @@ def diagnose(id:str,user=Depends(current_user)):
             managed_skills = {question['skill'] for question in managed}
             questions = [question for question in questions if question['skill'] not in managed_skills] + managed
             bank_version = 'managed-diagnostic-v1'
-        missing=set(json.loads(g['skills']))-{q['skill'] for q in questions}
+        required=closure(graph,json.loads(g['skills']))
+        questions=[q for q in questions if q['skill'] in required]
+        missing=required-{q['skill'] for q in questions}
         if not questions or missing:fail(409,'诊断题库覆盖不足，请补充材料或重试','DIAGNOSTIC_COVERAGE_GAP')
         did=uid();insert(db,'diagnoses',id=did,goal_id=id,student_id=user['id'],questions=dump(questions),goal_version=g['version'],bank_version=bank_version,created_at=now())
         return {'id':did,'questions':public_questions(questions),'attempt_id':None}
@@ -253,6 +303,9 @@ def diagnostic_draft(id:str,body:dict,user=Depends(current_user)):
         g=goal_access(db,user,d['goal_id'])
         if g['status']=='archived': fail(409,'归档目标不能修改诊断')
         if g['version']!=d['goal_version']: fail(409,'目标已变化，请领取当前版本诊断')
+        from app.services.course_planning import validate_versions,binding
+        binding(db,g['id'])
+        validate_versions(db,json.loads(d['questions']))
         validate_answers(json.loads(d['questions']),body,partial=True)
         run(db,'UPDATE diagnoses SET draft_answers=:a WHERE id=:id',a=dump(body),id=id)
     return {'ok':True}
@@ -266,6 +319,8 @@ def diagnostic_submit(id:str,body:Submission,user=Depends(current_user)):
         g=goal_access(db,user,d['goal_id']);questions=json.loads(d['questions'])
         if g['status']=='archived': fail(409,'归档目标不能提交新诊断')
         if g['version']!=d['goal_version']: fail(409,'目标已变化，请领取当前版本诊断')
+        from app.services.course_planning import binding,validate_versions
+        binding(db,g['id']);validate_versions(db,questions)
         validate_answers(questions,body.answers)
         aid=uid();insert(db,'attempts',id=aid,student_id=user['id'],goal_id=g['id'],class_id=g['class_id'],answers=dump(body.answers),feedback='[]',status='scored',minutes=body.minutes,created_at=now())
         f,s=observations(db,aid,questions,body.answers,user['id'],g['class_id'])

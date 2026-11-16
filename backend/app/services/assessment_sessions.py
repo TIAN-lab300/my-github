@@ -27,6 +27,11 @@ def expose(db, student, questions, session_id=None, source='session', timestamp=
 
 
 def recover_history(db, student):
+    # Course papers and path sessions share the same conservative exposure ledger.
+    for item in rows(db,'''SELECT i.snapshot,a.created_at FROM learning_assessment_items i
+        JOIN learning_assessments a ON a.id=i.assessment_id WHERE a.student_id=:u''',u=student):
+        q=json.loads(item['snapshot'])
+        expose(db,student,[{'prompt':q['prompt'],'question_id':q['question_id']}],source='course_paper',timestamp=item['created_at'])
     for record in rows(db, 'SELECT questions,created_at FROM diagnoses WHERE student_id=:u', u=student):
         expose(db, student, json.loads(record['questions']), source='diagnosis_snapshot', timestamp=record['created_at'])
     # Assigned questions may already have been displayed. Treat them conservatively as exposed.
@@ -91,6 +96,8 @@ def session_dto(db, session):
 def begin_session(db, path_id, item_id, user, repeat=False):
     from app.api.goals import assessment_item
     path, task = assessment_item(db, user, path_id, item_id)
+    from app.services.course_planning import binding,bank
+    cb=binding(db,path['goal_id'])
     recover_history(db, user['id'])
     sessions = rows(db, '''SELECT * FROM assessment_sessions WHERE student_id=:u AND path_id=:p
         AND item_id=:i ORDER BY created_at DESC,id DESC''', u=user['id'], p=path_id, i=item_id)
@@ -112,6 +119,8 @@ def begin_session(db, path_id, item_id, user, repeat=False):
         frozen = one(db, 'SELECT questions FROM path_question_bank WHERE path_id=:p AND item_id=:i', p=path_id, i=item_id)
         if frozen:
             candidates = json.loads(frozen['questions'])
+    if cb:
+        candidates=bank(db,cb,'retest' if previous else 'practice',{task['skill_id']})
     previous_question = json.loads(previous['questions'])[0] if previous else None
     selected = None
     for question in candidates:

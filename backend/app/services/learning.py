@@ -57,8 +57,10 @@ def fingerprint(db,student,goal_id):
         ORDER BY r.id""",u=student)
     graph=one(db,'SELECT id FROM graph_versions WHERE active=1')
     memberships=rows(db,'SELECT class_id,status FROM memberships WHERE user_id=:u ORDER BY class_id',u=student)
+    from app.services.course_planning import fingerprint_data
+    course_data=fingerprint_data(db,goal_id)
     return dump({'goal':goal['version'],'watermark':user['watermark'],'budget':budget['version'],
-                 'graph':graph['id'] if graph else 'curated-v1','resources':resources,'memberships':memberships,
+                 'graph':graph['id'] if graph else 'curated-v1','resources':resources,'memberships':memberships,'course':course_data,
                  'identity':{'status':user['status'],'auth_version':user['auth_version'],'role':user['role']}})
 
 def allocate(db,student,minutes,due_date,exclude_goal=None,goal_limit=None):
@@ -99,6 +101,7 @@ def actual_events(db,student,class_id=None):
     events+=rows(db,'SELECT id,minutes,created_at,assignment_id AS source_id FROM attempts WHERE student_id=:u'+suffix,**args)
     if not class_id:
         events+=rows(db,'SELECT id,minutes,created_at,item_id AS source_id FROM checkins WHERE student_id=:u',u=student)
+        events+=rows(db,'SELECT id,minutes,created_at,material_link_id AS source_id FROM learning_sessions WHERE student_id=:u',u=student)
     return events
 
 SKILLS=[{'id':'functions','name':'函数基础','minutes':30,'prerequisites':[]},

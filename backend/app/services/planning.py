@@ -36,6 +36,7 @@ class State(TypedDict,total=False):
     cloud_approved:bool
     cloud_repairs:int
     last_agent:str
+    learner_evidence:dict
 
 def record_step(db,state,agent,detail):
     record=one(db,'SELECT status,retry_count FROM agent_runs WHERE id=:id',id=state['run_id'])
@@ -72,11 +73,24 @@ def diagnose(state):
         diagnosis=one(db,'SELECT * FROM diagnoses WHERE goal_id=:g AND goal_version=:v AND attempt_id IS NOT NULL ORDER BY created_at DESC LIMIT 1',g=g['id'],v=g['version'])
         if not diagnosis:fail(409,'请先提交诊断')
         graph,version=graph_snapshot(db)
+        from app.services.course_planning import binding,closure,validate_versions
+        course_binding=binding(db,g['id'])
+        if course_binding:
+            from app.services.curriculum_structure import extend_graph
+            graph=extend_graph(db,course_binding['course_id'],json.loads(course_binding['mappings']),graph)
         questions=json.loads(diagnosis['questions'])
+        validate_versions(db,questions)
+        required=closure(graph,skills)
+        missing=required-{q['skill'] for q in questions}
+        if missing:fail(409,'目标或先修尚未测评，请重新领取覆盖完整范围的诊断：'+','.join(sorted(missing)),'PREREQUISITE_DIAGNOSIS_GAP')
         graph=[{**node,'assessment_source':{'bank_version':diagnosis['bank_version'],
                 'question_ids':[q['id'] for q in questions if q['skill']==node['id']]}} for node in graph]
         previous=one(db,"SELECT * FROM paths WHERE goal_id=:g AND status='active'",g=g['id'])
         budget=one(db,'SELECT * FROM budgets WHERE user_id=:u',u=u['id'])
+        from app.services.planning_evidence import learner_evidence,evidence_changes
+        evidence=learner_evidence(db,u['id'],g,graph,diagnosis)
+        evidence['catalog_evidence_integrated']=bool(course_binding)
+        if course_binding:evidence['course_id']=course_binding['course_id']
         mode='initial';triggers=[]
         if r['kind']=='replan':
             mode='local'
@@ -85,6 +99,7 @@ def diagnose(state):
             overdue=rows(db,"SELECT a.id FROM assignments a JOIN tasks t ON t.id=a.task_id WHERE a.student_id=:u AND a.status NOT IN ('completed','cancelled') AND t.status='published' AND t.due_at<:time ORDER BY t.due_at",u=u['id'],time=now())
             if len(overdue)>=2:triggers.append('全账户有至少两项教师任务逾期未完成')
             old=json.loads(previous['validation']) if previous else {}
+            triggers.extend(evidence_changes(old.get('learner_evidence'),evidence))
             before=old.get('budget_snapshot',budget)
             change=max(abs(budget[k]-before[k])/max(before[k],1) for k in ('daily_minutes','weekly_minutes'))
             if change:triggers.append('全局预算变化')
@@ -101,7 +116,7 @@ def diagnose(state):
                     triggers.append('来源证据变化');break
             if not triggers:triggers.append('学生主动评估')
         state.update(goal=g,actor=u,fingerprint=fingerprint(db,u['id'],g['id']),graph=graph,graph_version=version,
-                     previous=previous,budget_snapshot=budget,mode=mode,triggers=triggers)
+                     previous=previous,budget_snapshot=budget,mode=mode,triggers=triggers,learner_evidence=evidence)
     step(state,'GoalDiagnosisAgent','读取已提交诊断和已确认技能；未调用云端模型')
     return state
 
@@ -119,6 +134,10 @@ def build(state):
             semantic_vectors={}
     with transaction() as db:
         g=state['goal'];u=state['actor'];m=mastery(db,u['id'])
+        from app.services.course_planning import binding
+        cb=binding(db,g['id'])
+        course_links=rows(db,'SELECT * FROM learning_material_links WHERE course_id=:c',c=cb['course_id']) if cb else []
+        course_mapping={m['skill_id']:m['graph_skill_id'] for m in json.loads(cb['mappings'])} if cb else {}
         target=set(json.loads(g['skills']))
         for node in reversed(state['graph']):
             if node['id'] in target:target.update(node['prerequisites'])
@@ -128,11 +147,15 @@ def build(state):
             version=one(db,"SELECT * FROM resource_versions WHERE id=:id AND parse_status='ready' AND index_status='indexed'",id=resource['current_version'])
             if not version:continue
             supported=[skill for skill in target if any(t.lower() in version['body'].lower() for t in tokens[skill])]
+            if cb:
+                linked={course_mapping.get(link['skill_id']) for link in course_links if link['resource_version_id']==version['id']}
+                supported=[skill for skill in supported if skill in linked]
             semantic_locations={}
             if semantic_vectors:
                 from app.services.vector_index import cosine
                 indexed=rows(db,'SELECT ordinal,body,embedding FROM vector_chunks WHERE version_id=:v ORDER BY ordinal',v=version['id'])
                 for skill in target-set(supported):
+                    if cb and skill not in linked:continue
                     if skill not in semantic_vectors:continue
                     matches=[(cosine(semantic_vectors[skill],json.loads(chunk['embedding'])),chunk) for chunk in indexed]
                     if matches:
@@ -228,11 +251,14 @@ def save(state):
         validation={key:state[key] for key in ('graph','graph_version','rules','remediations','preserved','execution','diff','mode','triggers','budget_snapshot')}
         validation.update(is_valid=True,schedule=state['schedule'],method='cloud-four-agent-v1' if state.get('cloud_mode') else 'local-deterministic-v2',cloud_called=bool(state.get('cloud_mode')),cloud_outputs=state.get('cloud_outputs',{}),model_config_id=r['model_config_id'],
                           previous=state['previous']['id'] if state.get('previous') else None,goal_snapshot=state['goal'])
+        validation['learner_evidence']=state.get('learner_evidence',{})
         insert(db,'paths',id=pid,goal_id=state['goal']['id'],student_id=state['actor']['id'],status='pending_acceptance',
                content_status='verified',tasks=dump(state['tasks']),sources=dump(state['sources']),validation=dump(validation),
                fingerprint=state['fingerprint'],reason='依据诊断、图谱和全局预算生成，范围 '+state['mode'],created_at=now())
         from app.services.topic_bank import question_bank
-        bank,_=question_bank(db,'practice',state['graph_version'] if state['graph_version']!='curated-v1' else None)
+        from app.services.course_planning import binding,bank as course_bank
+        cb=binding(db,state['goal']['id'])
+        bank=course_bank(db,cb,'practice') if cb else question_bank(db,'practice',state['graph_version'] if state['graph_version']!='curated-v1' else None)[0]
         for item in state['execution']:
             insert(db,'path_question_bank',path_id=pid,item_id=item['id'],questions=dump([question for question in bank if question['skill']==item['skill_id']]))
         for item in state['remediations']:

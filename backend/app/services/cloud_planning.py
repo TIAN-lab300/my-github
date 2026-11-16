@@ -98,7 +98,8 @@ def diagnose(state):
     planning.diagnose(state)
     response=agent_call(state,'GoalDiagnosisAgent',{
         'goal':state['goal']['title'],'skills':json.loads(state['goal']['skills']),
-        'instruction':'分析学习目标和先修要求，返回summary字符串和risks字符串数组。'})
+        'learner_evidence':state['learner_evidence'],'budget':state['budget_snapshot'],
+        'instruction':'根据learner_evidence中已评分的诊断与当前掌握度分析目标和先修要求，区分首次诊断与后续变化。unknown表示缺少证据，不是已证实薄弱。学习时长不等于掌握度，不得推测未测技能、改写分数或BKT概率。返回summary字符串和risks字符串数组。'})
     if not isinstance(response.get('summary'),str):fail(503,'诊断智能体缺少summary','MODEL_SCHEMA_INVALID')
     state['cloud_outputs']={'diagnosis':response}
     planning.record_cloud_step(state,'GoalDiagnosisAgent','云端分析目标与先修要求')
@@ -110,6 +111,7 @@ def build(state):
     sources=authorized_sources(state)
     response=agent_call(state,'PathBuildingAgent',{
         'diagnosis':state['cloud_outputs']['diagnosis'],
+        'learner_evidence':state['learner_evidence'],
         'required_task_count':len(state['execution']),
         'allowed_skill_ids':[task['skill_id'] for task in state['execution']],
         'excluded_mastered_or_out_of_scope_skills':[node['id'] for node in state['graph'] if node['id'] not in {task['skill_id'] for task in state['execution']}],
@@ -158,6 +160,7 @@ def review(state):
     with transaction() as db:state['rules']=validate(state,db)
     response=agent_call(state,'PlanReviewAgent',{
         'tasks':state['execution'],'rules':state['rules'],'sources':authorized_sources(state),
+        'learner_evidence':state['learner_evidence'],
         'instruction':'审查教学顺序、具体活动与评估目标是否一致，并逐项对照sources的授权片段判断引用是否支持活动。若引入材料未覆盖的知识、外部资源或结论，必须拒绝并在issues列出具体技能和不受支持的内容。返回approved布尔值和issues字符串数组。硬规则失败必须拒绝。approved为true时issues必须为空。'})
     if type(response.get('approved')) is not bool or not isinstance(response.get('issues'),list):
         fail(503,'审查智能体输出不合法','MODEL_SCHEMA_INVALID')
@@ -177,6 +180,7 @@ def finalize(state):
     authorized_sources(state)
     response=agent_call(state,'LearningReplanAgent',{
         'mode':state['mode'],'triggers':state['triggers'],'diff':state['diff'],
+        'learner_evidence':state['learner_evidence'],
         'instruction':'解释当前计划或重规划的调整原因、风险和后续学习建议，返回reason字符串与recommendations字符串数组。不得改写已完成历史。'})
     if not isinstance(response.get('reason'),str):fail(503,'重规划智能体缺少原因解释','MODEL_SCHEMA_INVALID')
     state['cloud_outputs']['replan']=response

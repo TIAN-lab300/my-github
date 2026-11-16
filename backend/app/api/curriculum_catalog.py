@@ -22,8 +22,11 @@ def catalog(user=Depends(current_user)):
     if not inspect(engine).has_table('curriculum_catalog_courses'):
         fail(503,'课程资料目录尚未部署，请先完成数据库迁移','CATALOG_NOT_DEPLOYED')
     with transaction() as db:
+        from app.services.course_links import course_links
+        links=course_links()
         courses=rows(db,'SELECT * FROM curriculum_catalog_courses ORDER BY elective,year,id')
         for c in courses:
+            c['external_courses']=links.get(c['id'],[])
             c['skills']=rows(db,'SELECT id,name,status FROM curriculum_catalog_skills WHERE course_id=:c ORDER BY id',c=c['id'])
-            c['sources']=rows(db,"SELECT s.id,s.resource_id,r.title,r.description,s.original_language FROM curriculum_catalog_sources m JOIN public_source_catalog s ON s.id=m.source_id JOIN resources r ON r.id=s.resource_id WHERE m.course_id=:c AND r.status='published' AND r.scope='school' ORDER BY s.id",c=c['id'])
+            c['sources']=rows(db,"SELECT s.id,s.resource_id,s.url,r.title,r.description,s.original_language FROM curriculum_catalog_sources m JOIN public_source_catalog s ON s.id=m.source_id JOIN resources r ON r.id=s.resource_id WHERE m.course_id=:c AND r.status='published' AND r.scope='school' ORDER BY s.id",c=c['id'])
     return {'courses':courses,'scope':'用户指定课程范围，候选知识点待审核','questions_ready':False}

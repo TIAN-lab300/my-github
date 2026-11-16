@@ -131,7 +131,8 @@ def test_batch4(sf,clients,monkeypatch):
         assert response.status_code==409
         assert student.get(P+'/goals/'+gid+'/diagnoses').json()==[]
         assert student.patch(P+'/goals/'+gid,json={'version':1,'target_skill_ids':['functions']}).status_code==200
-        assert len(sheet(student,gid)['questions'])==6
+        scoped=sheet(student,gid)['questions']
+        assert len(scoped)==2 and {q['skill'] for q in scoped}=={'functions'}
     elif sf=='SF-PROFILE-04':
         profile=student.get(P+'/learners/me/profile').json()
         assert all(key in profile for key in ['learning_context','learning_behavior','mastery_state','evidence_quality','risk_summary','data_quality'])

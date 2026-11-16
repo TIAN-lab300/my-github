@@ -14,7 +14,8 @@ export function GoalInspector({goal}:{goal:any}){
   }catch(e){setMessage((e as Error).message)}finally{setBusy(false)}
  }
  return <section><p>目标版本 {goal.version} · {goal.class_id?'已显式关联班级':'本人私有目标'}</p>
-  {goal.requires_replan&&<p role="status">目标或预算已变化，请重新评估活动路径</p>}
+  {goal.requires_replan&&<p role="status">{goal.replan_reasons?.length?goal.replan_reasons.join('、'):'目标或预算已变化'}，请重新评估活动路径</p>}
+  {goal.requires_diagnosis&&<p role="status">当前目标版本尚无已提交诊断，请先点击“开始/查看诊断”完成检测，再生成或重规划。</p>}
   <button disabled={busy} onClick={()=>inspect('feasibility')}>检查时间可行性</button>
   <button disabled={busy} onClick={()=>inspect('history')}>查看目标版本历史</button>
   {message&&<p role="alert">{message}</p>}

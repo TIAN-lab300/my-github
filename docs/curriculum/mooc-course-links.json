@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-11-15",
+  "verification": "已核对课程主页名称和学校；未代替用户登录验证全部视频播放权限",
+  "courses": [
+    {"course_id":"public-C01","title":"C语言程序设计（上）","school":"北京理工大学","url":"https://www.icourse163.org/course/BIT-20019","note":"程序设计基础参考课程；上下两部分结合学习。"},
+    {"course_id":"public-C01","title":"C语言程序设计（下）","school":"北京理工大学","url":"https://www.icourse163.org/course/BIT-46004","note":"衔接上半部分；具体章节以原站课程大纲为准。"},
+    {"course_id":"public-C03","title":"数据结构","school":"浙江大学","url":"https://www.icourse163.org/course/ZJU-93001","note":"陈越、何钦铭课程团队；作为对应知识范围的参考课程。"},
+    {"course_id":"public-C04","title":"离散数学概论","school":"北京大学","url":"https://www.icourse163.org/course/PKU-1002525004","note":"入门参考，不能替代专业课全部深度与考核要求。"},
+    {"course_id":"public-C09","title":"计算机组成原理（上）","school":"哈尔滨工业大学","url":"https://www.icourse163.org/course/HIT-309001","note":"计算机组成原理参考课程，上下两部分结合学习。"},
+    {"course_id":"public-C09","title":"计算机组成原理（下）","school":"哈尔滨工业大学","url":"https://www.icourse163.org/course/HIT-1001527001","note":"衔接上半部分，按原站大纲选择章节。"},
+    {"course_id":"public-C10","title":"操作系统","school":"哈尔滨工业大学","url":"https://www.icourse163.org/course/HIT-1002531008","note":"操作系统原理与实现参考课程。"},
+    {"course_id":"public-C11","title":"计算机网络","school":"哈尔滨工业大学","url":"https://www.icourse163.org/course/HIT-154005","note":"网络原理、协议与应用编程参考课程。"},
+    {"course_id":"public-C08","title":"数据库系统（上）：模型与语言","school":"哈尔滨工业大学","url":"https://www.icourse163.org/course/HIT-1001516002","note":"对应关系模型、数据库语言等内容。"},
+    {"course_id":"public-C08","title":"数据库系统（中）：建模与设计","school":"哈尔滨工业大学","url":"https://www.icourse163.org/course/HIT-1001554030","note":"对应数据建模与数据库设计；不声称覆盖整门课程。"}
+  ]
+}
