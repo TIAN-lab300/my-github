@@ -2984,3 +2984,14 @@ GET /courses/{id}/coverage?phase=diagnostic 返回逐知识点缺口及原因。
 没有已确认目标时不再展示无法操作的开始按钮，改为展示实际本人草稿和“继续完善草稿”入口，可恢复原目标描述与时间并定位至创建区。没有模型密钥时，可显式选择manual_catalog，手动选择1至20个真实课程知识点，再补齐先修并确认、领取诊断、按既有流程生成路径。不假装调用模型或自动理解“1233”等任意文字；范围由学生明确指定。保存时记录解析方式和手动选择，改动范围使旧解析失效，防止误确认旧范围。
 
 新增只读课程目录接口/engineering-goals/catalog，解析接口支持manual_catalog并验证真实ID；不变更数据库结构，不修改用户现有草稿、归档目标或掌握证据。来源正文、已发布题库、预算、候选接受的规则保持。验证包括只有草稿1233时恢复、手动选择C++知识点、未接受路径前直接出题、交卷生成每日路径、唯一目标自动选择以及原保存/暂存/恢复流程。
+
+
+## 2026-11-17 LearningTutorAgent 技术增补
+
+新增 backend/app/api/tutor.py、frontend/src/LearningTutor.tsx 与迁移0029。POST /learning/courses/{cid}/tutor 接收 skill_id、question、mode(local/cloud)、level(1..3)、cloud_consent 和可选 assessment_item_id；请求键 Idempotency-Key 防止重复受理，用户同时最多一个未过期运行。GET /learning/courses/{cid}/tutor/history 返回本人最近20次运行，并按当前资料/测验状态裁剪历史结果。
+
+检索只用 learning_material_links 对应当前已发布、parse_status=ready 且 index_status=indexed 的校级正文，每次最多3份，每份截取开头1800字；这是有界正文证据，不是完整课程语义检索。云端资料必须 cloud_allowed，模型经统一 call_model 接口调用，agent=LearningTutorAgent，contract=learning-tutor-v1。输出限制 explanation≤3000字、hints 1..5项每项≤800字、citations 1..6项每项逐字quote≤500字；引用身份和正文子串由服务端校验。引用校验不保证全部解释语义正确，需后续人工教学评价。
+
+tutor_runs 按 actor_id/request_key 唯一，记录课程、知识点、问题、模式、程度、提交题号、模型配置、来源快照、结果、状态、耗时、错误码和时间。超120秒未结束的请求在用户下次请求/查看历史时标记中断，用户可新发起请求。无学生成绩或掌握度写操作，不接入规划 agent_runs，防止混淆职责。
+
+迁移需先备份再运行 app.cli.migrate()；升级后重启不带reload的后端并刷新前端。本地引导无需模型，云端教学质量尚未执行真实专项验收。

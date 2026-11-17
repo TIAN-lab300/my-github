@@ -136,7 +136,7 @@ def supplement(body:dict,user=Depends(current_user)):
 
 @router.post('/resources/{id}/import-link',status_code=201)
 def import_link(id:str,body:dict,user=Depends(current_user)):
-    role(user,'teacher')
+    role(user,'teacher','admin')
     if body.get('authorized') is not True:fail(422,'须确认有权抓取并用于课程教学')
     with transaction() as db:
         resource=resource_access(db,user,id,True)

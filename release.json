@@ -1,6 +1,6 @@
 {
-  "version": "diagnosis-entry-2026.11.16",
+  "version": "learning-tutor-2026.11.17",
   "source_manifest": "docs/evidence/implementation/release-summary.json",
-  "schema_revision": "0028",
+  "schema_revision": "0029",
   "base_github_commit": "0d541a2bbb681bdbd1acbdc91526c484e39dbe2b"
 }

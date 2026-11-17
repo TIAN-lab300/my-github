@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse,FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from app.core.db import transaction,run,uid
-from app.api import engineering_goals,learning_catalog,curriculum_catalog,phone,auth,classes,resources,tasks,goals,profiles,models,management,evidence,question_bank
+from app.api import tutor,engineering_goals,learning_catalog,curriculum_catalog,phone,auth,classes,resources,tasks,goals,profiles,models,management,evidence,question_bank
 
 @asynccontextmanager
 async def lifespan(app):
@@ -65,7 +65,7 @@ async def errors(request,exc):
     detail=exc.detail if isinstance(exc.detail,dict) else {'message':str(exc.detail),'code':'REQUEST_FAILED'}
     return JSONResponse({**detail,'request_id':getattr(request.state,'request_id','')},status_code=exc.status_code,headers=exc.headers)
 
-for router in (auth.router,classes.router,resources.router,tasks.router,goals.router,profiles.router,models.router,management.router,evidence.router,question_bank.router):
+for router in (tutor.router,auth.router,classes.router,resources.router,tasks.router,goals.router,profiles.router,models.router,management.router,evidence.router,question_bank.router):
     app.include_router(router,prefix='/api/v1')
 
 @app.get('/api/v1/health')

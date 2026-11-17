@@ -1,6 +1,7 @@
 import {useEffect,useState} from 'react';
 import {api} from './api';
 import {ResourcePreview} from './ResourcePreview';
+import {ResourceVersions} from './ResourceVersions';
 import {RecordEditor} from './RecordEditor';
 export function PersonalResources(){
  const [items,setItems]=useState<any[]>([]),[detail,setDetail]=useState<any>(null),[editor,setEditor]=useState<any>(null);
@@ -16,7 +17,7 @@ export function PersonalResources(){
  <form className="actions" onSubmit={e=>{e.preventDefault();void act(load)}}><label>个人资料关键词<input value={query} onChange={e=>setQuery(e.target.value)}/></label><button disabled={busy}>查询我的资料</button></form>
  {!items.length&&<p>暂无匹配的个人资料，可先上传文件或收藏链接。</p>}
  {items.map(r=><div className="listrow" key={r.id}><h3>{r.title}</h3><p>仅自己可见 · {({text:'文档',link:'网页收藏',video:'视频',audio:'音频',image:'图片'} as Record<string,string>)[r.kind]||'资料'} · {({ready:'正文可检索',not_applicable:r.kind==='link'?'外链，尚无导入正文':'尚未识别正文，可查看原文件',queued:'等待解析',running:'解析中',failed:'解析失败',review_required:'识别结果待核对',cancelled:'已取消解析'} as Record<string,string>)[r.parse_status]||'查看解析状态'}</p><p>{r.description}</p><div className="actions"><button disabled={busy} onClick={()=>void act(async()=>setDetail(await api('/resources/'+r.id)))}>查看个人资料</button><button disabled={busy} onClick={()=>setEditor(r)}>编辑个人资料</button></div></div>)}
- {detail&&<section className="card"><h3>{detail.title}</h3><button onClick={()=>setDetail(null)}>关闭个人资料</button><ResourcePreview resource={detail}/>{detail.kind==='link'?<a href={detail.filename} target="_blank" rel="noopener noreferrer">打开个人收藏原站</a>:<a href={'/api/v1/resources/'+detail.id+'/download'}>下载个人文件</a>}</section>}
+ {detail&&<section className="card"><h3>{detail.title}</h3><button onClick={()=>setDetail(null)}>关闭个人资料</button><ResourcePreview resource={detail}/><ResourceVersions resource={detail} onChanged={()=>{void api('/resources/'+detail.id).then(setDetail).catch(e=>setError(e.message));void load().catch(e=>setError(e.message))}}/>{detail.kind==='link'?<a href={detail.filename} target="_blank" rel="noopener noreferrer">打开个人收藏原站</a>:<a href={'/api/v1/resources/'+detail.id+'/download'}>下载个人文件</a>}</section>}
  {editor&&<RecordEditor kind="resource" record={editor} members={[]} classes={[]} onClose={()=>setEditor(null)} onSave={async(path,body)=>{await api(path,'PATCH',body);setEditor(null);await load();if(detail?.id===editor.id)setDetail(await api(path));setNotice('个人资料修改已保存')}}/>}
  </section>
 }

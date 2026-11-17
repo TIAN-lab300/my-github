@@ -61,3 +61,10 @@ playwright-report/
 /backend/tests/
 /scripts/verify_*.mjs
 /scripts/verify_*.py
+
+# Local browser fixture configuration and one-off database import reports
+/stage3-browser-config.json
+/docs/evidence/implementation/candidate-technical-review-20261116.json
+/docs/evidence/implementation/curriculum-search-import.json
+/docs/evidence/implementation/engineering-goals-install.json
+/docs/evidence/implementation/original-bank-import.json

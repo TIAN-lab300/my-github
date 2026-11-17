@@ -331,7 +331,7 @@ async def upload(files:list[UploadFile]=File(...),title:str=Form(''),description
 
 @router.post('/resources/links',status_code=201)
 def link(body:dict,user=Depends(current_user)):
-    role(user,'teacher','student')
+    role(user,'teacher','student','admin')
     fields=[('url',2048),('title',200),('description',3000)]
     if user['role']=='teacher':fields.append(('class_id',100))
     elif body.get('class_id'):fail(422,'个人收藏不能指定班级')
@@ -343,9 +343,9 @@ def link(body:dict,user=Depends(current_user)):
     if not str(body.get('title','')).strip() or not str(body.get('description','')).strip(): fail(422,'请填写标题与推荐理由')
     with transaction() as db:
         personal=user['role']=='student'
-        if not personal:class_access(db,user,body.get('class_id'),True)
+        if user['role']=='teacher':class_access(db,user,body.get('class_id'),True)
         rid=uid();vid=uid()
-        insert(db,'resources',id=rid,owner_id=user['id'],class_id=None if personal else body['class_id'],scope='private' if personal else 'class',title=body['title'][:200],description=body['description'][:3000],tags=str(body.get('tags',''))[:500],source_license='学生个人收藏；外链正文未导入' if personal else '教师登记，内容待审核',cloud_allowed=0,kind='link',current_version=vid,created_at=now())
+        insert(db,'resources',id=rid,owner_id=user['id'],class_id=body['class_id'] if user['role']=='teacher' else None,scope='private' if personal else 'class' if user['role']=='teacher' else 'school',title=body['title'][:200],description=body['description'][:3000],tags=str(body.get('tags',''))[:500],source_license='学生个人收藏；外链正文未导入' if personal else '教学资料链接，正文待授权导入与审核',cloud_allowed=0,kind='link',current_version=vid,created_at=now())
         insert(db,'resource_versions',id=vid,resource_id=rid,filename=url,bytes=0,hash=hashlib.sha256(url.encode()).hexdigest(),body='',parse_status='not_applicable',index_status='not_applicable',created_at=now())
     return {'id':rid}
 
@@ -480,7 +480,7 @@ def search(body:dict,user=Depends(current_user)):
         current_allowed={resource['id']:resource for resource in visible(db,user) if scope=='all' or resource['scope']==scope}
         hits=[hit for hit in hits if (resource:=current_allowed.get(hit['resource_id'])) and resource['current_version']==hit['resource_version_id'] and (resource['status']=='published' or resource['scope']=='private')]
     metadata=[hit for hit in metadata if (resource:=current_allowed.get(hit['resource_id'])) and resource['current_version']==hit['resource_version_id'] and (resource['status']=='published' or resource['scope']=='private')]
-    return {'results':hits[:20],'metadata_results':metadata[:20],'course_results':course_results,'scope':scope,
+    return {'results':hits[:20],'metadata_results':metadata[:20],'course_results':course_results,'scope':scope,'query':query,
         'scope_hint':'当前仅搜索本人上传或收藏的资料；查找学校课程请切换到学校共享或全部范围。' if scope=='private' else '',
         'coverage_status':'body_hits' if hits else 'metadata_only' if metadata or course_results else 'empty',
         'coverage':'有正文命中，覆盖仍需校验' if hits else '找到课程或资料入口，尚无可引用正文' if metadata or course_results else '当前范围没有匹配结果',
