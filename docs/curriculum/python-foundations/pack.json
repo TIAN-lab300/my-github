@@ -1,0 +1,582 @@
+{
+  "version": "python-foundations-2026-11-17-v1",
+  "course_id": "project-python-foundations",
+  "name": "Python 函数与递归基础（项目补充课）",
+  "provenance": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题",
+  "review": "AI辅助编写并技术校验，未经授课教师审核和难度标定",
+  "skills": [
+    {
+      "id": "project-python-foundations-functions",
+      "name": "函数基础",
+      "graph_skill_id": "functions",
+      "lesson": "functions.md",
+      "chapter_id": "project-python-foundations-chapter-1",
+      "minutes": 30,
+      "prerequisites": []
+    },
+    {
+      "id": "project-python-foundations-recursion",
+      "name": "递归与基本情况",
+      "graph_skill_id": "recursion",
+      "lesson": "recursion.md",
+      "chapter_id": "project-python-foundations-chapter-2",
+      "minutes": 45,
+      "prerequisites": [
+        "project-python-foundations-functions"
+      ]
+    },
+    {
+      "id": "project-python-foundations-stack",
+      "name": "调用栈与返回过程",
+      "graph_skill_id": "stack",
+      "lesson": "stack.md",
+      "chapter_id": "project-python-foundations-chapter-3",
+      "minutes": 45,
+      "prerequisites": [
+        "project-python-foundations-recursion"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-1",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "diagnostic",
+      "prompt": "在 def add(a, b): return a + b 中，a 和 b 是什么？",
+      "options": [
+        "形参",
+        "实参",
+        "全局变量",
+        "返回值"
+      ],
+      "answer": 0,
+      "explanation": "定义处的参数名是形参，调用处传入的是实参。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-2",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "diagnostic",
+      "prompt": "执行 def twice(x): return x * 2 后，没有调用 twice，函数体会怎样？",
+      "options": [
+        "立即计算所有可能值",
+        "通常尚未执行",
+        "自动打印结果",
+        "立刻报错"
+      ],
+      "answer": 1,
+      "explanation": "定义创建函数对象；函数体通常在调用时执行。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-3",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "diagnostic",
+      "prompt": "函数执行到 return 7 后，同一路径上的下一条语句会怎样？",
+      "options": [
+        "继续执行",
+        "仅在参数为0时执行",
+        "不再执行",
+        "执行两次"
+      ],
+      "answer": 2,
+      "explanation": "return 结束当前这一次调用。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-4",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "diagnostic",
+      "prompt": "函数正常结束但未执行带值的 return，返回什么？",
+      "options": [
+        "0",
+        "空字符串",
+        "False",
+        "None"
+      ],
+      "answer": 3,
+      "explanation": "没有显式返回值时，Python函数返回None。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-5",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "practice",
+      "prompt": "def sub(a, b): return a-b；sub(b=2, a=7) 的结果是什么？",
+      "options": [
+        "5",
+        "-5",
+        "9",
+        "TypeError"
+      ],
+      "answer": 0,
+      "explanation": "关键字实参按名称匹配，a为7、b为2。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-6",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "practice",
+      "prompt": "def f(x): print(x)；v=f(3) 后 v 是什么？",
+      "options": [
+        "3",
+        "None",
+        "字符串3",
+        "函数f"
+      ],
+      "answer": 1,
+      "explanation": "print显示3；f没有带值return，所以v为None。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-7",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "practice",
+      "prompt": "def pair(): return 2, 5；pair() 返回什么？",
+      "options": [
+        "两个独立调用",
+        "列表[2,5]",
+        "元组(2,5)",
+        "仅5"
+      ],
+      "answer": 2,
+      "explanation": "逗号将两个值组合为元组。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-8",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "practice",
+      "prompt": "x=10；def f(): x=4; return x；调用 f() 后，全局 x 通常是多少？",
+      "options": [
+        "4",
+        "None",
+        "14",
+        "10"
+      ],
+      "answer": 3,
+      "explanation": "未声明global时，函数内赋值创建局部绑定，不重绑全局x。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-9",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "retest",
+      "prompt": "对 def f(a, b=3): return a+b，f(2) 的结果是什么？",
+      "options": [
+        "5",
+        "2",
+        "3",
+        "TypeError"
+      ],
+      "answer": 0,
+      "explanation": "a接收2，b使用默认值3。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-10",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "retest",
+      "prompt": "def add_one(xs): xs.append(1)；a=[]；add_one(a) 后 a 是什么？",
+      "options": [
+        "[]",
+        "[1]",
+        "None",
+        "1"
+      ],
+      "answer": 1,
+      "explanation": "参数绑定同一个列表对象，append的原地修改能被调用者观察到。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-11",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "retest",
+      "prompt": "默认参数表达式通常在什么时候求值？",
+      "options": [
+        "每次进入函数体时",
+        "每次return时",
+        "执行函数定义时",
+        "只在程序退出时"
+      ],
+      "answer": 2,
+      "explanation": "默认值在定义时求值，可变默认对象可能跨调用复用。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-functions-12",
+      "skill_id": "project-python-foundations-functions",
+      "phase": "retest",
+      "prompt": "def f(a,b): return a+b；调用 f(1, a=2, b=3) 会怎样？",
+      "options": [
+        "返回6",
+        "返回5",
+        "返回3",
+        "因a重复获得值而发生TypeError"
+      ],
+      "answer": 3,
+      "explanation": "第一个位置实参已赋给a，关键字又赋给a，造成重复。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-1",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "diagnostic",
+      "prompt": "递归函数可靠终止通常需要什么？",
+      "options": [
+        "基本情况与趋近它的递归步骤",
+        "只需要函数名相同",
+        "只需要print",
+        "只需要全局变量"
+      ],
+      "answer": 0,
+      "explanation": "基本情况提供直接答案，递归步骤应使规模趋向该情况。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-2",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "diagnostic",
+      "prompt": "total(n) 在 n==0 时返回0，否则返回 n+total(n-1)；total(3)是多少？",
+      "options": [
+        "3",
+        "6",
+        "9",
+        "0"
+      ],
+      "answer": 1,
+      "explanation": "逐层回收得到3+2+1+0=6。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-3",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "diagnostic",
+      "prompt": "阶乘定义中，非负整数范围的 factorial(0) 应返回多少？",
+      "options": [
+        "0",
+        "-1",
+        "1",
+        "None"
+      ],
+      "answer": 2,
+      "explanation": "0!定义为1，乘法递归才能正确回收。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-4",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "diagnostic",
+      "prompt": "递归函数一直调用自身且不趋向终止条件，通常有什么风险？",
+      "options": [
+        "自动转为循环",
+        "自动返回0",
+        "没有风险",
+        "触发RecursionError等资源限制"
+      ],
+      "answer": 3,
+      "explanation": "活动调用不断嵌套，可能达到递归限制。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-5",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "practice",
+      "prompt": "在 n 为正整数且基本情况为 n==0 时，哪一步让规模趋近基本情况？",
+      "options": [
+        "调用f(n-1)",
+        "调用f(n+1)",
+        "调用f(n)",
+        "只打印n"
+      ],
+      "answer": 0,
+      "explanation": "n逐步减少，才可能到达0。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-6",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "practice",
+      "prompt": "total(n)约定非负整数并每次减1，传入-2时应该怎样理解？",
+      "options": [
+        "一定返回0",
+        "不满足输入约定，需校验或额外分支",
+        "自动变为正数",
+        "自动跳过递归"
+      ],
+      "answer": 1,
+      "explanation": "负数不断减1不会趋近0，必须先处理输入范围。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-7",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "practice",
+      "prompt": "递归分支只写 f(n-1)，却不返回其结果，能否自动把结果传给当前调用者？",
+      "options": [
+        "总能",
+        "只有打印时能",
+        "不能自动传递",
+        "只在n为偶数时能"
+      ],
+      "answer": 2,
+      "explanation": "递归子调用的值需要被当前层接收并显式返回或组合。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-8",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "practice",
+      "prompt": "把递归上限调高，可以修复什么？",
+      "options": [
+        "所有递归逻辑错误",
+        "缺失基本情况",
+        "不缩小的问题规模",
+        "不能修复上述逻辑问题"
+      ],
+      "answer": 3,
+      "explanation": "提高限制不改变递归的终止逻辑。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-9",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "retest",
+      "prompt": "f(n)在n==0时返回0，否则返回f(n-1)；对合法正整数它计算什么？",
+      "options": [
+        "最终返回0",
+        "所有整数之和",
+        "n的阶乘",
+        "n平方"
+      ],
+      "answer": 0,
+      "explanation": "它只转交子调用的返回值，没有把n相加或相乘。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-10",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "retest",
+      "prompt": "递归深度描述什么？",
+      "options": [
+        "累计调用次数",
+        "同时尚未返回的嵌套调用层数",
+        "print次数",
+        "程序行数"
+      ],
+      "answer": 1,
+      "explanation": "深度衡量某时刻活动调用链长度。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-11",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "retest",
+      "prompt": "关于基本情况的返回值，哪项正确？",
+      "options": [
+        "永远写0",
+        "永远写1",
+        "应符合所求问题的数学含义",
+        "可以省略且总正确"
+      ],
+      "answer": 2,
+      "explanation": "累加和阶乘的基本情况返回值不同，必须按问题定义设计。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-recursion-12",
+      "skill_id": "project-python-foundations-recursion",
+      "phase": "retest",
+      "prompt": "很长的线性累加任务可以优先考虑什么以减少递归深度风险？",
+      "options": [
+        "无限提高递归上限",
+        "删除基本情况",
+        "重复调用同一输入",
+        "用循环迭代"
+      ],
+      "answer": 3,
+      "explanation": "循环可避免为每一级都增加递归调用状态。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-1",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "diagnostic",
+      "prompt": "普通同步调用A调用B、B调用C，C正常结束后先回到哪里？",
+      "options": [
+        "B的调用位置",
+        "程序入口",
+        "A的入口",
+        "随机位置"
+      ],
+      "answer": 0,
+      "explanation": "最近未结束的调用者B先恢复执行。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-2",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "diagnostic",
+      "prompt": "A调用B、B调用C，正常返回顺序是什么？",
+      "options": [
+        "A、B、C",
+        "C、B、A",
+        "B、A、C",
+        "同时返回"
+      ],
+      "answer": 1,
+      "explanation": "调用栈按后进先出理解，最内层先完成。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-3",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "diagnostic",
+      "prompt": "递归到达基本情况时，外层尚未完成的加法会怎样？",
+      "options": [
+        "全部取消",
+        "立刻全部完成",
+        "逐层接收返回值后继续",
+        "变成全局变量"
+      ],
+      "answer": 2,
+      "explanation": "基本情况返回后，外层调用逐层完成等待的运算。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-4",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "diagnostic",
+      "prompt": "同一递归函数不同调用中的局部参数n如何理解？",
+      "options": [
+        "只有一个n被所有层覆盖",
+        "n永远等于初始值",
+        "n只能为0",
+        "不同调用有各自局部绑定"
+      ],
+      "answer": 3,
+      "explanation": "每次调用有自己的局部状态，值可不同。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-5",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "practice",
+      "prompt": "c返回2；b返回c()+3；a返回b()*2；a()的结果是什么？",
+      "options": [
+        "10",
+        "7",
+        "5",
+        "2"
+      ],
+      "answer": 0,
+      "explanation": "先c=2，再b=5，最后a=10。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-6",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "practice",
+      "prompt": "return n+f(n-1) 中，n的加法通常什么时候完成？",
+      "options": [
+        "调用f之前",
+        "f(n-1)返回后",
+        "函数定义时",
+        "永不完成"
+      ],
+      "answer": 1,
+      "explanation": "需要先得到右侧子调用的返回值。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-7",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "practice",
+      "prompt": "调用栈最大深度与程序累计调用次数有什么关系？",
+      "options": [
+        "必然相等",
+        "深度总更大",
+        "是不同指标，不必相等",
+        "累计次数不计递归"
+      ],
+      "answer": 2,
+      "explanation": "顺序调用很多次也可以只有很浅的活动调用栈。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-8",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "practice",
+      "prompt": "若每层递归保留固定大小局部状态、最大深度为n，调用栈辅助空间通常如何增长？",
+      "options": [
+        "恒为0",
+        "与总输出字符数相同",
+        "必为n平方",
+        "通常为O(n)"
+      ],
+      "answer": 3,
+      "explanation": "同时活动的n层各保留固定大小状态，空间随深度线性增长。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-9",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "retest",
+      "prompt": "函数内抛出没有在当前调用中处理的异常，通常会怎样？",
+      "options": [
+        "沿调用链传播",
+        "自动当作返回0",
+        "静默忽略",
+        "自动变成None"
+      ],
+      "answer": 0,
+      "explanation": "异常会向调用者传播，直到被处理或终止执行。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-10",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "retest",
+      "prompt": "递归下降时参数依次为3、2、1、0，正常回收时完成顺序是什么？",
+      "options": [
+        "3、2、1、0",
+        "0、1、2、3",
+        "随机",
+        "3、0、2、1"
+      ],
+      "answer": 1,
+      "explanation": "最深层基本情况先完成，再逐层返回。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-11",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "retest",
+      "prompt": "不同层都引用同一个列表，某层append后，其他持有该列表的层可能看到变化吗？",
+      "options": [
+        "不能，局部名称意味着总复制",
+        "只有外层完成后才可见",
+        "可以，名称局部不代表对象独占",
+        "一定抛异常"
+      ],
+      "answer": 2,
+      "explanation": "局部绑定可以指向同一可变对象，对象修改可被共享观察。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    },
+    {
+      "id": "python-foundations-2026-11-17-v1-stack-12",
+      "skill_id": "project-python-foundations-stack",
+      "phase": "retest",
+      "prompt": "普通函数正常返回后，关于该次活动调用帧的教学理解，哪项合适？",
+      "options": [
+        "它永远位于栈顶",
+        "它会自动再次执行",
+        "它变成新的主程序",
+        "该次调用结束，不再作为活动栈帧等待"
+      ],
+      "answer": 3,
+      "explanation": "返回结束当前调用，执行继续回到调用者。",
+      "source": "项目原创讲义与基础单选题；参考Python官方文档核对语义；非北理工官方课程、教材或试题；AI辅助编写并技术校验，未经授课教师审核和难度标定"
+    }
+  ]
+}

@@ -13,6 +13,7 @@ def validate_output(agent,response):
     elif agent=='PlanReviewAgent':
         if type(response.get('approved')) is not bool or not strings(response.get('issues')):reject()
         if response['approved'] and response['issues']:reject()
+        if not response['approved'] and not response['issues']:reject()
     elif agent=='PathBuildingAgent':
         tasks=response.get('tasks')
         if not text(response.get('reason'),2000) or not isinstance(tasks,list) or len(tasks)>30:reject()

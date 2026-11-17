@@ -118,7 +118,7 @@ def listing(user=Depends(current_user)):
             from app.services.engineering_goals import context as project_context
             g['is_engineering']=bool(project_context(db,g['id']))
             g['target_skill_ids']=json.loads(g.pop('skills'))
-            g['paths']=rows(db,'SELECT id,status,content_status,reason,created_at,fingerprint FROM paths WHERE goal_id=:id ORDER BY created_at DESC',id=g['id'])
+            g['paths']=rows(db,'SELECT id,status,content_status,reason,created_at,fingerprint FROM paths WHERE goal_id=:id AND status!="deleted" ORDER BY created_at DESC',id=g['id'])
             current_budget=one(db,'SELECT version FROM budgets WHERE user_id=:u',u=user['id'])
             g['requires_replan']=any(p['status']=='active' and (json.loads(p['fingerprint'])['goal']!=g['version'] or json.loads(p['fingerprint'])['budget']!=current_budget['version']) for p in g['paths'])
             # Compare evidence rather than the user watermark: accepting a path
@@ -344,14 +344,16 @@ def diagnostic_submit(id:str,body:Submission,user=Depends(current_user)):
         save_mastery(db,user['id']);return one(db,'SELECT * FROM attempts WHERE id=:id',id=aid)
 
 @router.post('/goals/{id}/planning-runs',status_code=202)
-def planning(id:str,background:BackgroundTasks,engine:str='local',idempotency_key:str=Header(default=''),user=Depends(current_user)):
-    return queue_run(id,'initial',background,idempotency_key,user,engine)
+def planning(id:str,background:BackgroundTasks,engine:str='local',pace:str='early',review_mastered:bool=False,idempotency_key:str=Header(default=''),user=Depends(current_user)):
+    return queue_run(id,'initial',background,idempotency_key,user,engine,pace,review_mastered)
 
 @router.post('/goals/{id}/replan-previews',status_code=202)
-def replan(id:str,background:BackgroundTasks,engine:str='local',idempotency_key:str=Header(default=''),user=Depends(current_user)):
-    return queue_run(id,'replan',background,idempotency_key,user,engine)
+def replan(id:str,background:BackgroundTasks,engine:str='local',pace:str='early',review_mastered:bool=False,idempotency_key:str=Header(default=''),user=Depends(current_user)):
+    return queue_run(id,'replan',background,idempotency_key,user,engine,pace,review_mastered)
 
-def queue_run(id,kind,background,key,user,engine='local'):
+def queue_run(id,kind,background,key,user,engine='local',pace='early',review_mastered=False):
+    if pace not in ('early','balanced'):fail(422,'排期方式无效')
+    options={'pace':pace,'review_mastered':review_mastered}
     if engine not in ('local','cloud'):fail(422,'规划模式不合法')
     from app.services.planning import execute
     if not key or len(key)>120: fail(422,'请提供Idempotency-Key')
@@ -360,12 +362,13 @@ def queue_run(id,kind,background,key,user,engine='local'):
         if g['status']=='archived': fail(409,'目标已归档')
         existing=one(db,'SELECT * FROM agent_runs WHERE actor_id=:u AND kind=:k AND idem_key=:i',u=user['id'],k=kind,i=key)
         if existing:
+            if json.loads(existing['checkpoint']).get('planning_options',{'pace':'early','review_mastered':False})!=options:fail(409,'幂等键已用于其他排期选项')
             if existing['execution_mode']!=engine:fail(409,'幂等键已用于其他执行模式')
             if existing['goal_id']!=id: fail(409,'幂等键已用于其他目标')
             return {'run_id':existing['id'],'status':existing['status']}
         config=one(db,"SELECT * FROM model_configs WHERE status='active' LIMIT 1") if engine=='cloud' else None
         if engine=='cloud' and not config:fail(409,'请先由管理员评估并激活模型配置')
-        rid=uid();insert(db,'agent_runs',execution_mode=engine,model_config_id=config['id'] if config else None,id=rid,actor_id=user['id'],goal_id=id,kind=kind,status='queued',idem_key=key,created_at=now())
+        rid=uid();insert(db,'agent_runs',checkpoint=dump({'planning_options':options}),execution_mode=engine,model_config_id=config['id'] if config else None,id=rid,actor_id=user['id'],goal_id=id,kind=kind,status='queued',idem_key=key,created_at=now())
     background.add_task(execute,rid)
     return {'run_id':rid,'status':'queued'}
 
@@ -373,19 +376,45 @@ def queue_run(id,kind,background,key,user,engine='local'):
 def path(id:str,user=Depends(current_user)):
     with transaction() as db:
         p=one(db,'SELECT * FROM paths WHERE id=:id AND student_id=:u',id=id,u=user['id'])
-        if not p: fail(404,'路径不存在')
+        if not p or p['status']=='deleted': fail(404,'路径不存在或候选已删除')
         for k in ('tasks','sources','validation'): p[k]=json.loads(p[k])
         mastered=mastery(db,user['id'])
         p['remediations']=p['validation'].get('remediations',[])
         for item in p['tasks']+p['remediations']:
             item['locked']=any(mastered.get(s,{}).get('probability',.2)<.75 for s in item.get('prerequisites',[]))
             item['checkin']=one(db,'SELECT * FROM checkins WHERE path_id=:p AND item_id=:i',p=id,i=item['id'])
+        from datetime import datetime,date,timedelta
+        from zoneinfo import ZoneInfo
+        snapshot=p['validation'].get('budget_snapshot',{})
+        tz=ZoneInfo(snapshot.get('timezone','Asia/Shanghai'))
+        start=datetime.fromisoformat(p['created_at']).astimezone(tz).date()
+        deadline=p['validation'].get('goal_snapshot',{}).get('due_date',start.isoformat())
+        end=datetime.fromisoformat(deadline).astimezone(tz).date() if 'T' in deadline else date.fromisoformat(deadline)
+        schedule={d['date']:d['minutes'] for d in p['validation'].get('schedule',[])}
+        days=snapshot.get('days','[0,1,2,3,4,5,6]');days=json.loads(days) if isinstance(days,str) else days
+        p['calendar']=[{'date':(day:=start+timedelta(days=i)).isoformat(),'minutes':schedule.get(day.isoformat(),0),'available_day':day.weekday() in days} for i in range(min(731,max(0,(end-start).days+1)))]
         p['requires_refresh']=p['fingerprint']!=fingerprint(db,user['id'],p['goal_id'])
         warnings=[]
         for rejected in rows(db,"SELECT validation FROM paths WHERE goal_id=:g AND status='rejected' ORDER BY created_at DESC LIMIT 3",g=p['goal_id']):
             warnings.extend(json.loads(rejected['validation']).get('triggers',[]))
         p['replan_warnings']=list(dict.fromkeys(warnings))
         return p
+
+@router.delete('/paths/{id}')
+def delete_candidate(id:str,user=Depends(current_user)):
+    role(user,'student')
+    with transaction() as db:
+        p=one(db,'SELECT * FROM paths WHERE id=:id AND student_id=:u',id=id,u=user['id'])
+        if not p:fail(404,'候选路径不存在')
+        if p['status']=='deleted':return {'ok':True}
+        if p['status']!='pending_acceptance':fail(409,'只能删除尚未接受的候选路径，活动路径和历史路径不能删除')
+        if one(db,'SELECT id FROM checkins WHERE path_id=:p',p=id) or one(db,"SELECT id FROM reservations WHERE source_type='path' AND source_id=:p AND status='active'",p=id):
+            fail(409,'该路径已有学习记录或活动预约，不能作为候选删除')
+        run(db,"UPDATE paths SET status='deleted' WHERE id=:p",p=id)
+        run(db,"UPDATE remediation_tasks SET status='cancelled' WHERE path_id=:p AND status='candidate'",p=id)
+        audit(db,user['id'],'candidate_path_deleted',id,'移除未接受候选，保留生成过程和历史证据')
+    return {'ok':True}
+
 
 @router.post('/paths/{id}/accept')
 def accept(id:str,user=Depends(current_user)):
@@ -410,10 +439,10 @@ def accept(id:str,user=Depends(current_user)):
             from app.services.planning_rules import validate
             state={'goal':g,'actor':user,'graph':metadata['graph'],'tasks':items,'remediations':remediations,
                    'execution':metadata['execution'],'sources':json.loads(p['sources']),
-                   'schedule':metadata['schedule'],'preserved':metadata.get('preserved',[]),
+                   'schedule':metadata['schedule'],'preserved':metadata.get('preserved',[]),'planning_options':metadata.get('planning_options',{}),'execution_contract':metadata.get('execution_contract'),
                    'previous':one(db,'SELECT * FROM paths WHERE id=:id',id=metadata['previous']) if metadata.get('previous') else None}
             if not all(rule['passed'] for rule in validate(state,db)):fail(409,'路径规则重新审查失败，请重新生成')
-        schedule=allocate(db,user['id'],minutes,g['due_date'],g['id'],g['weekly_minutes']) if minutes else []
+        schedule=allocate(db,user['id'],minutes,g['due_date'],g['id'],g['weekly_minutes'],pace=metadata.get('planning_options',{}).get('pace','early')) if minutes else []
         if schedule != metadata.get('schedule', schedule):
             fail(409,'排期已变化，请重新生成预览并确认','STALE_PREVIEW')
         run(db,"UPDATE paths SET status='superseded' WHERE goal_id=:g AND status='active'",g=g['id'])

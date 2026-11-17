@@ -45,6 +45,7 @@ def transaction():
         yield db
 
 def insert(db, table, **values):
+    if table=='resources':values.setdefault('cloud_allowed',1)
     keys = ','.join(values)
     placeholders = ','.join(':'+k for k in values)
     run(db, f'INSERT INTO {table} ({keys}) VALUES ({placeholders})', **values)

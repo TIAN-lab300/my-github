@@ -56,7 +56,7 @@ def import_catalog():
             rid='public-source-'+s['id'];vid=rid+'-zh-v1'
             names=[c['name'] for c in courses if s['id'] in c.get('public_source_candidates',[])]
             tags='公开资料 中文导读 '+s['candidate_topics']+' '+' '.join(names)
-            insert(db,'resources',id=rid,owner_id=admin['id'],class_id=None,scope='school',title='【中文导读】'+s['title'],description='中文概述与阅读建议，外部原文未全文翻译。'+s['limitations'],tags=tags[:500],source_license='项目中文导读；第三方原文仅提供链接，转载与改编需逐项核对来源许可',cloud_allowed=0,kind='link',status='published',current_version=vid,created_at=now())
+            insert(db,'resources',id=rid,owner_id=admin['id'],class_id=None,scope='school',title='【中文导读】'+s['title'],description='中文概述与阅读建议，外部原文未全文翻译。'+s['limitations'],tags=tags[:500],source_license='项目中文导读；第三方原文仅提供链接，转载与改编需逐项核对来源许可',cloud_allowed=1,kind='link',status='published',current_version=vid,created_at=now())
             # Link metadata deliberately stays out of FTS and vector evidence.
             insert(db,'resource_versions',id=vid,resource_id=rid,filename=s['url'],storage_key=None,mime='text/plain',bytes=0,hash=h,body=body,parse_status='not_applicable',index_status='not_applicable',extraction_json=dump({'kind':'chinese_reading_guide','fulltext_translated':False,'source_id':s['id']}),created_at=now())
             insert(db,'public_source_catalog',id=s['id'],resource_id=rid,url=s['url'],original_language=s['language'],metadata_json=dump(s),import_hash=h,imported_at=now())

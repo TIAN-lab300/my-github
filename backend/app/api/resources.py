@@ -258,7 +258,7 @@ def listing(q:str='',kind:str='',page:int=1,class_id:str='',status:str='',parse_
         return result[(page-1)*50:page*50]
 
 @router.post('/resources',status_code=201)
-async def upload(files:list[UploadFile]=File(...),title:str=Form(''),description:str=Form(...),tags:str=Form(...),source_license:str=Form(...),class_id:str=Form(''),cloud_allowed:bool=Form(False),user=Depends(current_user)):
+async def upload(files:list[UploadFile]=File(...),title:str=Form(''),description:str=Form(...),tags:str=Form(...),source_license:str=Form(...),class_id:str=Form(''),cloud_allowed:bool=Form(True),user=Depends(current_user)):
     role(user,'teacher','student','admin')
     if not description.strip() or not tags.strip() or not source_license.strip(): fail(422,'请填写说明、标签和来源权限')
     if len(files)>10: fail(422,'每批最多10份文件')
@@ -338,6 +338,7 @@ def link(body:dict,user=Depends(current_user)):
     for field,limit in fields:
         if not isinstance(body.get(field),str) or not body[field].strip() or len(body[field])>limit:fail(422,'请填写有效的网址、标题、说明和班级')
     if 'tags' in body and (not isinstance(body['tags'],str) or len(body['tags'])>500):fail(422,'标签不合法')
+    if 'cloud_allowed' in body and type(body['cloud_allowed']) is not bool:fail(422,'云端授权必须为布尔值')
     url=body['url']; parsed=urlsplit(url)
     if parsed.scheme not in ('http','https') or not parsed.hostname or parsed.username or parsed.password: fail(422,'请输入有效HTTP/HTTPS网址')
     if not str(body.get('title','')).strip() or not str(body.get('description','')).strip(): fail(422,'请填写标题与推荐理由')
@@ -345,7 +346,7 @@ def link(body:dict,user=Depends(current_user)):
         personal=user['role']=='student'
         if user['role']=='teacher':class_access(db,user,body.get('class_id'),True)
         rid=uid();vid=uid()
-        insert(db,'resources',id=rid,owner_id=user['id'],class_id=body['class_id'] if user['role']=='teacher' else None,scope='private' if personal else 'class' if user['role']=='teacher' else 'school',title=body['title'][:200],description=body['description'][:3000],tags=str(body.get('tags',''))[:500],source_license='学生个人收藏；外链正文未导入' if personal else '教学资料链接，正文待授权导入与审核',cloud_allowed=0,kind='link',current_version=vid,created_at=now())
+        insert(db,'resources',id=rid,owner_id=user['id'],class_id=body['class_id'] if user['role']=='teacher' else None,scope='private' if personal else 'class' if user['role']=='teacher' else 'school',title=body['title'][:200],description=body['description'][:3000],tags=str(body.get('tags',''))[:500],source_license='学生个人收藏；外链正文未导入' if personal else '教学资料链接，正文待授权导入与审核',cloud_allowed=int(body.get('cloud_allowed',True)),kind='link',current_version=vid,created_at=now())
         insert(db,'resource_versions',id=vid,resource_id=rid,filename=url,bytes=0,hash=hashlib.sha256(url.encode()).hexdigest(),body='',parse_status='not_applicable',index_status='not_applicable',created_at=now())
     return {'id':rid}
 

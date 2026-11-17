@@ -31,7 +31,7 @@ def initialize(demo=False):
             for u in ('student','student2'): insert(db,'memberships',class_id=cid,user_id=ids[u])
             body='''函数基础：Python使用def定义函数，return返回结果，参数传入函数。\n递归：函数调用自身，必须存在结束条件，每次调用逐步趋向基本情况。\n调用栈：函数调用将上下文压入栈中，返回时后进先出。无限递归导致栈深度错误。\n例：def factorial(n): return 1 if n == 0 else n * factorial(n-1)\n来源：本项目作者编写的教学样例，用于函数与递归基础主题。'''
             rid=uid();vid=uid();storage=uid()+'.txt';data=body.encode('utf-8');(DATA/'files'/storage).write_bytes(data)
-            insert(db,'resources',id=rid,owner_id=ids['teacher'],class_id=cid,scope='class',title='Python函数与递归入门',description='函数、递归边界与调用栈',tags='Python 函数 递归 调用栈',source_license='项目自编教学资料，可用于本地演示',cloud_allowed=0,kind='text',status='published',current_version=vid,created_at=now())
+            insert(db,'resources',id=rid,owner_id=ids['teacher'],class_id=cid,scope='class',title='Python函数与递归入门',description='函数、递归边界与调用栈',tags='Python 函数 递归 调用栈',source_license='项目自编教学资料，可用于本地演示',cloud_allowed=1,kind='text',status='published',current_version=vid,created_at=now())
             insert(db,'resource_versions',id=vid,resource_id=rid,filename='函数与递归.txt',storage_key=storage,mime='text/plain',bytes=len(data),hash=hashlib.sha256(data).hexdigest(),body=body,parse_status='ready',index_status='indexed',created_at=now())
             from app.api.resources import tokenize
             run(db,'INSERT INTO chunks VALUES(:r,:v,:b)',r=rid,v=vid,b=tokenize(body))
@@ -151,9 +151,12 @@ def reset_demo_sandbox(directory,confirmation):
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('action',choices=['import-question-candidates','import-public-catalog','init','demo','backup','restore','reindex','prepare-models','demo-sandbox','demo-reset','evaluate-cloud']);parser.add_argument('path',nargs='?');parser.add_argument('--destination');parser.add_argument('--confirm');parser.add_argument('--config-id');parser.add_argument('--operator');parser.add_argument('--previous-report')
+    parser=argparse.ArgumentParser();parser.add_argument('action',choices=['import-python-foundations','import-question-candidates','import-public-catalog','init','demo','backup','restore','reindex','prepare-models','demo-sandbox','demo-reset','evaluate-cloud']);parser.add_argument('path',nargs='?');parser.add_argument('--destination');parser.add_argument('--confirm');parser.add_argument('--config-id');parser.add_argument('--operator');parser.add_argument('--previous-report')
     args=parser.parse_args()
-    if args.action=='import-question-candidates':
+    if args.action=='import-python-foundations':
+        from app.services.python_foundations import import_pack
+        print(json.dumps(import_pack(),ensure_ascii=False))
+    elif args.action=='import-question-candidates':
         from app.services.question_candidates import import_candidates
         print(json.dumps(import_candidates(),ensure_ascii=False))
     elif args.action=='import-public-catalog':

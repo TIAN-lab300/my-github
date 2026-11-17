@@ -1,7 +1,7 @@
 import os,json,re
 from urllib.parse import urlsplit
 import httpx
-from fastapi import APIRouter,Depends,BackgroundTasks,HTTPException
+from fastapi import APIRouter,Depends,BackgroundTasks,HTTPException,Body
 from app.core.db import *
 from app.core.security import *
 from app.schemas import ModelInput
@@ -107,34 +107,67 @@ def evaluate(id:str,user=Depends(current_user)):
     return {'json_ok':success,'search_verified':False,'message':'仅验证JSON连通；未验证联网搜索或完整AI质量集'}
 
 @router.post('/admin/model-configs/{id}/activate')
-def activate(id:str,user=Depends(current_user)):
-    role(user,'admin')
+def activate(id:str,body:dict|None=Body(default=None),user=Depends(current_user)):
+    role(user,'admin');body=body or {}
+    force=body.get('allow_unqualified') is True
+    reason=body.get('reason','')
+    if force and (not isinstance(reason,str) or not reason.strip() or len(reason)>1000):
+        fail(422,'请填写带风险激活的原因（1至1000字）')
     with transaction() as db:
-        c=one(db,"SELECT * FROM model_configs WHERE id=:id AND status='approved'",id=id)
-        if not c: fail(409,'配置需先通过评估')
-        quality=one(db,"SELECT id,review_status,case_count,passed_count FROM model_quality_reports WHERE model_config_id=:id ORDER BY created_at DESC LIMIT 1",id=id)
-        if not quality or quality['review_status']!='approved' or quality['case_count']!=60 or quality['passed_count']!=60:fail(409,'请先完成60场景硬判据评价，并由管理员逐例核对教学语义后批准')
+        c=one(db,"SELECT * FROM model_configs WHERE id=:id AND status IN ('approved','active')",id=id)
+        if not c:fail(409,'配置需先通过JSON连通性试验')
+        quality=one(db,"SELECT * FROM model_quality_reports WHERE model_config_id=:id ORDER BY created_at DESC,rowid DESC LIMIT 1",id=id)
+        from app.services.quality_policy import describe,config_fingerprint
+        evaluation=json.loads(c['evaluation'])
+        if force:
+            if evaluation.get('json_ok') is not True:fail(409,'请先完成真实JSON连通性试验','MODEL_CONNECTION_REQUIRED')
+            evaluation['quality_override']={'enabled':True,'reason':reason.strip(),'actor_id':user['id'],
+                'activated_at':now(),'config_fingerprint':config_fingerprint(c),
+                'report_id':quality['id'] if quality else None,'passed_count':quality['passed_count'] if quality else None,
+                'case_count':quality['case_count'] if quality else None}
+        else:
+            if not describe(quality)['approved']:fail(409,'质量报告未通过复核；管理员也可选择“带风险激活”','MODEL_QUALITY_REQUIRED')
+            evaluation.pop('quality_override',None)
         run(db,"UPDATE model_configs SET status='approved' WHERE status='active'")
         run(db,"UPDATE model_configs SET status='active' WHERE id=:id",id=id)
-        evaluation=json.loads(c['evaluation']);evaluation['quality_report_id']=quality['id']
+        evaluation['quality_report_id']=quality['id'] if quality else None
         run(db,'UPDATE model_configs SET evaluation=:e WHERE id=:id',e=dump(evaluation),id=id)
-        audit(db,user['id'],'model_activated',id,quality['id'])
-    return {'ok':True}
+        audit(db,user['id'],'model_activated_with_override' if force else 'model_activated',id,
+              dump(evaluation['quality_override']) if force else quality['id'])
+    return {'ok':True,'activation_mode':'override' if force else 'reviewed'}
+
+
+@router.post('/admin/model-configs/{id}/quality-runs',status_code=202)
+def start_quality_run(id:str,body:dict,background:BackgroundTasks,user=Depends(current_user)):
+    role(user,'admin')
+    if body.get('confirmed') is not True:fail(422,'请确认本次进行60场景真实评价，每例最多2次修复重试，会消耗API额度')
+    from app.services.quality_jobs import prepare_job,execute_job
+    job=prepare_job(id,user['id']);background.add_task(execute_job,id,job['id'])
+    return {'id':job['id'],'status':job['status'],'total':60}
+
+@router.get('/admin/model-configs/{id}/quality-runs/{run_id}')
+def quality_run_status(id:str,run_id:str,user=Depends(current_user)):
+    role(user,'admin')
+    from app.services.quality_jobs import read_job
+    return read_job(id,run_id)
 
 @router.get('/admin/model-configs/{id}/quality-reports')
 def quality_reports(id:str,user=Depends(current_user)):
     role(user,'admin')
     with transaction() as db:
-        return rows(db,'SELECT id,operator,case_count,passed_count,report_hash,review_status,review_comment,created_at FROM model_quality_reports WHERE model_config_id=:id ORDER BY created_at DESC',id=id)
+        from app.services.quality_policy import describe
+        reports=rows(db,'SELECT * FROM model_quality_reports WHERE model_config_id=:id ORDER BY created_at DESC,rowid DESC',id=id)
+        return [{**{k:v for k,v in r.items() if k!='payload'},**describe(r)} for r in reports]
 
 
 @router.get('/admin/model-configs/{id}/quality-reports/{report_id}')
 def quality_report(id:str,report_id:str,user=Depends(current_user)):
     role(user,'admin')
     with transaction() as db:
-        report=one(db,'SELECT payload,review_status,review_comment FROM model_quality_reports WHERE id=:r AND model_config_id=:c',r=report_id,c=id)
+        report=one(db,'SELECT * FROM model_quality_reports WHERE id=:r AND model_config_id=:c',r=report_id,c=id)
         if not report:fail(404,'质量报告不存在')
-        return {**json.loads(report['payload']),'review_status':report['review_status'],'review_comment':report['review_comment']}
+        from app.services.quality_policy import describe
+        return {**json.loads(report['payload']),'review_status':report['review_status'],'review_comment':report['review_comment'],**describe(report)}
 
 
 @router.post('/admin/model-configs/{id}/quality-reports/{report_id}/review')
@@ -146,11 +179,16 @@ def review_quality(id:str,report_id:str,body:dict,user=Depends(current_user)):
         report=one(db,'SELECT * FROM model_quality_reports WHERE id=:r AND model_config_id=:c',r=report_id,c=id)
         if not report:fail(404,'质量报告不存在')
         if report['review_status']!='pending':fail(409,'报告已复核，请重新执行评价后提交新报告')
+        from app.services.quality_policy import describe
+        if body['approved'] and not describe(report)['current_rubric']:fail(409,'报告判据已过期，请执行当前teaching-v4评价；不得把旧分数升级为新判据通过','QUALITY_RUBRIC_OUTDATED')
+        if body['approved'] and not describe(report)['hard_pass']:fail(409,'报告内容完整性或新判据复核未通过，请重新评价','QUALITY_RECHECK_FAILED')
         reviewed=body.get('reviewed_case_ids',[])
         expected={entry['case']['id'] for entry in json.loads(report['payload'])['results']}
         if body['approved'] and (not isinstance(reviewed,list) or len(reviewed)!=len(expected) or any(not isinstance(value,str) for value in reviewed) or set(reviewed)!=expected):fail(422,'批准前须逐例确认全部60个场景')
         if body['approved'] and (report['case_count']!=60 or report['passed_count']!=60):fail(409,'硬判据尚未全部通过，请修正后重新评价')
         run(db,'UPDATE model_quality_reports SET review_status=:status,reviewer_id=:u,review_comment=:comment,reviewed_at=:t WHERE id=:r',status='approved' if body['approved'] else 'rejected',u=user['id'],comment=comment,t=now(),r=report_id)
+        if body['approved']:
+            run(db,"UPDATE model_configs SET status='approved' WHERE id=:c AND status='active'",c=id)
         audit(db,user['id'],'model_quality_reviewed',report_id,detail='approved' if body['approved'] else 'rejected')
     return {'ok':True}
 
@@ -160,6 +198,8 @@ def detail(id:str,user=Depends(current_user)):
     with transaction() as db:
         r=one(db,'SELECT * FROM agent_runs WHERE id=:id AND actor_id=:u',id=id,u=user['id'])
         if not r: fail(404,'运行不存在')
+        result=one(db,'SELECT status FROM paths WHERE id=:p',p=r['result_id']) if r['result_id'] else None
+        r['result_deleted']=bool(result and result['status']=='deleted')
         checkpoint=json.loads(r['checkpoint'])
         r['checkpoint']={'last_agent':checkpoint.get('last_agent'),'resumable':bool(checkpoint.get('fingerprint'))}
         r['steps']=rows(db,'SELECT agent,status,detail,created_at,input_fingerprint,output_summary,attempt_no FROM agent_steps WHERE run_id=:id ORDER BY created_at,rowid',id=id)
@@ -189,15 +229,18 @@ def retry(id:str,background:BackgroundTasks,user=Depends(current_user)):
 @router.get('/planning/model-status')
 def planning_model_status(user=Depends(current_user)):
     with transaction() as db:
-        c=one(db,"SELECT model,secret_env FROM model_configs WHERE status='active' ORDER BY created_at DESC LIMIT 1")
-        latest=one(db,"SELECT model,status,evaluation,secret_env FROM model_configs ORDER BY created_at DESC LIMIT 1")
-    configured=bool(c and os.getenv(c['secret_env']))
+        c=one(db,"SELECT * FROM model_configs WHERE status='active' ORDER BY created_at DESC LIMIT 1")
+        latest=one(db,"SELECT id,model,status,evaluation,secret_env FROM model_configs ORDER BY created_at DESC LIMIT 1")
+        from app.services.quality_policy import activation_state
+        quality=activation_state(db,c or latest)
+    configured=bool(c and os.getenv(c['secret_env']) and quality.get('allowed'))
     error_code=None
     if latest and latest['evaluation']:
         try:error_code=json.loads(latest['evaluation']).get('error_code')
         except (ValueError,TypeError):pass
     return {'active':bool(c),'ready':configured,'model':c['model'] if c else None,
-            'reason':'ready' if configured else 'missing_key' if c else 'not_active',
+            'reason':'ready' if configured else 'missing_key' if c and not os.getenv(c['secret_env']) else 'quality_required' if c else 'not_active',
+            'quality':quality,'quality_override':quality.get('override',False),
             'latest_status':latest['status'] if latest else None,
             'latest_model':latest['model'] if latest else None,
             'key_ready':bool(latest and os.getenv(latest['secret_env'])),

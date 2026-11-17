@@ -42,9 +42,9 @@ def evidence(db,user,cid,sid,cloud=False):
 def active_config(db):
     config=one(db,"SELECT * FROM model_configs WHERE status='active' ORDER BY created_at DESC LIMIT 1")
     if not config:fail(409,'请管理员先配置、评估并激活模型，或选择本地阅读引导','TUTOR_MODEL_NOT_READY')
-    quality=one(db,'SELECT review_status,case_count,passed_count FROM model_quality_reports WHERE model_config_id=:c ORDER BY created_at DESC LIMIT 1',c=config['id'])
-    if not quality or quality['review_status']!='approved' or quality['case_count']!=60 or quality['passed_count']!=60:
-        fail(409,'模型尚未完成现有质量复核，暂不开放云端辅导','MODEL_QUALITY_REQUIRED')
+    from app.services.quality_policy import activation_state
+    if not activation_state(db,config)['allowed']:
+        fail(409,'模型尚未完成当前teaching-v4基础质量复核，暂不开放云端辅导；该报告不代替辅导专项验收','MODEL_QUALITY_REQUIRED')
     if not os.getenv(config['secret_env']):fail(503,'服务端尚未配置模型密钥，可使用本地阅读引导','MODEL_KEY_MISSING')
     return config
 
@@ -86,6 +86,8 @@ def tutor(cid:str,body:TutorRequest,idempotency_key:str=Header(default=''),user=
         sources=evidence(db,user,cid,s['id'],body.mode=='cloud')
         if not sources:fail(409,'缺少本知识点已关联的可用正文'+('或正文未授权云端发送' if body.mode=='cloud' else '')+'，请先补齐资料','TUTOR_EVIDENCE_MISSING')
         config=active_config(db) if body.mode=='cloud' else None
+        from app.services.quality_policy import activation_state
+        quality_override=activation_state(db,config)['override'] if config else False
         if one(db,"SELECT id FROM tutor_runs WHERE actor_id=:u AND status='running' AND created_at>:cutoff",u=user['id'],cutoff=datetime.fromtimestamp(time.time()-120,timezone.utc).isoformat()):fail(409,'已有辅导请求处理中，请稍后重试','TUTOR_BUSY')
         insert(db,'tutor_runs',id=ident,actor_id=user['id'],course_id=cid,skill_id=s['id'],request_key=idempotency_key,mode=body.mode,level=body.level,question=body.question.strip(),assessment_item_id=body.assessment_item_id,model_config_id=config['id'] if config else None,status='running',sources=dump(sources),created_at=now())
     try:
@@ -100,7 +102,7 @@ def tutor(cid:str,body:TutorRequest,idempotency_key:str=Header(default=''),user=
             result={'explanation':'本地阅读引导，未调用大模型，也未自动分析你的问题。请先对照下方正式正文片段，再独立梳理概念与例子。',
                 'hints':['先指出问题涉及的定义、条件或步骤。','对照引用正文，写出你已经理解和仍不理解的部分。','尝试用自己的例子解释，再通过正式测验验证。'][:body.level],
                 'citations':[{'source_id':sources[0]['id'],'quote':sources[0]['excerpt'][:300]}]}
-        result.update(agent='LearningTutorAgent',model_called=bool(config),model=config['model'] if config else None,model_config_id=config['id'] if config else None,provider_meta={'request_id':meta.get('request_id'),'usage':meta.get('usage')} if isinstance(meta,dict) else {})
+        result.update(quality_override=quality_override,agent='LearningTutorAgent',model_called=bool(config),model=config['model'] if config else None,model_config_id=config['id'] if config else None,provider_meta={'request_id':meta.get('request_id'),'usage':meta.get('usage')} if isinstance(meta,dict) else {})
         with transaction() as db:
             check_pending(db,user,cid,s['id'])
             current=evidence(db,user,cid,s['id'],body.mode=='cloud')

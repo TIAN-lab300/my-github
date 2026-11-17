@@ -5,6 +5,6 @@ export function CloudMode({value,onChange}:{value:string;onChange:(value:string)
  const [status,setStatus]=useState<any>(null),[error,setError]=useState('');
  async function refresh(){try{setStatus(await api('/planning/model-status'));setError('')}catch(e){setError((e as Error).message)}}
  useEffect(()=>{refresh()},[]);
- const reason=status?.ready?'模型已启用，可以生成真实云端规划':!status?.key_ready?'服务端缺少模型密钥，请管理员从云端版入口启动':status?.latest_status==='failed'?(labels[status.last_error_code]||'上次连通性评估失败，请管理员检查模型配置'):status?.latest_status==='approved'?'模型已连通，等待60场景质量报告与复核':'模型尚未通过质量评估并激活';
+ const reason=status?.reason==='quality_required'?'当前模型需要完成新版teaching-v4评价并复核激活，旧60/60不能沿用':status?.ready?(status.quality_override?'模型已由管理员带风险启用，质量报告未通过复核；可使用云端规划':'模型已启用，可以生成真实云端规划'):!status?.key_ready?'服务端缺少模型密钥，请管理员从云端版入口启动':status?.latest_status==='failed'?(labels[status.last_error_code]||'上次连通性评估失败，请管理员检查模型配置'):status?.latest_status==='approved'?'模型已连通，等待60场景质量报告与复核':'模型尚未通过质量评估并激活';
  return <section className="card"><label>规划方式<select value={value} onChange={event=>onChange(event.target.value)}><option value="local">本地规则规划</option><option value="cloud" disabled={!status?.ready}>真实云端四智能体</option></select></label><p role="status">云端状态：{error||reason}</p><button type="button" onClick={refresh}>刷新模型状态</button><p>云端规划仅使用已获云端授权的课程片段。</p></section>
 }

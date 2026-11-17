@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {TeachingPacket} from './TeachingPacket';
 import {api} from './api';
 export function PlanningDetails({path,onChanged,onPractice}:{path:any;onChanged:()=>void;onPractice:(value:any)=>void}){
  const [message,setMessage]=useState('');
@@ -16,6 +17,7 @@ export function PlanningDetails({path,onChanged,onPractice}:{path:any;onChanged:
    <p>新排期 {validation.diff.after_schedule.map((s:any)=>s.date+' '+s.minutes+'分钟').join('；')||'无需新增时间'}</p>
    <p>保留完成历史 {validation.preserved?.length||0}项</p>
   </div>}
+  {validation.teaching_warnings?.map((w:string,i:number)=><p key={i} className="notice">{w}</p>)}
   <h3>执行顺序与材料</h3>
   {validation.execution?.map((item:any,index:number)=><p key={item.id}>{index+1}. {item.name} · {item.minutes}分钟 · {item.dates?.map((d:any)=>d.date+' '+d.minutes+'分钟').join('；')} · 材料{item.citations?.length||0}份 · {item.assessment} · {item.instructions||''}</p>)}
   {message&&<p role="status">{message}</p>}
@@ -23,7 +25,7 @@ export function PlanningDetails({path,onChanged,onPractice}:{path:any;onChanged:
    <p>来源任务 {item.source_item_id} · {item.minutes}分钟 · {item.locked?'先修未达标':'可学习'}</p>
    {item.checkin&&<p>已记录{item.checkin.minutes}分钟</p>}
    {path.status==='active'&&!item.locked&&<><button disabled={busy||!!item.checkin} onClick={async()=>{setBusy(true);try{await api('/check-ins','POST',{path_id:path.id,item_id:item.id,minutes:item.minutes,proportion:1,difficulty:'补强学习',note:''});setMessage('补强学习已记录，掌握度需经测验验证');onChanged()}catch(e){setMessage((e as Error).message)}finally{setBusy(false)}}}>记录补强学习</button>
-    <button disabled={busy} onClick={async()=>{setBusy(true);try{onPractice({path_id:path.id,item_id:item.id})}catch(e){setMessage((e as Error).message)}finally{setBusy(false)}}}>补强知识测验</button></>}
+    <TeachingPacket packet={item.teaching_packet}/><button disabled={busy||item.teaching_packet?.assessment.available_count===0} onClick={async()=>{setBusy(true);try{onPractice({path_id:path.id,item_id:item.id})}catch(e){setMessage((e as Error).message)}finally{setBusy(false)}}}>补强知识测验</button></>}
   </section>)}
  </section>
 }

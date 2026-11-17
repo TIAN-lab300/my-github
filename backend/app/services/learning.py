@@ -67,7 +67,7 @@ def fingerprint(db,student,goal_id):
                  'graph':project['graph'] if project else graph['id'] if graph else 'curated-v1','resources':resources,'memberships':memberships,'course':course_data,'project':project,
                  'identity':{'status':user['status'],'auth_version':user['auth_version'],'role':user['role']}})
 
-def allocate(db,student,minutes,due_date,exclude_goal=None,goal_limit=None):
+def _allocate_early(db,student,minutes,due_date,exclude_goal=None,goal_limit=None):
     budget=one(db,'SELECT * FROM budgets WHERE user_id=:u',u=student)
     tz=ZoneInfo(budget['timezone']); today=datetime.now(tz).date()
     due=datetime.fromisoformat(due_date).astimezone(tz).date() if 'T' in due_date else date.fromisoformat(due_date)
@@ -97,6 +97,46 @@ def allocate(db,student,minutes,due_date,exclude_goal=None,goal_limit=None):
         if remaining==0: break
     if remaining: fail(409,f'全局预算不足，仍缺{remaining}分钟；请延长截止或调整预算','BUDGET_CONFLICT')
     return output
+
+def allocate(db,student,minutes,due_date,exclude_goal=None,goal_limit=None,pace='early'):
+    if pace not in ('early','balanced'):fail(422,'排期方式无效')
+    if not minutes:return []
+    baseline=_allocate_early(db,student,minutes,due_date,exclude_goal,goal_limit)
+    if pace=='early':return baseline
+    # Prefer ~15-minute sessions spread over the available horizon, not tiny daily fragments.
+    import heapq,math
+    budget=one(db,'SELECT * FROM budgets WHERE user_id=:u',u=student)
+    tz=ZoneInfo(budget['timezone']);today=datetime.now(tz).date()
+    due=datetime.fromisoformat(due_date).astimezone(tz).date() if 'T' in due_date else date.fromisoformat(due_date)
+    daily={};weekly={}
+    def used(day,m):
+        week=date.fromisoformat(day).strftime('%G-%V')
+        daily[day]=daily.get(day,0)+m;weekly[week]=weekly.get(week,0)+m
+    for r in rows(db,"SELECT * FROM reservations WHERE student_id=:u AND status='active'",u=student):
+        if exclude_goal and r['goal_id']==exclude_goal:continue
+        used(r['local_date'],r['minutes'])
+    for event in actual_events(db,student):used(datetime.fromisoformat(event['created_at']).astimezone(tz).date().isoformat(),event['minutes'])
+    days=json.loads(budget['days']);slots=[];week_left={}
+    for offset in range((due-today).days+1):
+        day=today+timedelta(days=offset);ds=day.isoformat();week=day.strftime('%G-%V')
+        capacity=max(0,budget['daily_minutes']-daily.get(ds,0))
+        week_left[week]=max(0,min(budget['weekly_minutes']-weekly.get(week,0),goal_limit or budget['weekly_minutes']))
+        if day.weekday() in days and capacity and week_left[week]:slots.append({'date':ds,'week':week,'capacity':capacity})
+    if not slots:fail(409,'截止日前没有可用学习时段','BUDGET_CONFLICT')
+    count=min(len(slots),max(1,math.ceil(minutes/15)))
+    selected={round(i*(len(slots)-1)/(count-1)) for i in range(count)} if count>1 else {len(slots)//2}
+    heap=[(0,i) for i in selected];heapq.heapify(heap);secondary=[i for i in range(len(slots)) if i not in selected]
+    assigned=[0]*len(slots);remaining=minutes
+    while remaining:
+        if not heap:
+            if not secondary:fail(409,'截止日前可用预算不足','BUDGET_CONFLICT')
+            heap=[(assigned[i],i) for i in secondary];heapq.heapify(heap);secondary=[]
+        amount,i=heapq.heappop(heap);slot=slots[i]
+        if assigned[i]>=slot['capacity'] or not week_left[slot['week']]:continue
+        assigned[i]+=1;week_left[slot['week']]-=1;remaining-=1
+        if assigned[i]<slot['capacity'] and week_left[slot['week']]:heapq.heappush(heap,(assigned[i],i))
+    return [{'date':slot['date'],'minutes':assigned[i]} for i,slot in enumerate(slots) if assigned[i]]
+
 
 def actual_events(db,student,class_id=None):
     args={'u':student}; suffix=''

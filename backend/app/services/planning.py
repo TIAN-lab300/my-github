@@ -37,6 +37,13 @@ class State(TypedDict,total=False):
     cloud_repairs:int
     last_agent:str
     learner_evidence:dict
+    planning_options:dict
+    execution_contract:str
+    teaching_warnings:list
+    cloud_semantic_issues:list
+    review_findings:list
+    cloud_round:int
+    cloud_call_cursors:dict
 
 def record_step(db,state,agent,detail):
     record=one(db,'SELECT status,retry_count FROM agent_runs WHERE id=:id',id=state['run_id'])
@@ -45,7 +52,20 @@ def record_step(db,state,agent,detail):
     output={'task_ids':[t['id'] for t in state.get('tasks',[])],
             'source_versions':[s['version_id'] for s in state.get('sources',[])],
             'scope':state.get('mode'),'rules':state.get('rules',[])}
-    output['model_calls']=[call for call in state.get('cloud_calls',[]) if call['agent']==agent]
+    output['semantic_issues']=state.get('cloud_issues',[]) if agent=='PlanReviewAgent' else []
+    output['repair_count']=state.get('cloud_repairs',0)
+    calls=[call for call in state.get('cloud_calls',[]) if call['agent']==agent]
+    cursors=state.setdefault('cloud_call_cursors',{})
+    output['model_calls']=calls[cursors.get(agent,0):]
+    cursors[agent]=len(calls)
+    output['model_calls_semantics']='step-only-v1'
+    output['agent_calls_total']=len(calls)
+    output['review_round']=state.get('cloud_round') if agent in ('PathBuildingAgent','PlanReviewAgent') else None
+    if agent=='PlanReviewAgent' and state.get('cloud_mode'):
+        output['review_decision']='approved' if state.get('cloud_approved') else 'rejected'
+        output['review_findings']=state.get('review_findings',[])
+    if agent=='PathBuildingAgent' and state.get('cloud_mode'):
+        output['task_descriptions']=[{'skill_id':item['skill_id'],'instructions':item.get('instructions',''),'citation_version_ids':[c['version_id'] for c in item.get('citations',[])],'example_id':(item.get('teaching_packet',{}).get('worked_example') or {}).get('example_id')} for item in state.get('execution',[])]
     output['tools']={'GoalDiagnosisAgent':['goal.read','diagnosis.read','graph.snapshot','mastery.read'],
                      'PathBuildingAgent':['resources.authorized','budget.allocate'],
                      'PlanReviewAgent':['rules.validate'],
@@ -89,6 +109,7 @@ def diagnose(state):
                 'question_ids':[q['id'] for q in questions if q['skill']==node['id']]}} for node in graph]
         previous=one(db,"SELECT * FROM paths WHERE goal_id=:g AND status='active'",g=g['id'])
         budget=one(db,'SELECT * FROM budgets WHERE user_id=:u',u=u['id'])
+        if 'planning_options' not in state:state['planning_options']=json.loads(previous['validation']).get('planning_options',{}) if previous else {}
         from app.services.planning_evidence import learner_evidence,evidence_changes
         evidence=learner_evidence(db,u['id'],g,graph,diagnosis)
         evidence['catalog_evidence_integrated']=bool(course_binding)
@@ -145,6 +166,9 @@ def build(state):
         if pc:
             course_links=[link for sid in json.loads(pc['skill_ids']) for link in rows(db,'SELECT * FROM learning_material_links WHERE skill_id=:s',s=sid)]
             course_mapping={sid:PREFIX+sid for sid in json.loads(pc['skill_ids'])}
+        legacy_links=rows(db,'''SELECT m.resource_version_id,g.graph_skill_id FROM learning_material_links m
+            JOIN curriculum_graph_mappings g ON g.skill_id=m.skill_id AND g.course_id=m.course_id
+            WHERE g.graph_version=:v''',v=state['graph_version']) if not cb and not pc else []
         target=set(json.loads(g['skills']))
         for node in reversed(state['graph']):
             if node['id'] in target:target.update(node['prerequisites'])
@@ -153,11 +177,13 @@ def build(state):
             if resource['status']!='published' and resource['scope']!='private':continue
             version=one(db,"SELECT * FROM resource_versions WHERE id=:id AND parse_status='ready' AND index_status='indexed'",id=resource['current_version'])
             if not version:continue
-            if not cb and not pc and one(db,'SELECT id FROM learning_material_links WHERE resource_version_id=:v',v=version['id']):
+            linked_legacy={link['graph_skill_id'] for link in legacy_links if link['resource_version_id']==version['id']}
+            if not cb and not pc and one(db,'SELECT id FROM learning_material_links WHERE resource_version_id=:v',v=version['id']) and not linked_legacy:
                 # A generic legacy topic must not silently borrow a similarly named
                 # C/C++ course lesson. Course content requires an explicit identity map.
                 continue
             supported=[skill for skill in target if any(t.lower() in version['body'].lower() for t in tokens[skill])]
+            if linked_legacy:supported=[skill for skill in supported if skill in linked_legacy]
             if cb or pc:
                 linked={course_mapping.get(link['skill_id']) for link in course_links if link['resource_version_id']==version['id']}
                 supported=[skill for skill in supported if skill in linked]
@@ -167,6 +193,7 @@ def build(state):
                 indexed=rows(db,'SELECT ordinal,body,embedding FROM vector_chunks WHERE version_id=:v ORDER BY ordinal',v=version['id'])
                 for skill in target-set(supported):
                     if (cb or pc) and skill not in linked:continue
+                    if linked_legacy and skill not in linked_legacy:continue
                     if skill not in semantic_vectors:continue
                     matches=[(cosine(semantic_vectors[skill],json.loads(chunk['embedding'])),chunk) for chunk in indexed]
                     if matches:
@@ -201,12 +228,20 @@ def build(state):
         tasks=[];remediations=[];execution=[]
         for node in state['graph']:
             skill=node['id']
-            if skill not in target or m.get(skill,{}).get('probability',.2)>=.75:continue
+            is_review=m.get(skill,{}).get('probability',.2)>=.75
+            if skill not in target:continue
+            if is_review and not (state.get('planning_options',{}).get('review_mastered') and skill in json.loads(g['skills'])):continue
+            if is_review and skill in completed and completed[skill].get('kind')=='review':continue
             item={**node,'skill_id':skill,'id':old.get(skill,{}).get('id',uid()) if state['mode']=='local' else uid(),
                   'assessment':'完成相关知识测验，达到0.75解锁后续学习',
                   'reinforcement':m.get(skill,{}).get('probability',.2)<.45,
                   'citations':[{'resource_id':s['resource_id'],'version_id':s['version_id']} for s in sources if skill in s['supported_skills']]}
-            if skill in completed:
+            if is_review:
+                item.update(id=uid(),kind='review',name=node['name']+' · 复习巩固',minutes=min(30,node['minutes']),reinforcement=False,
+                    assessment='复习讲义与示例，再通过测验验证保持情况；学习分钟不改变掌握度',
+                    instructions='回顾核心概念，独立解释一个例子，再完成练习；这是已达标后的复习，不代表知识薄弱。')
+                tasks.append(item)
+            elif skill in completed:
                 item.update(id=uid(),kind='remediation',source_item_id=completed[skill]['id'])
                 remediations.append(item)
             else:
@@ -221,13 +256,13 @@ def build(state):
             execution.append(item)
         minutes=sum(item['minutes'] for item in execution)
         try:
-            schedule=allocate(db,u['id'],minutes,g['due_date'],g['id'],g['weekly_minutes']) if minutes else []
+            schedule=allocate(db,u['id'],minutes,g['due_date'],g['id'],g['weekly_minutes'],pace=state.get('planning_options',{}).get('pace','early')) if minutes else []
         except Exception as exc:
             if state['mode']!='local' or not hasattr(exc,'status_code') or exc.status_code!=409:raise
             state['mode']='global'
             state['triggers'].append('局部排期不可行，改为全局重排')
             minutes=sum(item['minutes'] for item in execution)
-            schedule=allocate(db,u['id'],minutes,g['due_date'],g['id'],g['weekly_minutes']) if minutes else []
+            schedule=allocate(db,u['id'],minutes,g['due_date'],g['id'],g['weekly_minutes'],pace=state.get('planning_options',{}).get('pace','early')) if minutes else []
         pending=[{'item':item,'remaining':item['minutes']} for item in execution]
         for item in execution:item['dates']=[]
         for day in schedule:
@@ -245,6 +280,8 @@ def build(state):
               'after_schedule':schedule,'scope':state['mode'],'risks':state['triggers']}
         state.update(tasks=tasks,sources=sources,schedule=schedule,remediations=remediations,
                      preserved=preserved,execution=execution,diff=diff)
+        from app.services.teaching_packets import attach_packets
+        attach_packets(db,state)
     step(state,'PathBuildingAgent','按先修与掌握度构造学习及独立补强任务，核算全局预算')
     return state
 
@@ -263,8 +300,11 @@ def save(state):
         pid=uid()
         validation={key:state[key] for key in ('graph','graph_version','rules','remediations','preserved','execution','diff','mode','triggers','budget_snapshot')}
         validation.update(is_valid=True,schedule=state['schedule'],method='cloud-four-agent-v1' if state.get('cloud_mode') else 'local-deterministic-v2',cloud_called=bool(state.get('cloud_mode')),cloud_outputs=state.get('cloud_outputs',{}),model_config_id=r['model_config_id'],
-                          previous=state['previous']['id'] if state.get('previous') else None,goal_snapshot=state['goal'])
+                          planning_options=state.get('planning_options',{}),previous=state['previous']['id'] if state.get('previous') else None,goal_snapshot=state['goal'])
         validation['learner_evidence']=state.get('learner_evidence',{})
+        validation['execution_contract']=state.get('execution_contract')
+        validation['teaching_warnings']=state.get('teaching_warnings',[])
+        if state.get('cloud_mode'):validation.update(review_contract='planning-review-evidence-v1',repair_count=state.get('cloud_repairs',0),model_call_count=len(state.get('cloud_calls',[])))
         from app.services.engineering_goals import context as project_context,event_key
         if project_context(db,state['goal']['id']):validation['project_event_key']=event_key(db,state['goal']['id'])
         insert(db,'paths',id=pid,goal_id=state['goal']['id'],student_id=state['actor']['id'],status='pending_acceptance',
@@ -296,12 +336,14 @@ def execute(run_id):
             if claimed.rowcount!=1:return
             record=one(db,'SELECT * FROM agent_runs WHERE id=:id',id=run_id)
             state=json.loads(record['checkpoint'])
+            options=state.get('planning_options')
             if state.get('fingerprint')!=fingerprint(db,record['actor_id'],record['goal_id']):state={}
+            if options is not None:state['planning_options']=options
             state['run_id']=run_id
         if record['execution_mode']=='cloud':
             import time
             from app.services.cloud_planning import workflow as cloud_workflow
-            state.update(cloud_mode=True,cloud_deadline=time.time()+180,cloud_repairs=0,cloud_calls=[])
+            state.update(cloud_mode=True,cloud_deadline=time.time()+180,cloud_repairs=0,cloud_calls=[],cloud_call_cursors={},cloud_round=0,review_findings=[])
             cloud_workflow.invoke(state,{'recursion_limit':20})
         else:
             workflow.invoke(state)
@@ -312,6 +354,7 @@ def execute(run_id):
             if record and record['status'] not in ('cancelled','succeeded'):
                 checkpoint=json.loads(record['checkpoint'])
                 phase={'GoalDiagnosisAgent':'PathBuildingAgent','PathBuildingAgent':'PlanReviewAgent','PlanReviewAgent':'LearningReplanAgent'}.get(checkpoint.get('last_agent'),'GoalDiagnosisAgent')
+                if isinstance(getattr(exc,'detail',None),dict) and exc.detail.get('code') in ('PATH_MATERIAL_REVIEW_REQUIRED','PATH_REPAIR_EXHAUSTED'):phase='PlanReviewAgent'
                 insert(db,'agent_steps',id=uid(),run_id=run_id,agent=phase,status='failed',detail=message,
                        created_at=now(),input_fingerprint=checkpoint.get('fingerprint','{}'),
                        output_summary=dump({'error':message,'rules':exc.detail.get('rules',[]) if hasattr(exc,'detail') and isinstance(exc.detail,dict) else []}),attempt_no=record['retry_count'])

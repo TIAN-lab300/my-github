@@ -21,7 +21,7 @@ $env:PYTHONPATH = Join-Path $projectRoot 'backend'
 if (!$env:ZHIXING_DATA) { $env:ZHIXING_DATA = Join-Path $projectRoot 'backend/data' }
 $env:PYTHONUTF8 = '1'
 $reportPath = Join-Path $env:ZHIXING_DATA ('model-quality-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.json')
-Write-Host '评估共60场景；提供旧报告时只调用失败或输入已变更的场景，可能产生费用。'
+Write-Host '当前teaching-v4共60场景，每例失败最多2次模型修复，会额外消耗额度；仅同判据、同提示词、同输入可复用旧响应，跨版本将重新调用并产生费用。'
 $extraArgs = @()
 if ($PreviousReport) { $extraArgs = @('--previous-report', $PreviousReport) }
 & $pythonPath -m app.cli evaluate-cloud $reportPath --config-id $ConfigId --operator $Operator @extraArgs
