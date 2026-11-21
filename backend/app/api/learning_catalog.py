@@ -46,7 +46,7 @@ def material(db,user,ident):
     if not link:fail(404,'学习资料关联不存在')
     r=resource_access(db,user,link['resource_id'])
     v=one(db,'SELECT * FROM resource_versions WHERE id=:v AND resource_id=:r',v=link['resource_version_id'],r=r['id'])
-    if r['status']!='published' or r['current_version']!=v['id'] or v['parse_status']!='ready':
+    if not v or (r['status']!='published' and not (r['scope']=='private' and r['owner_id']==user['id'])) or r['current_version']!=v['id'] or v['parse_status']!='ready':
         fail(409,'关联资料已撤回或更新，请重新关联当前有效版本')
     return link
 
@@ -122,12 +122,16 @@ class MaterialLink(BaseModel):
 
 @router.post('/learning/courses/{id}/materials',status_code=201)
 def link_material(id:str,body:MaterialLink,user=Depends(current_user)):
-    role(user,'admin')
+    role(user,'admin','teacher','student')
     with transaction() as db:
         skill(db,id,body.skill_id);r=resource_access(db,user,body.resource_id)
         v=one(db,'SELECT * FROM resource_versions WHERE id=:v',v=r['current_version'])
         if body.resource_version_id and body.resource_version_id!=r['current_version']:fail(409,'资料已更新，请刷新并重新确认关联','MATERIAL_VERSION_CHANGED')
-        if r['scope']!='school' or r['status']!='published' or not v or v['parse_status']!='ready' or not v['body'].strip():fail(409,'请选择校级已发布且正文可用的资料；外链导读不属于正式教学正文')
+        if r['scope']=='school':role(user,'admin')
+        else:resource_access(db,user,r['id'],True)
+        private=r['scope']=='private' and r['owner_id']==user['id']
+        ready=v and ((v['parse_status']=='ready' and v['body'].strip()) or (r['kind']=='link' and v['parse_status']=='not_applicable'))
+        if not ready or (r['status']!='published' and not private):fail(409,'请选择有权使用的已发布资料；个人资料仅本人可关联')
         old=one(db,'SELECT id FROM learning_material_links WHERE skill_id=:s AND resource_version_id=:v',s=body.skill_id,v=v['id'])
         if old:return {'id':old['id']}
         ident=uid();insert(db,'learning_material_links',id=ident,course_id=id,skill_id=body.skill_id,resource_id=r['id'],resource_version_id=v['id'],locator=body.locator)
@@ -137,7 +141,10 @@ def link_material(id:str,body:MaterialLink,user=Depends(current_user)):
 @router.get('/learning/courses/{id}')
 def learning_course(id:str,user=Depends(current_user)):
     with transaction() as db:
-        c=course(db,id);c['skills']=rows(db,'SELECT id,name,status FROM curriculum_catalog_skills WHERE course_id=:c ORDER BY id',c=id)
+        c=course(db,id)
+        from app.services.course_material_access import imported_course_materials
+        c['imported_materials']=imported_course_materials(db,user,id)
+        c['skills']=rows(db,'SELECT id,name,status FROM curriculum_catalog_skills WHERE course_id=:c ORDER BY id',c=id)
         c['chapters']=rows(db,'SELECT * FROM learning_chapters WHERE course_id=:c ORDER BY position',c=id)
         c['project_rubrics']=[json.loads(r['payload']) for r in rows(db,'SELECT payload FROM learning_project_rubrics WHERE course_id=:c ORDER BY skill_id',c=id)]
         c['bank_releases']=rows(db,'''SELECT DISTINCT r.id,r.provenance,r.review_kind FROM learning_bank_releases r
@@ -145,7 +152,8 @@ def learning_course(id:str,user=Depends(current_user)):
             JOIN learning_question_versions v ON v.id=i.question_version_id WHERE v.course_id=:c''',c=id)
         for s in c['skills']:
             s['materials']=[]
-            for link in rows(db,'SELECT m.*,r.title,r.description,r.source_license,v.filename,v.bytes FROM learning_material_links m JOIN resources r ON r.id=m.resource_id JOIN resource_versions v ON v.id=m.resource_version_id WHERE m.skill_id=:s AND r.scope=\'school\' AND r.status=\'published\' AND r.current_version=v.id AND v.parse_status=\'ready\'',s=s['id']):s['materials'].append(link)
+            from app.services.course_material_access import visible_materials
+            s['materials']=visible_materials(db,user,id,s['id'])
             if user['role']=='admin':
                 s['outdated_materials']=rows(db,"SELECT m.id,m.resource_id,m.resource_version_id,m.locator,r.title,r.current_version,r.status FROM learning_material_links m JOIN resources r ON r.id=m.resource_id WHERE m.skill_id=:s AND r.scope='school' AND m.resource_version_id!=r.current_version",s=s['id'])
             s['question_counts']={p:one(db,"SELECT COUNT(DISTINCT question_id) n FROM learning_question_versions WHERE skill_id=:s AND phase=:p AND status='published'",s=s['id'],p=p)['n'] for p in ('diagnostic','practice','retest')}

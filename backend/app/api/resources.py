@@ -228,7 +228,7 @@ def tokenize(text):
 
 def visible(db,user):
     result=[]
-    for r in rows(db,'SELECT * FROM resources ORDER BY created_at DESC'):
+    for r in rows(db,'SELECT * FROM resources WHERE id NOT LIKE 'chapter-ref-%' ORDER BY created_at DESC'):
         if r['owner_id']==user['id']: result.append(r); continue
         if r['status']!='published': continue
         if r['scope']=='school' or (r['scope']=='class' and user['role']=='student' and one(db,"SELECT 1 FROM memberships WHERE class_id=:c AND user_id=:u AND status='active'",c=r['class_id'],u=user['id'])):
