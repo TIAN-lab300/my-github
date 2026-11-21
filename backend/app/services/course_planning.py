@@ -23,13 +23,15 @@ def binding(db,goal_id,validate=True):
 
 
 def bank(db,b,phase,skills=None):
+    from app.services.curriculum_governance import usable_question
     mapping=json.loads(b['mappings']);result=[]
     for m in mapping:
         if skills is not None and m['graph_skill_id'] not in skills:continue
         for q in rows(db,"""SELECT v.* FROM learning_question_versions v WHERE skill_id=:s AND status='published'
             AND phase=:p AND NOT EXISTS(SELECT 1 FROM learning_question_versions n WHERE n.question_id=v.question_id
             AND n.version>v.version AND n.status='published') ORDER BY question_id""",s=m['skill_id'],p=phase):
-            result.append({'id':q['id'],'question_id':q['question_id'],'course_question_version_id':q['id'],
+            if not usable_question(db,q,phase):continue
+            result.append({'id':q['id'],'question_id':q['question_id'],'course_question_version_id':q['id'],'teaching_quality':q['teaching_quality'],
                 'skill':m['graph_skill_id'],'prompt':q['prompt'],'options':json.loads(q['options']),
                 'answer':str(q['answer']),'explanation':q['explanation'],'source':q['source'],
                 'purpose':phase,'version':q['version']})

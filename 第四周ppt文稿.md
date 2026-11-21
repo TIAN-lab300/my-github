@@ -139,7 +139,7 @@ flowchart TD
 | 并发保护 | 输入版本与指纹 | 防止接受陈旧候选 |
 | 云端 | 服务端配置与质量门槛 | 配置可登记不代表可直接激活 |
 
-源码定位：backend/app/services/planning.py、planning_rules.py、cloud_planning.py、vector_index.py；frontend/src/PlanningDetails.tsx、PlanningReadiness.tsx。
+源码定位：backend/app/services/planning.py、planning_rules.py、cloud_planning.py、vector_index.py；frontend/src/PlanningDetails.tsx。
 
 ## 第9页 A关键模块运行与集成问题
 

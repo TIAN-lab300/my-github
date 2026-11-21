@@ -12,18 +12,22 @@ def bkt(p,correct):
     return posterior+(1-posterior)*.2
 
 def mastery(db,student,class_id=None):
-    sql='SELECT * FROM observations WHERE student_id=:u'
+    sql='SELECT o.*, l.skill_id AS canonical_skill FROM observations o LEFT JOIN project_evidence_links l ON l.observation_id=o.id WHERE o.student_id=:u'
     args={'u':student}
     if class_id:
-        sql+=' AND class_id=:c'; args['c']=class_id
-    sql+=' ORDER BY rowid'
+        sql+=' AND o.class_id=:c'; args['c']=class_id
+    sql+=' ORDER BY o.rowid'
     result={}
+    aliases=set()
     for obs in rows(db,sql,**args):
-        item=result.setdefault(obs['skill'],{'probability':.2,'evidence_count':0})
+        skill=obs['canonical_skill'] or obs['skill']
+        if obs['canonical_skill']:aliases.add(skill)
+        item=result.setdefault(skill,{'probability':.2,'evidence_count':0})
         before=item['probability']
         item['probability']=bkt(item['probability'],obs['correct'])
         item['evidence_count']+=1
         item['last_update']={'prior':before,'posterior':item['probability'],'evidence_id':obs['attempt_id'],'parameter_version':'bkt-v1','mastery_threshold':.75,'weak_threshold':.45}
+    for skill in aliases:result['catalog:'+skill]=result[skill]
     return result
 
 def observations(db,attempt,questions,answers,student,class_id=None):
@@ -48,24 +52,6 @@ def save_mastery(db,student,class_id=None):
         insert(db,'mastery_snapshots',id=uid(),student_id=student,class_id=class_id,skill=skill,probability=item['probability'],evidence_count=item['evidence_count'],created_at=now())
     touch(db,student)
 
-def fingerprint(db,student,goal_id):
-    goal=one(db,'SELECT version FROM goals WHERE id=:id',id=goal_id)
-    user=one(db,'SELECT watermark,status,auth_version,role FROM users WHERE id=:id',id=student)
-    budget=one(db,'SELECT version FROM budgets WHERE user_id=:id',id=student)
-    resources=rows(db,"""SELECT r.id,r.version,r.current_version,r.status,r.cloud_allowed,c.status AS class_status
-        FROM resources r LEFT JOIN classes c ON c.id=r.class_id WHERE r.owner_id=:u
-        OR (r.status='published' AND (r.scope='school' OR (r.scope='class' AND EXISTS
-        (SELECT 1 FROM memberships m WHERE m.class_id=r.class_id AND m.user_id=:u AND m.status='active'))))
-        ORDER BY r.id""",u=student)
-    graph=one(db,'SELECT id FROM graph_versions WHERE active=1')
-    memberships=rows(db,'SELECT class_id,status FROM memberships WHERE user_id=:u ORDER BY class_id',u=student)
-    from app.services.course_planning import fingerprint_data
-    course_data=fingerprint_data(db,goal_id)
-    from app.services.engineering_goals import fingerprint_data as project_data
-    project=project_data(db,goal_id)
-    return dump({'goal':goal['version'],'watermark':user['watermark'],'budget':budget['version'],
-                 'graph':project['graph'] if project else graph['id'] if graph else 'curated-v1','resources':resources,'memberships':memberships,'course':course_data,'project':project,
-                 'identity':{'status':user['status'],'auth_version':user['auth_version'],'role':user['role']}})
 
 def _allocate_early(db,student,minutes,due_date,exclude_goal=None,goal_limit=None):
     budget=one(db,'SELECT * FROM budgets WHERE user_id=:u',u=student)
@@ -80,10 +66,14 @@ def _allocate_early(db,student,minutes,due_date,exclude_goal=None,goal_limit=Non
     for r in reservations:
         if exclude_goal and r['goal_id']==exclude_goal: continue
         add(r['local_date'],r['minutes'])
+        if exclude_goal and r['goal_id']=='project:'+exclude_goal:
+            week=date.fromisoformat(r['local_date']).strftime('%G-%V');goal_week[week]=goal_week.get(week,0)+r['minutes']
     # Actual work replaces reservations upon completion; never double count it.
     for event in actual_events(db,student):
         day=datetime.fromisoformat(event['created_at']).astimezone(tz).date().isoformat()
         add(day,event['minutes'])
+        if exclude_goal and event.get('goal_id')==exclude_goal:
+            week=date.fromisoformat(day).strftime('%G-%V');goal_week[week]=goal_week.get(week,0)+event['minutes']
     remaining=minutes; output=[]; days=json.loads(budget['days'])
     for offset in range((due-today).days+1):
         day=today+timedelta(days=offset)
@@ -108,19 +98,24 @@ def allocate(db,student,minutes,due_date,exclude_goal=None,goal_limit=None,pace=
     budget=one(db,'SELECT * FROM budgets WHERE user_id=:u',u=student)
     tz=ZoneInfo(budget['timezone']);today=datetime.now(tz).date()
     due=datetime.fromisoformat(due_date).astimezone(tz).date() if 'T' in due_date else date.fromisoformat(due_date)
-    daily={};weekly={}
+    daily={};weekly={};project_week={}
     def used(day,m):
         week=date.fromisoformat(day).strftime('%G-%V')
         daily[day]=daily.get(day,0)+m;weekly[week]=weekly.get(week,0)+m
     for r in rows(db,"SELECT * FROM reservations WHERE student_id=:u AND status='active'",u=student):
         if exclude_goal and r['goal_id']==exclude_goal:continue
         used(r['local_date'],r['minutes'])
-    for event in actual_events(db,student):used(datetime.fromisoformat(event['created_at']).astimezone(tz).date().isoformat(),event['minutes'])
+        if exclude_goal and r['goal_id']=='project:'+exclude_goal:
+            week=date.fromisoformat(r['local_date']).strftime('%G-%V');project_week[week]=project_week.get(week,0)+r['minutes']
+    for event in actual_events(db,student):
+        ds=datetime.fromisoformat(event['created_at']).astimezone(tz).date().isoformat();used(ds,event['minutes'])
+        if exclude_goal and event.get('goal_id')==exclude_goal:
+            week=date.fromisoformat(ds).strftime('%G-%V');project_week[week]=project_week.get(week,0)+event['minutes']
     days=json.loads(budget['days']);slots=[];week_left={}
     for offset in range((due-today).days+1):
         day=today+timedelta(days=offset);ds=day.isoformat();week=day.strftime('%G-%V')
         capacity=max(0,budget['daily_minutes']-daily.get(ds,0))
-        week_left[week]=max(0,min(budget['weekly_minutes']-weekly.get(week,0),goal_limit or budget['weekly_minutes']))
+        week_left[week]=max(0,min(budget['weekly_minutes']-weekly.get(week,0),max(0,goal_limit-project_week.get(week,0)) if goal_limit else budget['weekly_minutes']))
         if day.weekday() in days and capacity and week_left[week]:slots.append({'date':ds,'week':week,'capacity':capacity})
     if not slots:fail(409,'截止日前没有可用学习时段','BUDGET_CONFLICT')
     count=min(len(slots),max(1,math.ceil(minutes/15)))
@@ -142,9 +137,10 @@ def actual_events(db,student,class_id=None):
     args={'u':student}; suffix=''
     if class_id: suffix=' AND class_id=:c';args['c']=class_id
     events=rows(db,'SELECT id,minutes,created_at,resource_id AS source_id FROM study_sessions WHERE student_id=:u'+suffix,**args)
-    events+=rows(db,'SELECT id,minutes,created_at,assignment_id AS source_id FROM attempts WHERE student_id=:u'+suffix,**args)
+    events+=rows(db,'SELECT id,minutes,created_at,assignment_id AS source_id,goal_id FROM attempts WHERE student_id=:u'+suffix,**args)
+    events+=rows(db,'SELECT id,minutes,created_at,source_id,goal_id FROM project_worklogs WHERE student_id=:u'+suffix,**args)
     if not class_id:
-        events+=rows(db,'SELECT id,minutes,created_at,item_id AS source_id FROM checkins WHERE student_id=:u',u=student)
+        events+=rows(db,'SELECT c.id,c.minutes,c.created_at,c.item_id AS source_id,p.goal_id FROM checkins c JOIN paths p ON p.id=c.path_id WHERE c.student_id=:u',u=student)
         events+=rows(db,'SELECT id,minutes,created_at,material_link_id AS source_id FROM learning_sessions WHERE student_id=:u',u=student)
     return events
 

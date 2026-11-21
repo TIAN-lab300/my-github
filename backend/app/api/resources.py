@@ -8,7 +8,7 @@ from app.core.security import *
 from app.schemas import StudyInput
 
 router=APIRouter()
-TEXT={'.md','.txt','.srt','.vtt','.pdf','.docx','.pptx'}
+TEXT={'.md','.txt','.srt','.vtt','.pdf','.docx','.pptx','.c','.cpp','.h','.hpp','.py','.glsl','.vert','.frag','.log'}
 DOCUMENTS={'.pdf','.docx','.pptx'}
 MEDIA={'.mp4','.webm','.mov','.m4a','.mp3','.wav','.ogg','.png','.jpg','.jpeg','.gif','.webp'}
 
@@ -313,6 +313,8 @@ async def upload(files:list[UploadFile]=File(...),title:str=Form(''),description
             with transaction() as db:
                 if user['role']=='teacher': class_access(db,user,class_id,True)
                 existing=one(db,'''SELECT r.id,r.current_version,v.parse_status,v.error FROM resources r JOIN resource_versions v ON v.id=r.current_version WHERE r.owner_id=:owner AND r.class_id IS :class_id AND v.hash=:hash AND r.title=:title AND r.description=:description AND r.tags=:tags AND r.source_license=:license AND r.cloud_allowed=:cloud LIMIT 1''',owner=user['id'],class_id=class_id or None,hash=hashlib.sha256(data).hexdigest(),title=(title.strip() or f.filename or '资料')[:200],description=description[:3000],tags=tags[:500],license=source_license[:1000],cloud=int(cloud_allowed))
+                if user['role']=='admin' and not existing:
+                    existing=one(db,"SELECT r.id,r.current_version,v.parse_status,v.error FROM resources r JOIN resource_versions v ON v.id=r.current_version WHERE r.owner_id=:owner AND r.scope='school' AND r.status!='withdrawn' AND r.cloud_allowed=:cloud AND r.source_license=:license AND v.hash=:hash AND v.parse_status='ready' ORDER BY r.created_at LIMIT 1",owner=user['id'],cloud=int(cloud_allowed),license=source_license[:1000],hash=hashlib.sha256(data).hexdigest())
                 if existing:
                     (DATA/'files'/storage).unlink(missing_ok=True)
                     results.append({'id':existing['id'],'version_id':existing['current_version'],'filename':f.filename,'parse_status':existing['parse_status'],'error':existing['error'],'deduplicated':True})
@@ -360,7 +362,6 @@ def publish(id:str,user=Depends(current_user)):
         r=resource_access(db,user,id,True);v=one(db,'SELECT * FROM resource_versions WHERE id=:id',id=r['current_version'])
         role(user,'teacher','admin')
         if v['parse_status'] not in ('ready','not_applicable'): fail(409,'正文解析失败，不能发布')
-        if v['parse_status']=='ready' and v['index_status']!='indexed': fail(409,'正文索引未就绪')
         run(db,"UPDATE resources SET status='published',version=version+1 WHERE id=:id",id=id)
         from app.services.vector_index import enqueue as enqueue_vector
         if v['parse_status']=='ready': enqueue_vector(db,v['id'])

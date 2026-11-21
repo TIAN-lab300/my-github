@@ -72,36 +72,6 @@ export function QuestionBank({role}:{role:'admin'|'teacher'}) {
     </section>;
 }
 
-export function SessionAssessment({path,item,onChanged}:{path:string;item:string;onChanged:()=>Promise<void>}) {
-    const [session,setSession] = useState<RecordData|null>(null);
-    const [history,setHistory] = useState<RecordData[]>([]);
-    const [message,setMessage] = useState('');
-    const [busy,setBusy] = useState(false);
-    async function reload(selected?:string) {
-        const list = await api(`/paths/${path}/items/${item}/sessions`);
-        setHistory(list);setSession(list.find((s:RecordData)=>s.id===selected)||list[0]||null);
-    }
-    useEffect(()=>{setSession(null);setHistory([]);setMessage('');let alive=true;api(`/paths/${path}/items/${item}/sessions`).then(list=>{if(alive){setHistory(list);setSession(list[0]||null)}}).catch(e=>{if(alive)setMessage(e.message)});return()=>{alive=false}},[path,item]);
-    async function operate(work:()=>Promise<void>) {setBusy(true);setMessage('');try{await work()}catch(error){setMessage((error as Error).message)}finally{setBusy(false)}}
-    function start(repeat=false) {operate(async()=>{const result=await api(`/paths/${path}/items/${item}/${repeat?'retests':'sessions'}`,'POST');await reload(result.id)})}
-    return <section>
-        {message&&<p role="status" className="notice">{message}</p>}
-        {!session&&<button disabled={busy} onClick={()=>start()}>开始测验</button>}
-        {session&&<>
-            <p>{statuses[session.status]} · {session.previous_id?'复测':'首次测验'} · {new Date(session.created_at).toLocaleString()}</p>
-            {session.invalid_reason&&<p className="error">{session.invalid_reason}</p>}
-            <form onSubmit={e=>{e.preventDefault();operate(async()=>{const result=await api(`/assessment-sessions/${session.id}/submit`,'POST',{answers:session.answers,minutes:session.minutes});await reload(result.id);await onChanged();setMessage('测验已提交，掌握证据与路径状态已刷新')})}}>
-                {session.questions.map((question:RecordData)=><fieldset key={question.id} disabled={busy||session.status!=='open'}><legend>{question.prompt}</legend>{question.options.map((option:string,i:number)=><label key={i}><input type="radio" name={question.id} required checked={session.answers[question.id]===String(i)} onChange={()=>setSession({...session,answers:{...session.answers,[question.id]:String(i)}})}/>{option}</label>)}</fieldset>)}
-                {session.status==='open'&&<><label>累计测验用时（分钟）<input type="number" min={1} max={1440} required value={session.minutes} onChange={e=>setSession({...session,minutes:Number(e.target.value)})}/></label>
-                    <button type="button" disabled={busy} onClick={()=>operate(async()=>{await api(`/assessment-sessions/${session.id}/answers`,'PUT',{answers:session.answers,minutes:session.minutes});setMessage('答案与用时已保存')})}>保存答案</button><button disabled={busy}>提交评分</button></>}
-            </form>
-            {session.result&&<><h3>测验结果 · {Math.round(session.result.score*100)}%</h3><p>本次测验已计入掌握证据，重复查看不会增加证据。</p>{session.review_questions?.map((q:RecordData)=><p key={q.id}>正确答案 {q.options[Number(q.answer)]}。{q.explanation}</p>)}<p>{Object.entries(session.mastery||{}).map(([skill,value])=>`${skill} 当前掌握度 ${Math.round((value as RecordData).probability*100)}%`).join(' · ')}</p><button disabled={busy} onClick={()=>start(true)}>申请复测</button></>}
-        </>}
-        <h3>历次测验与原题复习</h3><p>选择已提交记录可回看题目与解析。</p>
-        {history.map(record=><p key={record.id}><button disabled={busy} onClick={()=>setSession(record)}>{new Date(record.created_at).toLocaleString()} · {statuses[record.status]}{record.result?` · ${Math.round(record.result.score*100)}%`:''}</button></p>)}
-    </section>;
-}
-
 export function TeacherAssessments({classId}:{classId:string}) {
     const [records,setRecords] = useState<RecordData[]>([]);
     const [error,setError] = useState('');

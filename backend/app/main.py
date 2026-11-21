@@ -8,12 +8,12 @@ from fastapi.responses import JSONResponse,FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from app.core.db import transaction,run,uid
-from app.api import tutor,engineering_goals,learning_catalog,curriculum_catalog,phone,auth,classes,resources,tasks,goals,profiles,models,management,evidence,question_bank
+from app.api import projects,tutor,engineering_goals,learning_catalog,curriculum_catalog,phone,auth,classes,resources,tasks,goals,profiles,models,management,evidence,question_bank
 
 @asynccontextmanager
 async def lifespan(app):
     with transaction() as db:
-        run(db,"UPDATE agent_runs SET status='interrupted',error='服务重启导致中断，可重试' WHERE status IN ('queued','running')")
+        run(db,"UPDATE agent_runs SET status='interrupted',error='旧规划运行已中断' WHERE status IN ('queued','running')")
     stop=asyncio.Event()
     async def consume(drain):
         while not stop.is_set():
@@ -27,8 +27,7 @@ async def lifespan(app):
     from app.services.profile_worker import drain_once as profile_once
     from app.services.parse_worker import drain_once as parse_once
     from app.services.vector_index import drain_once as vector_once
-    from app.services.engineering_goals import auto_replan_once
-    workers=[asyncio.create_task(consume(profile_once)),asyncio.create_task(consume(parse_once)),asyncio.create_task(consume(vector_once)),asyncio.create_task(consume(auto_replan_once))]
+    workers=[asyncio.create_task(consume(profile_once)),asyncio.create_task(consume(parse_once)),asyncio.create_task(consume(vector_once))]
     try: yield
     finally:
         stop.set()
@@ -65,7 +64,7 @@ async def errors(request,exc):
     detail=exc.detail if isinstance(exc.detail,dict) else {'message':str(exc.detail),'code':'REQUEST_FAILED'}
     return JSONResponse({**detail,'request_id':getattr(request.state,'request_id','')},status_code=exc.status_code,headers=exc.headers)
 
-for router in (tutor.router,auth.router,classes.router,resources.router,tasks.router,goals.router,profiles.router,models.router,management.router,evidence.router,question_bank.router):
+for router in (projects.router,tutor.router,auth.router,classes.router,resources.router,tasks.router,goals.router,profiles.router,models.router,management.router,evidence.router,question_bank.router):
     app.include_router(router,prefix='/api/v1')
 
 @app.get('/api/v1/health')

@@ -10,6 +10,28 @@ from app.api.tasks import task_dto,validate_questions
 
 router=APIRouter()
 
+@router.get('/curriculum/courses/{id}/coverage')
+def curriculum_coverage(id:str,user=Depends(current_user)):
+    from app.services.curriculum_governance import coverage,material_availability
+    with transaction() as db:
+        if not one(db,'SELECT id FROM curriculum_catalog_courses WHERE id=:i',i=id):fail(404,'课程不存在')
+        result=coverage(db,[s['id'] for s in rows(db,'SELECT id FROM curriculum_catalog_skills WHERE course_id=:i',i=id)])
+        for skill in result['skills']:
+            skill['material_availability']=material_availability(db,user,skill['skill_id'])
+        return result
+
+@router.post('/admin/curriculum/questions/{id}/auto-check')
+def curriculum_question_auto_check(id:str,user=Depends(current_user)):
+    role(user,'admin')
+    from app.services.curriculum_governance import check_question
+    with transaction() as db:return check_question(db,id)
+
+@router.post('/admin/curriculum/question-teaching-review')
+def curriculum_teaching_review(user=Depends(current_user)):
+    role(user,'admin')
+    from app.curriculum_review_batch import review_batch
+    return review_batch(1)
+
 @router.patch('/resources/{id}')
 def resource_edit(id:str,body:dict,user=Depends(current_user)):
     with transaction() as db:

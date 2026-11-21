@@ -69,24 +69,41 @@ def create_question(body:Question,user=Depends(current_user)):
         qid=uid();vid=uid()
         insert(db,'learning_questions',id=qid,course_id=body.course_id,owner_id=user['id'],created_at=now())
         insert(db,'learning_question_versions',id=vid,question_id=qid,course_id=body.course_id,skill_id=body.skill_id,version=1,phase=body.phase,prompt=body.prompt.strip(),options=dump(body.options),answer=body.answer,explanation=body.explanation.strip(),source=body.source,created_at=now())
+        from app.services.curriculum_governance import check_question
+        validation=check_question(db,vid)
         audit(db,user['id'],'learning_question_drafted',vid)
-    return {'id':vid,'status':'draft'}
+    return {'id':vid,'status':'draft','automatic_validation':validation}
 
 class Review(BaseModel):
-    confirmed:bool
+    confirmed:bool=False
 
 @router.post('/learning/questions/{id}/publish')
 def publish_question(id:str,body:Review,user=Depends(current_user)):
     role(user,'admin')
-    if not body.confirmed:fail(422,'请确认已核对完整题目、答案、来源许可及知识点')
+    from app.services.curriculum_governance import check_question,review_question_content
     with transaction() as db:
         q=one(db,'SELECT * FROM learning_question_versions WHERE id=:i',i=id)
         if not q or q['status']!='draft':fail(409,'只能发布草稿题目')
         c=course(db,q['course_id'])
         if c['assessment_mode']=='project_rubric':fail(409,'实践项目不能以选择题作为最终验收')
-        run(db,"UPDATE learning_question_versions SET status='published',reviewer_id=:u WHERE id=:i",u=user['id'],i=id)
-        audit(db,user['id'],'learning_question_published',id)
-    return {'ok':True}
+        validation=check_question(db,id)
+        knowledge=skill(db,q['course_id'],q['skill_id'])
+    if validation['status']!='passed':fail(422,'题目未通过自动结构校验','QUESTION_VALIDATION_FAILED')
+    teaching=None if body.confirmed else review_question_content(q,knowledge['name'])
+    with transaction() as db:
+        current=one(db,'SELECT * FROM learning_question_versions WHERE id=:i',i=id)
+        if current!=q:fail(409,'审核期间题目已变化，请重新提交审核','QUESTION_REVISION_CHANGED')
+        if teaching:
+            insert(db,'curriculum_validation_events',id=uid(),revision_id=validation['revision_id'],method='automatic_teaching_v1',status=teaching['status'],checks=dump(teaching),reviewer_id=None,created_at=now())
+            validation['teaching_review']=teaching['status']
+        if not teaching or teaching['status']!='failed':
+            run(db,"UPDATE learning_question_versions SET status='published',reviewer_id=:u WHERE id=:i",u=user['id'] if body.confirmed else None,i=id)
+            if body.confirmed:
+                insert(db,'curriculum_validation_events',id=uid(),revision_id=validation['revision_id'],method='human_review',status='passed',checks=dump({'confirmed':True}),reviewer_id=user['id'],created_at=now())
+            audit(db,user['id'],'learning_question_published',id)
+    if teaching and teaching['status']=='failed':
+        fail(422,'自动教学审查未通过：'+'；'.join(teaching['issues']),'QUESTION_TEACHING_REVIEW_FAILED')
+    return {'ok':True,'automatic_validation':validation,'teaching_validation':teaching,'human_reviewed':body.confirmed}
 
 @router.post('/learning/questions/{id}/disable')
 def disable_question(id:str,user=Depends(current_user)):
@@ -100,6 +117,7 @@ def disable_question(id:str,user=Depends(current_user)):
 class MaterialLink(BaseModel):
     skill_id:str
     resource_id:str
+    resource_version_id:str|None=None
     locator:str=Field(default='',max_length=1000)
 
 @router.post('/learning/courses/{id}/materials',status_code=201)
@@ -108,6 +126,7 @@ def link_material(id:str,body:MaterialLink,user=Depends(current_user)):
     with transaction() as db:
         skill(db,id,body.skill_id);r=resource_access(db,user,body.resource_id)
         v=one(db,'SELECT * FROM resource_versions WHERE id=:v',v=r['current_version'])
+        if body.resource_version_id and body.resource_version_id!=r['current_version']:fail(409,'资料已更新，请刷新并重新确认关联','MATERIAL_VERSION_CHANGED')
         if r['scope']!='school' or r['status']!='published' or not v or v['parse_status']!='ready' or not v['body'].strip():fail(409,'请选择校级已发布且正文可用的资料；外链导读不属于正式教学正文')
         old=one(db,'SELECT id FROM learning_material_links WHERE skill_id=:s AND resource_version_id=:v',s=body.skill_id,v=v['id'])
         if old:return {'id':old['id']}
@@ -126,7 +145,9 @@ def learning_course(id:str,user=Depends(current_user)):
             JOIN learning_question_versions v ON v.id=i.question_version_id WHERE v.course_id=:c''',c=id)
         for s in c['skills']:
             s['materials']=[]
-            for link in rows(db,'SELECT m.*,r.title FROM learning_material_links m JOIN resources r ON r.id=m.resource_id JOIN resource_versions v ON v.id=m.resource_version_id WHERE m.skill_id=:s AND r.scope=\'school\' AND r.status=\'published\' AND r.current_version=v.id AND v.parse_status=\'ready\'',s=s['id']):s['materials'].append(link)
+            for link in rows(db,'SELECT m.*,r.title,r.description,r.source_license,v.filename,v.bytes FROM learning_material_links m JOIN resources r ON r.id=m.resource_id JOIN resource_versions v ON v.id=m.resource_version_id WHERE m.skill_id=:s AND r.scope=\'school\' AND r.status=\'published\' AND r.current_version=v.id AND v.parse_status=\'ready\'',s=s['id']):s['materials'].append(link)
+            if user['role']=='admin':
+                s['outdated_materials']=rows(db,"SELECT m.id,m.resource_id,m.resource_version_id,m.locator,r.title,r.current_version,r.status FROM learning_material_links m JOIN resources r ON r.id=m.resource_id WHERE m.skill_id=:s AND r.scope='school' AND m.resource_version_id!=r.current_version",s=s['id'])
             s['question_counts']={p:one(db,"SELECT COUNT(DISTINCT question_id) n FROM learning_question_versions WHERE skill_id=:s AND phase=:p AND status='published'",s=s['id'],p=p)['n'] for p in ('diagnostic','practice','retest')}
         if user['role']=='admin':
             c['question_drafts']=rows(db,"SELECT id,skill_id,prompt,status,phase,options,answer,explanation,source FROM learning_question_versions WHERE course_id=:c ORDER BY created_at DESC",c=id)
@@ -169,7 +190,8 @@ def available_questions(db,user,course_id,skill_id,phase):
         recover_history(db,user['id'])
         seen={r['identity'] for r in rows(db,'SELECT identity FROM question_exposures WHERE student_id=:u',u=user['id'])}
         candidates=[q for q in candidates if not any(k in seen for k in question_keys(q))]
-    return candidates
+    from app.services.curriculum_governance import usable_question
+    return [question for question in candidates if usable_question(db,question,phase)]
 
 @router.get('/learning/courses/{id}/assessment-readiness')
 def assessment_readiness(id:str,phase:Literal['diagnostic','practice','retest']='practice',user=Depends(current_user)):
@@ -322,7 +344,15 @@ def planning_readiness(id:str,user=Depends(current_user)):
             result.append({**s,'mapping':m,'question_counts':counts,'material_count':materials,'gaps':gaps})
         goals=rows(db,'''SELECT g.id,g.title,g.status FROM goals g JOIN course_goal_bindings b ON b.goal_id=g.id
             WHERE b.course_id=:c AND g.student_id=:u ORDER BY g.created_at DESC''',c=id,u=user['id'])
-    return {'graph_version':version,'graph':graph,'skills':result,'goals':goals,'project_mode':c['assessment_mode']=='project_rubric'}
+        from app.services.curriculum_governance import coverage
+        inventory=coverage(db,[item['id'] for item in result])
+        from app.services.curriculum_governance import material_availability
+        for item in inventory['skills']:
+            item['material_availability']=material_availability(db,user,item['skill_id'])
+        direct_goals=rows(db,"""SELECT DISTINCT g.id,g.title,g.status FROM goals g JOIN project_goal_contexts p ON p.goal_id=g.id
+            JOIN json_each(p.skill_ids) j JOIN curriculum_catalog_skills s ON s.id=j.value
+            WHERE g.student_id=:u AND s.course_id=:c AND json_extract(p.analysis,'$.goal_type')='course'""",u=user['id'],c=id)
+    return {'graph_version':version,'graph':graph,'skills':result,'goals':goals+direct_goals,'project_mode':c['assessment_mode']=='project_rubric','coverage':inventory}
 
 from app.schemas import GoalInput
 class CourseGoal(GoalInput):
@@ -331,38 +361,52 @@ class CourseGoal(GoalInput):
 @router.post('/learning/courses/{id}/goals',status_code=201)
 def course_goal(id:str,body:CourseGoal,user=Depends(current_user)):
     role(user,'student')
-    from app.api.goals import validate_goal,preserve_goal
-    from app.services.course_planning import closure,attach_diagnosis
-    from app.services.planning_rules import graph_snapshot
-    from app.core.db import touch
+    from app.services import engineering_goals as catalog_goals
+    from app.services.course_planning import validate_versions
+    from app.services.learning import mastery
+
     with transaction() as db:
-        c=course(db,id);a=owned(db,user,body.assessment_id)
-        if a['course_id']!=id or a['status']!='submitted' or a['phase']!='diagnostic':fail(409,'请选择本课程已提交的首次诊断试卷')
+        c=course(db,id)
+        assessment=owned(db,user,body.assessment_id)
+        if assessment['course_id']!=id or assessment['status']!='submitted' or assessment['phase']!='diagnostic':
+            fail(409,'请选择本课程已提交的首次诊断试卷')
         if c['assessment_mode']=='project_rubric':fail(409,'项目课程须使用教师量规评价')
-        existing=one(db,'SELECT goal_id FROM course_goal_bindings WHERE initial_assessment_id=:a',a=a['id'])
+        existing=one(db,'SELECT goal_id FROM course_goal_bindings WHERE initial_assessment_id=:a',a=assessment['id'])
         if existing:return {'id':existing['goal_id'],'already_created':True}
-        graph,version=graph_snapshot(db)
-        items=rows(db,'SELECT DISTINCT skill_id FROM learning_assessment_items WHERE assessment_id=:a',a=a['id'])
-        mappings=rows(db,'SELECT * FROM curriculum_graph_mappings WHERE course_id=:c AND graph_version=:v',c=id,v=version)
-        targets=[m['graph_skill_id'] for m in mappings if m['skill_id'] in {i['skill_id'] for i in items}]
-        if len(targets)!=len(items):fail(409,'初测知识点尚未全部审核映射','COURSE_MAPPING_GAP')
-        required=closure(graph,targets)
-        if not required<=set(targets):fail(409,'请把目标的全部先修知识点一并选入课程初测','PREREQUISITE_DIAGNOSIS_GAP')
-        body.target_skill_ids=targets
-        validate_goal(db,user,body)
-        selected=[m for m in mappings if m['graph_skill_id'] in required]
-        from app.services.curriculum_structure import extend_graph
-        extend_graph(db,id,selected,graph)
-        for m in selected:
-            for phase in ('practice','retest'):
-                if not one(db,"SELECT id FROM learning_question_versions WHERE skill_id=:s AND phase=:p AND status='published'",s=m['skill_id'],p=phase):fail(409,'请先补齐所选知识点的练习及重测题库','QUESTION_COVERAGE_GAP')
-        gid=uid();insert(db,'goals',id=gid,student_id=user['id'],title=body.title.strip(),skills=dump(targets),
-            weekly_minutes=body.weekly_minutes,due_date=body.due_date,class_id=body.class_id,preference=body.preference,created_at=now())
-        insert(db,'course_goal_bindings',goal_id=gid,course_id=id,graph_version=version,mappings=dump(selected),initial_assessment_id=a['id'],created_at=now())
-        g=one(db,'SELECT * FROM goals WHERE id=:i',i=gid);preserve_goal(db,g)
-        did=attach_diagnosis(db,g,a,one(db,'SELECT * FROM course_goal_bindings WHERE goal_id=:i',i=gid))
-        touch(db,user['id']);audit(db,user['id'],'course_goal_created',gid)
-    return {'id':gid,'diagnosis_id':did,'message':'课程初测已纳入目标证据，请前往目标与诊断生成路径'}
+        proposal_id='course-assessment:'+assessment['id']
+        existing=one(db,'SELECT confirmed_goal_id FROM project_goal_proposals WHERE id=:i AND student_id=:u',i=proposal_id,u=user['id'])
+        if existing and existing['confirmed_goal_id']:return {'id':existing['confirmed_goal_id'],'already_created':True}
+        items=rows(db,'SELECT * FROM learning_assessment_items WHERE assessment_id=:a ORDER BY position',a=assessment['id'])
+        targets=list(dict.fromkeys(item['skill_id'] for item in items))
+        expanded,relation=catalog_goals.scope(db,targets)
+        validate_versions(db,[{'course_question_version_id':item['question_version_id']} for item in items])
+        analysis={'goal_type':'course','skill_ids':targets,'skills':expanded,'relation_version':relation,
+                  'summary':c['name']+'课程初测与学习目标','uncovered_capabilities':[]}
+        insert(db,'project_goal_proposals',id=proposal_id,student_id=user['id'],description=body.title,
+               mode='manual_catalog',analysis=dump(analysis),created_at=now())
+        goal=catalog_goals.confirm(proposal_id,user,{**body.model_dump(),'confirmed':True},connection=db)
+        gid=goal['id']
+        questions=[]
+        for item in items:
+            question=json.loads(item['snapshot'])
+            options=question['options']
+            questions.append({'id':item['id'],'skill':item['skill_id'],'question_id':question['question_id'],
+                'prompt':question['prompt'],'options':json.loads(options) if isinstance(options,str) else options,
+                'answer':str(question['answer']),'explanation':question['explanation'],
+                'course_question_version_id':item['question_version_id'],'source':question['source']})
+        # The diagnostic points to an attempt for this goal. Evidence already imported
+        # from the original course assessment stays in the shared evidence ledger.
+        attempt_id=uid()
+        evaluation=one(db,'SELECT correct_count,total_count FROM learning_evaluations WHERE assessment_id=:a',a=assessment['id'])
+        if not evaluation or not evaluation['total_count']:fail(409,'课程初测缺少有效评分记录')
+        insert(db,'attempts',id=attempt_id,student_id=user['id'],goal_id=gid,answers='{}',feedback='[]',
+               status='scored',minutes=0,score=evaluation['correct_count']/evaluation['total_count'],created_at=now())
+        diagnosis_id=uid()
+        insert(db,'diagnoses',id=diagnosis_id,goal_id=gid,student_id=user['id'],goal_version=1,
+               bank_version='course:'+id,questions=dump(questions),attempt_id=attempt_id,
+               mastery_snapshot=dump(mastery(db,user['id'])),created_at=now())
+        audit(db,user['id'],'course_goal_created',gid)
+    return {'id':gid,'diagnosis_id':diagnosis_id,'message':'课程初测已纳入目标证据，未测先修保留为未知'}
 
 
 @router.get('/learning/courses/{id}/structure')

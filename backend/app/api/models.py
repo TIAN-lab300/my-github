@@ -8,11 +8,6 @@ from app.schemas import ModelInput
 
 router=APIRouter()
 
-@router.get('/goals/{id}/runs')
-def goal_runs(id:str,user=Depends(current_user)):
-    with transaction() as db:
-        goal_access(db,user,id)
-        return rows(db,'SELECT id,kind,status,result_id,error,retry_count,created_at,finished_at FROM agent_runs WHERE goal_id=:g AND actor_id=:u ORDER BY created_at DESC LIMIT 50',g=id,u=user['id'])
 
 def call_model(config,prompt):
     import time
@@ -54,7 +49,19 @@ def call_model(config,prompt):
                 return result
             raise ValueError('JSON must be object')
         except httpx.TimeoutException:fail(503,'模型请求超时','MODEL_TIMEOUT')
-        except httpx.HTTPError:fail(503,'模型网络不可达','MODEL_NETWORK_ERROR')
+        except httpx.HTTPError as exc:
+            import socket,ssl
+            chain=[];current=exc;seen=set();category='transport'
+            while current is not None and id(current) not in seen and len(chain)<8:
+                seen.add(id(current));chain.append(type(current).__name__)
+                if isinstance(current,socket.gaierror):category='dns'
+                elif isinstance(current,ssl.SSLError):category='tls'
+                current=current.__cause__ or current.__context__
+            if isinstance(exc,httpx.ProxyError):category='proxy'
+            elif isinstance(exc,httpx.ConnectError) and category=='transport':category='connect'
+            elif isinstance(exc,httpx.RemoteProtocolError):category='remote_protocol'
+            raise HTTPException(503,{'code':'MODEL_NETWORK_ERROR','message':'模型连接失败（'+category+'），请查看排障报告中的异常类型','network_detail':{'category':category,'exception_types':chain}})
+
         except (ValueError,KeyError,IndexError,TypeError):
             if attempt==2:fail(503,'模型响应在两次修复后仍不符合JSON对象要求','MODEL_JSON_INVALID')
             messages.append({'role':'user','content':'上次响应格式无效，请重新按原任务返回合法JSON对象，不要添加Markdown围栏。'})
@@ -191,58 +198,3 @@ def review_quality(id:str,report_id:str,body:dict,user=Depends(current_user)):
             run(db,"UPDATE model_configs SET status='approved' WHERE id=:c AND status='active'",c=id)
         audit(db,user['id'],'model_quality_reviewed',report_id,detail='approved' if body['approved'] else 'rejected')
     return {'ok':True}
-
-
-@router.get('/runs/{id}')
-def detail(id:str,user=Depends(current_user)):
-    with transaction() as db:
-        r=one(db,'SELECT * FROM agent_runs WHERE id=:id AND actor_id=:u',id=id,u=user['id'])
-        if not r: fail(404,'运行不存在')
-        result=one(db,'SELECT status FROM paths WHERE id=:p',p=r['result_id']) if r['result_id'] else None
-        r['result_deleted']=bool(result and result['status']=='deleted')
-        checkpoint=json.loads(r['checkpoint'])
-        r['checkpoint']={'last_agent':checkpoint.get('last_agent'),'resumable':bool(checkpoint.get('fingerprint'))}
-        r['steps']=rows(db,'SELECT agent,status,detail,created_at,input_fingerprint,output_summary,attempt_no FROM agent_steps WHERE run_id=:id ORDER BY created_at,rowid',id=id)
-        return r
-
-@router.post('/runs/{id}/cancel')
-def cancel(id:str,user=Depends(current_user)):
-    with transaction() as db:
-        r=one(db,'SELECT * FROM agent_runs WHERE id=:id AND actor_id=:u',id=id,u=user['id'])
-        if not r: fail(404,'运行不存在')
-        if r['status'] in ('queued','running','interrupted'): run(db,"UPDATE agent_runs SET status='cancelled',finished_at=:t WHERE id=:id",t=now(),id=id)
-    return {'ok':True}
-
-@router.post('/runs/{id}/retry',status_code=202)
-def retry(id:str,background:BackgroundTasks,user=Depends(current_user)):
-    from app.services.planning import execute
-    with transaction() as db:
-        r=one(db,'SELECT * FROM agent_runs WHERE id=:id AND actor_id=:u',id=id,u=user['id'])
-        if not r or r['status'] not in ('failed','interrupted'): fail(409,'该运行不可重试')
-        g=goal_access(db,user,r['goal_id'])
-        if g['status']=='archived':fail(409,'目标已归档，不能重试旧规划；请新建或选择活动目标')
-        run(db,"UPDATE agent_runs SET status='queued',error=NULL,retry_count=retry_count+1 WHERE id=:id",id=id)
-    background.add_task(execute,id)
-    return {'run_id':id}
-
-
-@router.get('/planning/model-status')
-def planning_model_status(user=Depends(current_user)):
-    with transaction() as db:
-        c=one(db,"SELECT * FROM model_configs WHERE status='active' ORDER BY created_at DESC LIMIT 1")
-        latest=one(db,"SELECT id,model,status,evaluation,secret_env FROM model_configs ORDER BY created_at DESC LIMIT 1")
-        from app.services.quality_policy import activation_state
-        quality=activation_state(db,c or latest)
-    configured=bool(c and os.getenv(c['secret_env']) and quality.get('allowed'))
-    error_code=None
-    if latest and latest['evaluation']:
-        try:error_code=json.loads(latest['evaluation']).get('error_code')
-        except (ValueError,TypeError):pass
-    return {'active':bool(c),'ready':configured,'model':c['model'] if c else None,
-            'reason':'ready' if configured else 'missing_key' if c and not os.getenv(c['secret_env']) else 'quality_required' if c else 'not_active',
-            'quality':quality,'quality_override':quality.get('override',False),
-            'latest_status':latest['status'] if latest else None,
-            'latest_model':latest['model'] if latest else None,
-            'key_ready':bool(latest and os.getenv(latest['secret_env'])),
-            'last_error_code':error_code}
-

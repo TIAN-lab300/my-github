@@ -171,17 +171,5 @@ def readiness(id:str,user=Depends(current_user)):
             relevant=[s for s in result if s['course_id']==cid]
             c['recommendation_reason']='本阶段涉及'+str(len(relevant))+'个知识点：需补强'+str(sum(s['evidence_status']=='weak' for s in relevant))+'个，发展中'+str(sum(s['evidence_status']=='developing' for s in relevant))+'个，尚无证据'+str(sum(s['evidence_status']=='unknown' for s in relevant))+'个。只推荐相关章节，不要求整门课全部重学。'
             courses.append(c)
-        recent=rows(db,"SELECT id,status,error,result_id,kind FROM agent_runs WHERE goal_id=:g ORDER BY created_at DESC LIMIT 5",g=id)
         return {'goal_id':id,'skills':result,'courses':courses,'analysis':json.loads(ctx['analysis']),
-            'auto_enabled':bool(ctx['auto_enabled']),'auto_mode':ctx['auto_mode'],'auto_error':ctx['auto_error'],'recent_runs':recent,
-            'scope_stale':scope_stale,'ready':not scope_stale and all(not s['gaps'] for s in result),'note':'课程推荐不等于已导入正文；仅确认的基础范围参与本次路径。'}
-
-@router.patch('/engineering-goals/{id}/automation')
-def automation(id:str,body:dict,user=Depends(current_user)):
-    with transaction() as db:
-        g=goal_access(db,user,id)
-        if not service.context(db,id):fail(404,'不是工程目标')
-        if type(body.get('enabled')) is not bool or body.get('mode','local') not in ('local','cloud'):fail(422,'自动重规划设置不合法')
-        run(db,'UPDATE project_goal_contexts SET auto_enabled=:e,auto_mode=:m,auto_last_key=NULL,auto_error=NULL WHERE goal_id=:g',e=int(body['enabled']),m=body.get('mode','local'),g=id)
-        audit(db,user['id'],'engineering_auto_replan_changed',id,dump(body))
-    return {'ok':True,'message':'系统仅生成重规划候选，不自动接受；后台服务运行时检查变化。'}
+            'scope_stale':scope_stale,'ready':not scope_stale and all(not s['gaps'] for s in result),'note':'课程推荐不等于已导入正文。'}

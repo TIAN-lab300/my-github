@@ -139,27 +139,6 @@ def get_session(id: str, user=Depends(current_user)):
     with transaction() as db:
         return session_dto(db, session_owned(db, id, user))
 
-@router.get('/paths/{path}/items/{item}/sessions')
-def history(path: str, item: str, user=Depends(current_user)):
-    role(user, 'student')
-    with transaction() as db:
-        owned = one(db, 'SELECT id FROM paths WHERE id=:p AND student_id=:u', p=path, u=user['id'])
-        if not owned:
-            fail(404, '路径不存在')
-        recover_history(db, user['id'])
-        return [session_dto(db, session) for session in rows(db,
-            'SELECT * FROM assessment_sessions WHERE student_id=:u AND path_id=:p AND item_id=:i ORDER BY created_at DESC,id DESC',
-            u=user['id'], p=path, i=item)]
-
-@router.post('/paths/{path}/items/{item}/sessions')
-def start(path: str, item: str, user=Depends(current_user)):
-    with transaction() as db:
-        return session_dto(db, begin_session(db, path, item, user))
-
-@router.post('/paths/{path}/items/{item}/retests')
-def retest(path: str, item: str, user=Depends(current_user)):
-    with transaction() as db:
-        return session_dto(db, begin_session(db, path, item, user, repeat=True))
 
 @router.get('/teacher/classes/{class_id}/assessment-sessions')
 def teacher_history(class_id: str, user=Depends(current_user)):

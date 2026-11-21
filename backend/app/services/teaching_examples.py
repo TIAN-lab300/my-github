@@ -16,3 +16,17 @@ PLANNING_EXAMPLES={**EXAMPLES,'functions':{
  'rubric':'区分定义与调用；调用时x绑定整数3，计算3*2得到6，由return返回，answer接收6。不要求方程组或函数族反推。',
  'worked':'定义阶段创建函数并绑定名字double，此时不执行函数体；随后调用double(3)，将x绑定3，求值3*2，返回6并赋给answer。',
  'scope':'Python初学函数定义、参数传递和返回值；不引入代数反推或栈快照。'}}
+
+
+PLANNING_EXAMPLES['stack']={**EXAMPLES['stack'],'material_revision':'runtime-v3',
+ 'trace_semantics':'代码先按b、a、main的顺序定义函数，再执行main()；调用顺序是main→a→b，定义顺序不是调用顺序。states只记录栈帧，返回值单独记录。',
+ 'trace_rows':[
+  {'event':'initial','frames':[],'return_value':None},
+  {'event':'call main','frames':['main'],'return_value':None},
+  {'event':'call a','frames':['main','a'],'return_value':None},
+  {'event':'call b','frames':['main','a','b'],'return_value':None},
+  {'event':'return b','frames':['main','a'],'return_value':2},
+  {'event':'return a','frames':['main'],'return_value':3},
+  {'event':'return main','frames':[],'return_value':3}],
+ 'prompt':'仅依据本项目给定worked_example.code，按序号0至6列出初始态及全部6个事件、事件后的栈帧；在return b/a/main行标注返回值2/3/3，调用行无返回值。',
+ 'rubric':'序号0为空栈；序号1至6分别对应6个events，states与栈帧列逐项一致；返回行分别标2、3、3，最终result=3。无须在调用行编造返回值。'}

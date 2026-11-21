@@ -28,26 +28,23 @@ def curriculum(user=Depends(current_user)):
 @router.post('/goals/interpret')
 def interpret(body:dict,user=Depends(current_user)):
     role(user,'student')
-    text=str(body.get('text','')).strip()
-    if not text or len(text)>1000: fail(422,'请输入1至1000字目标描述')
-    skills=[]
-    if 'python' in text.lower(): skills=[s['id'] for s in SKILLS]
-    else:
-        for skill,words in [('functions',['函数']),('recursion',['递归']),('stack',['调用栈'])]:
-            if any(word in text for word in words):skills.append(skill)
-    with transaction() as db:
-        graph,_=graph_snapshot(db)
-    skill_ids={node['id'] for node in graph}
-    skills=[skill for skill in skills if skill in skill_ids]
-    for skill,aliases in keywords(graph).items():
-        if skill not in skills and any(alias.lower() in text.lower() for alias in aliases):skills.append(skill)
-    date_match=re.search(r'\d{4}-\d{2}-\d{2}',text)
-    time_match=re.search(r'每周\s*(\d+)\s*(小时|分钟)',text)
-    weekly=int(time_match[1])*(60 if time_match[2]=='小时' else 1) if time_match else None
-    return {'title':text,'target_skill_ids':skills,'due_date':date_match[0] if date_match else None,'weekly_minutes':weekly,
-            'preference':'video' if '视频' in text else 'text' if '文本' in text or '阅读' in text else 'unspecified',
-            'needs_clarification':[] if skills else ['请补充知识范围，当前题库支持函数、递归和调用栈'],
-            'confirmed':False,'method':'local-rule-v1'}
+    from app.services.goal_interpretation import interpret as analyze
+    return analyze(body.get('text'),user,body.get('cloud_consent'))
+
+
+@router.post('/goals/from-interpretation',status_code=201)
+def create_interpreted(body:dict,user=Depends(current_user)):
+    role(user,'student')
+    if not isinstance(body.get('proposal_id'),str):fail(422,'请先用大模型解析目标')
+    from app.services.goal_interpretation import confirm
+    return confirm(body['proposal_id'],user,body)
+
+
+@router.delete('/goals/{id}')
+def delete_archived(id:str,user=Depends(current_user)):
+    from app.services.goal_deletion import delete_archived
+    return delete_archived(id,user)
+
 
 @router.get('/goals/{id}/diagnoses')
 def diagnosis_history(id:str,user=Depends(current_user)):
@@ -64,9 +61,7 @@ def retest(id:str,user=Depends(current_user)):
         if not history or not history[0]['attempt_id']: fail(409,'请先完成首次诊断')
         if len(history)>1:
             if not history[-1]['attempt_id']: return {'id':history[-1]['id']}
-            fail(409,'等价题库已用尽；请通过路径练习补强，不能重复公开试卷刷掌握度','RETEST_BANK_EXHAUSTED')
-        practiced=one(db,'SELECT c.id FROM checkins c JOIN paths p ON p.id=c.path_id WHERE p.goal_id=:g AND c.created_at>:t AND c.proportion>0',g=id,t=history[0]['created_at'])
-        if not practiced: fail(409,'请先完成该目标的一次路径补强学习记录')
+            fail(409,'等价题库已用尽；不能重复公开试卷刷掌握度','RETEST_BANK_EXHAUSTED')
         graph_id=history[0]['bank_version']
         from app.services.course_planning import binding,bank as course_bank,closure
         cb=binding(db,id)
@@ -116,33 +111,13 @@ def listing(user=Depends(current_user)):
         goals=rows(db,'SELECT * FROM goals WHERE student_id=:u ORDER BY created_at DESC',u=user['id'])
         for g in goals:
             from app.services.engineering_goals import context as project_context
-            g['is_engineering']=bool(project_context(db,g['id']))
+            catalog_context=project_context(db,g['id'])
+            g['is_engineering']=bool(catalog_context and json.loads(catalog_context['analysis']).get('goal_type','project')=='project')
+            parsed=one(db,"SELECT analysis FROM project_goal_proposals WHERE confirmed_goal_id=:g AND mode='unified'",g=g['id'])
+            g['goal_type']=json.loads(parsed['analysis']).get('goal_type') if parsed else 'project' if g['is_engineering'] else 'knowledge'
             g['target_skill_ids']=json.loads(g.pop('skills'))
-            g['paths']=rows(db,'SELECT id,status,content_status,reason,created_at,fingerprint FROM paths WHERE goal_id=:id AND status!="deleted" ORDER BY created_at DESC',id=g['id'])
-            current_budget=one(db,'SELECT version FROM budgets WHERE user_id=:u',u=user['id'])
-            g['requires_replan']=any(p['status']=='active' and (json.loads(p['fingerprint'])['goal']!=g['version'] or json.loads(p['fingerprint'])['budget']!=current_budget['version']) for p in g['paths'])
-            # Compare evidence rather than the user watermark: accepting a path
-            # itself advances that watermark and must not request another replan.
-            from app.services.planning_evidence import learner_evidence,evidence_changes
-            from app.services.planning_rules import graph_snapshot
-            g['replan_reasons']=[]
             diagnostic=one(db,'SELECT * FROM diagnoses WHERE goal_id=:g AND goal_version=:v AND attempt_id IS NOT NULL ORDER BY created_at DESC LIMIT 1',g=g['id'],v=g['version'])
-            if diagnostic:
-                graph,_=graph_snapshot(db,g['id'])
-                evidence=learner_evidence(db,user['id'],{**g,'skills':dump(g['target_skill_ids'])},graph,diagnostic)
-                for active in g['paths']:
-                    if active['status']=='active':
-                        metadata=one(db,'SELECT validation FROM paths WHERE id=:i',i=active['id'])
-                        g['replan_reasons'].extend(evidence_changes(json.loads(metadata['validation']).get('learner_evidence'),evidence))
-            g['requires_replan']=g['requires_replan'] or bool(g['replan_reasons'])
             g['requires_diagnosis']=not bool(diagnostic)
-            for active in g['paths']:
-                if active['status']!='active':continue
-                before=json.loads(active['fingerprint']);after=json.loads(fingerprint(db,user['id'],g['id']))
-                for key,label in [('graph','图谱版本变化'),('resources','来源证据变化'),('course','课程题库或资料关联变化'),('project','工程课程题库或资料关联变化'),('memberships','班级权限变化')]:
-                    if before.get(key)!=after.get(key):g['replan_reasons'].append(label)
-            g['replan_reasons']=list(dict.fromkeys(g['replan_reasons']))
-            g['requires_replan']=g['requires_replan'] or bool(g['replan_reasons'])
             g['diagnoses']=rows(db,'SELECT id,attempt_id FROM diagnoses WHERE goal_id=:id ORDER BY created_at DESC',id=g['id'])
         return goals
 
@@ -183,33 +158,6 @@ def goal_history(id:str,user=Depends(current_user)):
         goal_access(db,user,id)
         return rows(db,'SELECT version,payload,created_at FROM goal_revisions WHERE goal_id=:g ORDER BY version DESC',g=id)
 
-@router.get('/goals/{id}/feasibility')
-def feasibility(id:str,user=Depends(current_user)):
-    with transaction() as db:
-        g=goal_access(db,user,id)
-        skills=json.loads(g['skills'])
-        if not skills:return {'status':'missing_structure','required_minutes':None,'reasons':['请先确认目标知识点映射'],'proven_infeasible':False}
-        from app.services.planning_rules import graph_snapshot
-        graph,_=graph_snapshot(db,id)
-        required_skills=set(skills)
-        for node in reversed(graph):
-            if node['id'] in required_skills: required_skills.update(node['prerequisites'])
-        required=sum(s['minutes'] for s in graph if s['id'] in required_skills)
-        try:
-            schedule=allocate(db,user['id'],required,g['due_date'],id,g['weekly_minutes'])
-            from app.api.resources import visible
-            text=''
-            for resource in visible(db,user):
-                if resource['status']!='published' and resource['scope']!='private':continue
-                version=one(db,"SELECT body FROM resource_versions WHERE id=:id AND parse_status='ready' AND index_status='indexed'",id=resource['current_version'])
-                if version:text+=version['body'].lower()+'\n'
-            tokens=keywords(graph)
-            gaps=[skill for skill in required_skills if not any(token.lower() in text for token in tokens[skill])]
-            return {'status':'evidence_gap' if gaps else 'feasible','required_minutes':required,'schedule':schedule,
-                    'missing_skills':gaps,'reasons':['缺少授权正文，请补充资料：'+','.join(gaps)] if gaps else [],'proven_infeasible':False}
-        except HTTPException as exc:
-            if exc.status_code!=409:raise
-            return {'status':'budget_conflict','required_minutes':required,'schedule':[],'reasons':[exc.detail['message']],'proven_infeasible':True}
 
 @router.post('/goals',status_code=201)
 def create(body:GoalInput,user=Depends(current_user)):
@@ -239,7 +187,7 @@ def edit(id:str,body:dict,user=Depends(current_user)):
         preserve_goal(db,g)
         if body.get('status')=='archived':
             run(db,"UPDATE goals SET status='archived',version=version+1 WHERE id=:id",id=id)
-            run(db,"UPDATE reservations SET status='cancelled' WHERE goal_id=:id AND status='active'",id=id)
+            run(db,"UPDATE reservations SET status='cancelled' WHERE goal_id IN (:id,:project) AND status='active'",id=id,project='project:'+id)
         else:
             try:
                 merged=GoalInput(title=body.get('title',g['title']),target_skill_ids=body.get('target_skill_ids',json.loads(g['skills'])),weekly_minutes=body.get('weekly_minutes',g['weekly_minutes']),due_date=body.get('due_date',g['due_date']),class_id=body.get('class_id',g['class_id']),preference=body.get('preference',g['preference']))
@@ -255,7 +203,23 @@ def edit(id:str,body:dict,user=Depends(current_user)):
             if prior and prior['goal_version']!=updated['version']:
                 insert(db,'diagnoses',id=uid(),goal_id=id,student_id=user['id'],questions=prior['questions'],attempt_id=prior['attempt_id'],
                     goal_version=updated['version'],bank_version=prior['bank_version'],mastery_snapshot=prior['mastery_snapshot'],created_at=now())
-    return {'ok':True,'requires_replan':True,'message':'目标版本已更新，原路径与已完成记录保留，请重新评估路径'}
+    return {'ok':True,'message':'目标版本已更新，已完成记录保留'}
+
+@router.post('/goals/{id}/curriculum-snapshot')
+def accept_curriculum_snapshot(id:str,user=Depends(current_user)):
+    from app.services.curriculum_governance import changes,save_snapshot,snapshot
+    from app.services.engineering_goals import context,validate_scope
+    with transaction() as db:
+        goal=goal_access(db,user,id)
+        ctx=context(db,id)
+        if not ctx or goal['status']=='archived':fail(409,'目标不可更新依赖')
+        validate_scope(db,id)
+        delta=changes(db,id)
+        if not delta:return {'curriculum_snapshot_id':one(db,'SELECT curriculum_snapshot_id FROM goals WHERE id=:g',g=id)['curriculum_snapshot_id'],'changes':[]}
+        ident=save_snapshot(db,id,snapshot(db,id,json.loads(ctx['skill_ids'])))
+        audit(db,user['id'],'goal_curriculum_snapshot_accepted',id,detail=ident)
+        return {'curriculum_snapshot_id':ident,'changes':delta}
+
 
 @router.post('/goals/{id}/diagnoses',status_code=201)
 def diagnose(id:str,user=Depends(current_user)):
@@ -270,6 +234,16 @@ def diagnose(id:str,user=Depends(current_user)):
         existing=one(db,'SELECT * FROM diagnoses WHERE goal_id=:id AND goal_version=:v ORDER BY created_at DESC',id=id,v=g['version'])
         if existing: return {'id':existing['id'],'questions':public_questions(json.loads(existing['questions'])),'attempt_id':existing['attempt_id']}
         from app.services.course_planning import binding,attach_diagnosis,closure
+        from app.services.engineering_goals import context
+        catalog_context=context(db,id)
+        if catalog_context and json.loads(catalog_context['analysis']).get('goal_type')=='course':
+            previous=one(db,"SELECT * FROM diagnoses WHERE goal_id=:g AND attempt_id IS NOT NULL AND bank_version LIKE 'course:%' ORDER BY goal_version DESC LIMIT 1",g=id)
+            if previous:
+                did=uid()
+                insert(db,'diagnoses',id=did,goal_id=id,student_id=user['id'],goal_version=g['version'],
+                       bank_version=previous['bank_version'],questions=previous['questions'],
+                       attempt_id=previous['attempt_id'],mastery_snapshot=previous['mastery_snapshot'],created_at=now())
+                return {'id':did,'questions':public_questions(json.loads(previous['questions'])),'attempt_id':previous['attempt_id']}
         cb=binding(db,id)
         if cb:
             latest=one(db,"SELECT * FROM learning_assessments WHERE student_id=:u AND course_id=:c AND phase='diagnostic' AND status='submitted' ORDER BY submitted_at DESC,rowid DESC LIMIT 1",u=user['id'],c=cb['course_id'])
@@ -343,161 +317,6 @@ def diagnostic_submit(id:str,body:Submission,user=Depends(current_user)):
         run(db,'UPDATE diagnoses SET mastery_snapshot=:m WHERE id=:id',m=dump(mastery(db,user['id'])),id=id)
         save_mastery(db,user['id']);return one(db,'SELECT * FROM attempts WHERE id=:id',id=aid)
 
-@router.post('/goals/{id}/planning-runs',status_code=202)
-def planning(id:str,background:BackgroundTasks,engine:str='local',pace:str='early',review_mastered:bool=False,idempotency_key:str=Header(default=''),user=Depends(current_user)):
-    return queue_run(id,'initial',background,idempotency_key,user,engine,pace,review_mastered)
-
-@router.post('/goals/{id}/replan-previews',status_code=202)
-def replan(id:str,background:BackgroundTasks,engine:str='local',pace:str='early',review_mastered:bool=False,idempotency_key:str=Header(default=''),user=Depends(current_user)):
-    return queue_run(id,'replan',background,idempotency_key,user,engine,pace,review_mastered)
-
-def queue_run(id,kind,background,key,user,engine='local',pace='early',review_mastered=False):
-    if pace not in ('early','balanced'):fail(422,'排期方式无效')
-    options={'pace':pace,'review_mastered':review_mastered}
-    if engine not in ('local','cloud'):fail(422,'规划模式不合法')
-    from app.services.planning import execute
-    if not key or len(key)>120: fail(422,'请提供Idempotency-Key')
-    with transaction() as db:
-        g=goal_access(db,user,id)
-        if g['status']=='archived': fail(409,'目标已归档')
-        existing=one(db,'SELECT * FROM agent_runs WHERE actor_id=:u AND kind=:k AND idem_key=:i',u=user['id'],k=kind,i=key)
-        if existing:
-            if json.loads(existing['checkpoint']).get('planning_options',{'pace':'early','review_mastered':False})!=options:fail(409,'幂等键已用于其他排期选项')
-            if existing['execution_mode']!=engine:fail(409,'幂等键已用于其他执行模式')
-            if existing['goal_id']!=id: fail(409,'幂等键已用于其他目标')
-            return {'run_id':existing['id'],'status':existing['status']}
-        config=one(db,"SELECT * FROM model_configs WHERE status='active' LIMIT 1") if engine=='cloud' else None
-        if engine=='cloud' and not config:fail(409,'请先由管理员评估并激活模型配置')
-        rid=uid();insert(db,'agent_runs',checkpoint=dump({'planning_options':options}),execution_mode=engine,model_config_id=config['id'] if config else None,id=rid,actor_id=user['id'],goal_id=id,kind=kind,status='queued',idem_key=key,created_at=now())
-    background.add_task(execute,rid)
-    return {'run_id':rid,'status':'queued'}
-
-@router.get('/paths/{id}')
-def path(id:str,user=Depends(current_user)):
-    with transaction() as db:
-        p=one(db,'SELECT * FROM paths WHERE id=:id AND student_id=:u',id=id,u=user['id'])
-        if not p or p['status']=='deleted': fail(404,'路径不存在或候选已删除')
-        for k in ('tasks','sources','validation'): p[k]=json.loads(p[k])
-        mastered=mastery(db,user['id'])
-        p['remediations']=p['validation'].get('remediations',[])
-        for item in p['tasks']+p['remediations']:
-            item['locked']=any(mastered.get(s,{}).get('probability',.2)<.75 for s in item.get('prerequisites',[]))
-            item['checkin']=one(db,'SELECT * FROM checkins WHERE path_id=:p AND item_id=:i',p=id,i=item['id'])
-        from datetime import datetime,date,timedelta
-        from zoneinfo import ZoneInfo
-        snapshot=p['validation'].get('budget_snapshot',{})
-        tz=ZoneInfo(snapshot.get('timezone','Asia/Shanghai'))
-        start=datetime.fromisoformat(p['created_at']).astimezone(tz).date()
-        deadline=p['validation'].get('goal_snapshot',{}).get('due_date',start.isoformat())
-        end=datetime.fromisoformat(deadline).astimezone(tz).date() if 'T' in deadline else date.fromisoformat(deadline)
-        schedule={d['date']:d['minutes'] for d in p['validation'].get('schedule',[])}
-        days=snapshot.get('days','[0,1,2,3,4,5,6]');days=json.loads(days) if isinstance(days,str) else days
-        p['calendar']=[{'date':(day:=start+timedelta(days=i)).isoformat(),'minutes':schedule.get(day.isoformat(),0),'available_day':day.weekday() in days} for i in range(min(731,max(0,(end-start).days+1)))]
-        p['requires_refresh']=p['fingerprint']!=fingerprint(db,user['id'],p['goal_id'])
-        warnings=[]
-        for rejected in rows(db,"SELECT validation FROM paths WHERE goal_id=:g AND status='rejected' ORDER BY created_at DESC LIMIT 3",g=p['goal_id']):
-            warnings.extend(json.loads(rejected['validation']).get('triggers',[]))
-        p['replan_warnings']=list(dict.fromkeys(warnings))
-        return p
-
-@router.delete('/paths/{id}')
-def delete_candidate(id:str,user=Depends(current_user)):
-    role(user,'student')
-    with transaction() as db:
-        p=one(db,'SELECT * FROM paths WHERE id=:id AND student_id=:u',id=id,u=user['id'])
-        if not p:fail(404,'候选路径不存在')
-        if p['status']=='deleted':return {'ok':True}
-        if p['status']!='pending_acceptance':fail(409,'只能删除尚未接受的候选路径，活动路径和历史路径不能删除')
-        if one(db,'SELECT id FROM checkins WHERE path_id=:p',p=id) or one(db,"SELECT id FROM reservations WHERE source_type='path' AND source_id=:p AND status='active'",p=id):
-            fail(409,'该路径已有学习记录或活动预约，不能作为候选删除')
-        run(db,"UPDATE paths SET status='deleted' WHERE id=:p",p=id)
-        run(db,"UPDATE remediation_tasks SET status='cancelled' WHERE path_id=:p AND status='candidate'",p=id)
-        audit(db,user['id'],'candidate_path_deleted',id,'移除未接受候选，保留生成过程和历史证据')
-    return {'ok':True}
-
-
-@router.post('/paths/{id}/accept')
-def accept(id:str,user=Depends(current_user)):
-    with transaction() as db:
-        p=one(db,'SELECT * FROM paths WHERE id=:id AND student_id=:u',id=id,u=user['id'])
-        if not p: fail(404,'路径不存在')
-        if p['status']=='active': return {'ok':True}
-        if p['status']!='pending_acceptance' or p['content_status']!='verified': fail(409,'路径尚不满足接受条件')
-        g=goal_access(db,user,p['goal_id'])
-        if g['status']=='archived' or fingerprint(db,user['id'],g['id'])!=p['fingerprint']: fail(409,'预览已过期，请重新生成','STALE_PREVIEW')
-        if g['class_id'] and class_access(db,user,g['class_id'])['status']!='active':fail(409,'关联班级已归档')
-        from app.core.security import resource_access
-        for source in json.loads(p['sources']):
-            r=resource_access(db,user,source['resource_id'])
-            private_owner=r['scope']=='private' and r['owner_id']==user['id']
-            if (r['status']!='published' and not private_owner) or r['current_version']!=source['version_id']: fail(409,'来源已变化，请重新生成')
-        items=json.loads(p['tasks']);minutes=sum(t['minutes'] for t in items)
-        metadata=json.loads(p['validation'])
-        remediations=metadata.get('remediations',[])
-        minutes+=sum(t['minutes'] for t in remediations)
-        if metadata.get('rules'):
-            from app.services.planning_rules import validate
-            state={'goal':g,'actor':user,'graph':metadata['graph'],'tasks':items,'remediations':remediations,
-                   'execution':metadata['execution'],'sources':json.loads(p['sources']),
-                   'schedule':metadata['schedule'],'preserved':metadata.get('preserved',[]),'planning_options':metadata.get('planning_options',{}),'execution_contract':metadata.get('execution_contract'),
-                   'previous':one(db,'SELECT * FROM paths WHERE id=:id',id=metadata['previous']) if metadata.get('previous') else None}
-            if not all(rule['passed'] for rule in validate(state,db)):fail(409,'路径规则重新审查失败，请重新生成')
-        schedule=allocate(db,user['id'],minutes,g['due_date'],g['id'],g['weekly_minutes'],pace=metadata.get('planning_options',{}).get('pace','early')) if minutes else []
-        if schedule != metadata.get('schedule', schedule):
-            fail(409,'排期已变化，请重新生成预览并确认','STALE_PREVIEW')
-        run(db,"UPDATE paths SET status='superseded' WHERE goal_id=:g AND status='active'",g=g['id'])
-        run(db,"UPDATE reservations SET status='cancelled' WHERE goal_id=:g AND status='active'",g=g['id'])
-        run(db,"UPDATE remediation_tasks SET status='cancelled' WHERE path_id IN (SELECT id FROM paths WHERE goal_id=:g AND id!=:p) AND status IN ('active','candidate')",g=g['id'],p=id)
-        run(db,"UPDATE remediation_tasks SET status='active' WHERE path_id=:p AND status='candidate'",p=id)
-        run(db,"UPDATE paths SET status='active' WHERE id=:id",id=id)
-        for s in schedule: insert(db,'reservations',id=uid(),student_id=user['id'],source_type='path',source_id=id,goal_id=g['id'],local_date=s['date'],minutes=s['minutes'])
-        run(db,"UPDATE goals SET status='active' WHERE id=:id",id=g['id']);touch(db,user['id'])
-    return {'ok':True}
-
-@router.post('/paths/{id}/reject')
-def reject(id:str,user=Depends(current_user)):
-    with transaction() as db:
-        p=one(db,'SELECT * FROM paths WHERE id=:id AND student_id=:u',id=id,u=user['id'])
-        if not p or p['status']!='pending_acceptance': fail(409,'预览不存在或已处理')
-        run(db,"UPDATE paths SET status='rejected' WHERE id=:id",id=id)
-        run(db,"UPDATE remediation_tasks SET status='rejected' WHERE path_id=:id AND status='candidate'",id=id)
-    return {'ok':True,'message':'保留原路径，先修限制和延期风险仍然有效'}
-
-@router.post('/check-ins')
-def checkin(body:Checkin,user=Depends(current_user)):
-    role(user,'student')
-    with transaction() as db:
-        p=one(db,"SELECT * FROM paths WHERE id=:id AND student_id=:u AND status='active'",id=body.path_id,u=user['id'])
-        if not p: fail(404,'活动路径不存在')
-        if goal_access(db,user,p['goal_id'])['status']=='archived': fail(409,'归档目标不能新增学习记录')
-        old=one(db,'SELECT * FROM checkins WHERE path_id=:p AND item_id=:i',p=body.path_id,i=body.item_id)
-        if old and (body.proportion < old['proportion'] or body.minutes < old['minutes']):
-            fail(422,'累计完成比例和累计学习分钟不能减少')
-        if old and all(old[key]==getattr(body,key) for key in ('proportion','minutes','difficulty','note')):
-            return old
-        item=next((t for t in json.loads(p['tasks'])+json.loads(p['validation']).get('remediations',[]) if t['id']==body.item_id),None)
-        if not item: fail(404,'路径任务不存在')
-        m=mastery(db,user['id'])
-        if any(m.get(s,{}).get('probability',.2)<.75 for s in item['prerequisites']): fail(409,'先修知识尚未通过有效测验，不能开始此任务')
-        if old:
-            id=old['id']
-            run(db,'UPDATE checkins SET proportion=:p,minutes=:m,difficulty=:d,note=:n WHERE id=:id',p=body.proportion,m=body.minutes,d=body.difficulty,n=body.note,id=id)
-        else:
-            id=uid();insert(db,'checkins',id=id,student_id=user['id'],**body.model_dump(),created_at=now())
-        run(db,"UPDATE remediation_tasks SET status='studied' WHERE id=:id AND path_id=:p",id=body.item_id,p=p['id'])
-        # Release this work's planned minutes; actual minutes are counted independently.
-        before=int(item['minutes']*(old['proportion'] if old else 0))
-        after=int(item['minutes']*body.proportion)
-        for day in item.get('dates',[]):
-            released_before=min(before,day['minutes']);before-=released_before
-            released_after=min(after,day['minutes']);after-=released_after
-            remaining=released_after-released_before
-            for r in rows(db,"SELECT * FROM reservations WHERE source_id=:p AND status='active' AND local_date=:d ORDER BY id",p=p['id'],d=day['date']):
-                release=min(remaining,r['minutes']);remaining-=release
-                run(db,'UPDATE reservations SET minutes=minutes-:m WHERE id=:id',m=release,id=r['id'])
-                if remaining==0: break
-        touch(db,user['id'])
-    return {'id':id,'message':'已记录学习；掌握度仅由有效测验证据更新'}
 
 def assessment_item(db,user,path_id,item_id):
     p=one(db,"SELECT * FROM paths WHERE id=:id AND student_id=:u AND status='active'",id=path_id,u=user['id'])
@@ -509,16 +328,10 @@ def assessment_item(db,user,path_id,item_id):
     if any(m.get(s,{}).get('probability',.2)<.75 for s in item['prerequisites']): fail(409,'先修尚未达标')
     return p,item
 
-@router.get('/paths/{id}/items/{item}/assessment')
-def path_assessment(id: str, item: str, user=Depends(current_user)):
-    from app.services.assessment_sessions import begin_session, session_dto
-    with transaction() as db:
-        return session_dto(db, begin_session(db, id, item, user))
 
-@router.post('/paths/{id}/items/{item}/attempts')
-def path_attempt(id: str, item: str, body: Submission, user=Depends(current_user)):
-    from app.services.assessment_sessions import begin_session
-    from app.api.question_bank import submit, Answers
-    with transaction() as db:
-        session = begin_session(db, id, item, user)
-    return submit(session['id'], Answers(answers=body.answers, minutes=body.minutes), user)['result']
+@router.post('/goals/interpretations/{id}/supplement',status_code=201)
+def supplement_goal(id:str,body:dict,user=Depends(current_user)):
+    role(user,'student')
+    if body.get('cloud_consent') is not True:fail(422,'请允许模型分析目标并生成补充草稿')
+    from app.services.goal_supplement import generate
+    return generate(id,user)
